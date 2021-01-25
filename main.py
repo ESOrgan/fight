@@ -18,7 +18,7 @@ item_property = {
     10: {"atk": 1, "type": "wep", "skill": "无", "description": "你无敌的手"},
     11: {"atk": 2, "type": "wep", "skill": "无", "description": "一根普通的木棍，没有什么特别之处"}
 }
-player_property = {"lv": 1, "hp": 10}
+player_property = {"lv": 1, "hp": 10, "max_hp": 10}
 
 inventory_display = []
 
