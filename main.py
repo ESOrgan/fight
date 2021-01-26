@@ -29,7 +29,7 @@ def get_key(value, dict_obj=None):
 
 
 g.msgbox("""
-                                  fight ra-001
+                                  fight dv-001
                                       欢迎
 """)
 while True:
