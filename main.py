@@ -3,24 +3,30 @@
 
 import easygui as g
 
-
-def get_key(dict_obj, value):
-    for key, val in dict_obj.items():
-        if val == value:
-            return key
-
-
 item_namespaces = {
-    0: "无", 10: "手", 11: "木棍"
+    0: "无",
+    10: "手", 11: "木棍",
+    30: "绷带"
+
 }
-pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": []}
+pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": [30]}
 item_property = {
     10: {"atk": 1, "type": "wep", "skill": "无", "description": "你无敌的手"},
-    11: {"atk": 2, "type": "wep", "skill": "无", "description": "一根普通的木棍，没有什么特别之处"}
+    11: {"atk": 2, "type": "wep", "skill": "无", "description": "一根普通的木棍，没有什么特别之处"},
+    30: {"heal": 1, "type": "med", "buff": "无", "description": "普通的布质绷带，能包裹你的伤口"}
 }
 player_property = {"lv": 1, "hp": 10, "max_hp": 10}
 
 inventory_display = []
+
+
+def get_key(value, dict_obj=None):
+    if dict_obj is None:
+        dict_obj = item_namespaces
+    for key, val in dict_obj.items():
+        if val == value:
+            return key
+
 
 g.msgbox("""
                                   fight ra-001
@@ -49,7 +55,7 @@ while True:
                 item_checking = g.choicebox("请选择你要操作的物品", choices=[item_namespaces[pocket["equip"]["weapon"]],
                                                                    item_namespaces[pocket["equip"]["armor"]]
                                                                    ])
-                item_checking = get_key(item_namespaces, item_checking)
+                item_checking = get_key(item_checking)
                 if item_checking == 0:
                     g.msgbox("你想操作空气吗？")
                 elif item_property[item_checking]["type"] == "wep":
@@ -109,15 +115,19 @@ atk: {item_property[item_checking]["atk"]}
                                 pocket["equip"]["armor"] = 0
                             g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
             else:
+                inventory_display = []
                 # set display list
-                if pocket["inventory"] is []:
-                    inventory_display = ["无", "无"]
+                if len(pocket["inventory"]) < 2:
+                    for i in pocket["inventory"]:
+                        inventory_display.append(get_key(i))
+                    while len(inventory_display) < 2:
+                        inventory_display.append("无")
                 else:
                     for i in pocket["inventory"]:
-                        inventory_display.append(get_key(item_namespaces, i))
+                        inventory_display.append(get_key(i))
                 while True:
                     item_checking = g.choicebox("请选择你要操作的物品", choices=inventory_display)
-                    item_checking = get_key(item_namespaces, item_checking)
+                    item_checking = get_key(item_checking)
                     if item_checking == 0:
                         g.msgbox("你想操作空气吗？")
                     elif item_property[item_checking]["type"] == "wep":
