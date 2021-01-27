@@ -74,10 +74,10 @@ while True:
                                     pocket["equip"]["weapon"] = 10
                             elif use == 1:
                                 g.msgbox(f"""
-    {item_namespaces[item_checking]}
-    atk: {item_property[item_checking]["atk"]}
-    技能: {item_property[item_checking]["skill"]}
-    “{item_property[item_checking]["description"]}”
+{item_namespaces[item_checking]}
+atk: {item_property[item_checking]["atk"]}
+技能: {item_property[item_checking]["skill"]}
+“{item_property[item_checking]["description"]}”
     """)
                             elif use == 2:
                                 if item_checking == 10:
@@ -149,7 +149,7 @@ while True:
 atk: {item_property[item_checking]["atk"]}
 技能: {item_property[item_checking]["skill"]}
 “{item_property[item_checking]["description"]}”
-                    """)
+""")
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
@@ -163,11 +163,11 @@ atk: {item_property[item_checking]["atk"]}
                                 pocket["equip"]["armor"] = 0
                             elif use == 1:
                                 g.msgbox(f"""
-                            {item_namespaces[item_checking]}
-                            def: {item_property[item_checking]["atk"]}
-                            技能: {item_property[item_checking]["skill"]}
-                            “{item_property[item_checking]["description"]}”
-                            """)
+{item_namespaces[item_checking]}
+def: {item_property[item_checking]["atk"]}
+技能: {item_property[item_checking]["skill"]}
+“{item_property[item_checking]["description"]}”
+""")
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
