@@ -171,3 +171,27 @@ def: {item_property[item_checking]["atk"]}
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
+                    elif item_property[item_checking]["type"] == "med":
+                        while True:
+                            use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["使用", "信息", "丢弃"])
+                            if use is None:
+                                break
+                            elif use == 0:
+                                player_property["hp"] += item_property[item_checking]["heal"]
+                                g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点HP")
+                                if player_property["hp"] > player_property["max_hp"]:
+                                    g.msgbox(f"你的HP溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                                             "不会帮你保存溢出的HP")
+                                elif player_property["hp"] == player_property["max_hp"]:
+                                    g.msgbox("你的HP满了")
+                                pocket["inventory"].remove(item_checking)
+                                break
+                            elif use == 1:
+                                g.msgbox(f"""
+    {item_namespaces[item_checking]}
+    回复{item_property[item_checking]["heal"]}点HP
+    “{item_property[item_checking]["description"]}”
+    """)
+                            elif use == 2:
+                                pocket["inventory"].remove(item_checking)
+                                g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
