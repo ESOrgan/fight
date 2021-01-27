@@ -188,10 +188,10 @@ def: {item_property[item_checking]["atk"]}
                                 break
                             elif use == 1:
                                 g.msgbox(f"""
-    {item_namespaces[item_checking]}
-    回复{item_property[item_checking]["heal"]}点HP
-    “{item_property[item_checking]["description"]}”
-    """)
+{item_namespaces[item_checking]}
+回复{item_property[item_checking]["heal"]}点HP
+“{item_property[item_checking]["description"]}”
+""")
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
