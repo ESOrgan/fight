@@ -119,12 +119,12 @@ atk: {item_property[item_checking]["atk"]}
                 # set display list
                 if len(pocket["inventory"]) < 2:
                     for i in pocket["inventory"]:
-                        inventory_display.append(get_key(i))
+                        inventory_display.append(item_namespaces[i])
                     while len(inventory_display) < 2:
                         inventory_display.append("无")
                 else:
                     for i in pocket["inventory"]:
-                        inventory_display.append(get_key(i))
+                        inventory_display.append(item_namespaces[i])
                 while True:
                     item_checking = g.choicebox("请选择你要操作的物品", choices=inventory_display)
                     item_checking = get_key(item_checking)
