@@ -52,68 +52,71 @@ while True:
 
             # equipped item
             if check_pos:
-                item_checking = g.choicebox("请选择你要操作的物品", choices=[item_namespaces[pocket["equip"]["weapon"]],
-                                                                   item_namespaces[pocket["equip"]["armor"]]
-                                                                   ])
-                item_checking = get_key(item_checking)
-                if item_checking == 0:
-                    g.msgbox("你想操作空气吗？")
-                elif item_property[item_checking]["type"] == "wep":
-                    while True:
-                        use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["卸下", "信息", "丢弃"])
-                        if use is None:
-                            break
-                        elif use == 0:
-                            if item_checking == 10:
-                                g.msgbox("你不能砍掉你的手！")
-                            else:
-                                pocket["inventory"].append(item_checking)
-                                pocket["equip"]["weapon"] = 10
-                        elif use == 1:
-                            g.msgbox(f"""
-{item_namespaces[item_checking]}
-atk: {item_property[item_checking]["atk"]}
-技能: {item_property[item_checking]["skill"]}
-“{item_property[item_checking]["description"]}”
-""")
-                        elif use == 2:
-                            if item_checking == 10:
-                                g.msgbox("你不能砍掉你的手！")
-                            elif item_checking == 0:
-                                g.msgbox("你不能剥掉你的皮！")
-                            elif item_property[item_checking]["type"] == "wep":
-                                pocket["equip"]["weapon"] = 10
-                            else:
-                                pocket["equip"]["armor"] = 0
-                            g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
-                elif item_property[item_checking]["type"] == "arm":
-                    while True:
-                        use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["卸下", "信息", "丢弃"])
-                        if use is None:
-                            break
-                        elif use == 0:
-                            if item_checking == 10:
-                                g.msgbox("你不能剥掉你的皮！")
-                            else:
-                                pocket["inventory"].append(item_checking)
-                                pocket["equip"]["armor"] = 0
-                        elif use == 1:
-                            g.msgbox(f"""
-                        {item_namespaces[item_checking]}
-                        def: {item_property[item_checking]["atk"]}
-                        技能: {item_property[item_checking]["skill"]}
-                        “{item_property[item_checking]["description"]}”
-                        """)
-                        elif use == 2:
-                            if item_checking == 10:
-                                g.msgbox("你不能砍掉你的手！")
-                            elif item_checking == 0:
-                                g.msgbox("你不能剥掉你的皮！")
-                            elif item_property[item_checking]["type"] == "wep":
-                                pocket["equip"]["weapon"] = 10
-                            else:
-                                pocket["equip"]["armor"] = 0
-                            g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
+                while True:
+                    item_checking = g.choicebox("请选择你要操作的物品", choices=[item_namespaces[pocket["equip"]["weapon"]],
+                                                                       item_namespaces[pocket["equip"]["armor"]]
+                                                                       ])
+                    if item_checking is None:
+                        break
+                    item_checking = get_key(item_checking)
+                    if item_checking == 0:
+                        g.msgbox("你想操作空气吗？")
+                    elif item_property[item_checking]["type"] == "wep":
+                        while True:
+                            use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["卸下", "信息", "丢弃"])
+                            if use is None:
+                                break
+                            elif use == 0:
+                                if item_checking == 10:
+                                    g.msgbox("你不能砍掉你的手！")
+                                else:
+                                    pocket["inventory"].append(item_checking)
+                                    pocket["equip"]["weapon"] = 10
+                            elif use == 1:
+                                g.msgbox(f"""
+    {item_namespaces[item_checking]}
+    atk: {item_property[item_checking]["atk"]}
+    技能: {item_property[item_checking]["skill"]}
+    “{item_property[item_checking]["description"]}”
+    """)
+                            elif use == 2:
+                                if item_checking == 10:
+                                    g.msgbox("你不能砍掉你的手！")
+                                elif item_checking == 0:
+                                    g.msgbox("你不能剥掉你的皮！")
+                                elif item_property[item_checking]["type"] == "wep":
+                                    pocket["equip"]["weapon"] = 10
+                                else:
+                                    pocket["equip"]["armor"] = 0
+                                g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
+                    elif item_property[item_checking]["type"] == "arm":
+                        while True:
+                            use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["卸下", "信息", "丢弃"])
+                            if use is None:
+                                break
+                            elif use == 0:
+                                if item_checking == 10:
+                                    g.msgbox("你不能剥掉你的皮！")
+                                else:
+                                    pocket["inventory"].append(item_checking)
+                                    pocket["equip"]["armor"] = 0
+                            elif use == 1:
+                                g.msgbox(f"""
+                            {item_namespaces[item_checking]}
+                            def: {item_property[item_checking]["atk"]}
+                            技能: {item_property[item_checking]["skill"]}
+                            “{item_property[item_checking]["description"]}”
+                            """)
+                            elif use == 2:
+                                if item_checking == 10:
+                                    g.msgbox("你不能砍掉你的手！")
+                                elif item_checking == 0:
+                                    g.msgbox("你不能剥掉你的皮！")
+                                elif item_property[item_checking]["type"] == "wep":
+                                    pocket["equip"]["weapon"] = 10
+                                else:
+                                    pocket["equip"]["armor"] = 0
+                                g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
             else:
                 inventory_display = []
                 # set display list
@@ -127,6 +130,8 @@ atk: {item_property[item_checking]["atk"]}
                         inventory_display.append(item_namespaces[i])
                 while True:
                     item_checking = g.choicebox("请选择你要操作的物品", choices=inventory_display)
+                    if item_checking is None:
+                        break
                     item_checking = get_key(item_checking)
                     if item_checking == 0:
                         g.msgbox("你想操作空气吗？")
