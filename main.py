@@ -94,8 +94,7 @@ atk: {item_property[item_checking]["atk"]}
                             elif use == 2:
                                 if item_checking == 10:
                                     g.msgbox("你不能砍掉你的手！")
-                                elif item_checking == 0:
-                                    g.msgbox("你不能剥掉你的皮！")
+                                    continue
                                 elif item_property[item_checking]["type"] == "wep":
                                     pocket["equip"]["weapon"] = 10
                                 else:
@@ -120,9 +119,7 @@ atk: {item_property[item_checking]["atk"]}
                             “{item_property[item_checking]["description"]}”
                             """)
                             elif use == 2:
-                                if item_checking == 10:
-                                    g.msgbox("你不能砍掉你的手！")
-                                elif item_checking == 0:
+                                if item_checking == 0:
                                     g.msgbox("你不能剥掉你的皮！")
                                 elif item_property[item_checking]["type"] == "wep":
                                     pocket["equip"]["weapon"] = 10
