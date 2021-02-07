@@ -1,5 +1,5 @@
-# version <dv-001>
-# lines: 221 + 4 (project description: 2; start blank: 1; end blank: 1) = 225
+# version <dv-002>
+# lines: 222 + 4 (project description: 2; start blank: 1; end blank: 1) = 226
 
 import easygui as g
 
@@ -32,7 +32,7 @@ def get_key(value, dict_obj=None):
 
 
 g.msgbox("""
-                                  fight dv-001
+                                  fight dv-002
                                       欢迎
 """)
 while True:
