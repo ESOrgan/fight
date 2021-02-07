@@ -12,10 +12,13 @@ item_namespaces = {
 pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": [30]}
 item_property = {
     10: {"atk": 1, "type": "wep", "skill": "无", "description": "你无敌的手"},
-    11: {"atk": 2, "type": "wep", "skill": "无", "description": "一根普通的木棍，没有什么特别之处"},
-    30: {"heal": 1, "type": "med", "buff": "无", "description": "普通的布质绷带，能包裹你的伤口"}
+    11: {"atk": 2, "type": "wep", "skill": "无",
+         "description": "一根普通的木棍，没有什么特别之处", "sell": 5},
+    30: {"heal": 1, "type": "med", "buff": "无",
+         "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
+    0: {'def': 0}
 }
-player_property = {"lv": 1, "hp": 10, "max_hp": 10}
+player_property = {"lv": 1, "hp": 10, "max_hp": 11, "gold": 40}
 
 inventory_display = []
 
@@ -195,3 +198,21 @@ def: {item_property[item_checking]["atk"]}
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
+                                break
+    # shop UI
+    elif choose == 2:
+        while True:
+            item_buying = g.choicebox("请选择你要购买的物品", choices=[item_namespaces[30], item_namespaces[11]])
+            if item_buying is None:
+                break
+            item_buying = get_key(item_buying)
+            if g.ccbox(f"""
+{item_namespaces[item_buying]}
+{item_property[item_buying]["sell"]}$
+{item_property[item_buying]["description"]}
+            """, choices=["购买", "取消"]):
+                if player_property["gold"] >= item_property[item_buying]["sell"]:
+                    player_property["gold"] -= item_property[item_buying]["sell"]
+                    pocket["inventory"].append(item_buying)
+                    g.msgbox(f"你花费{item_property[item_buying]['sell']}$购买了"
+                             f"{item_namespaces[item_buying]}")
