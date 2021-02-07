@@ -41,13 +41,22 @@ while True:
         exit()
     break
 while True:
-    choose = g.indexbox(f"你好，{player}！\n", choices=["背包"])
+    choose = g.indexbox(f"你好，{player}！\n", choices=["状态", "背包", "商店"])
     if choose is None:
         g.msgbox("再见")
         exit()
 
-    # pocket UI
+    # status UI
     if choose == 0:
+        g.msgbox(f"""
+LV: {player_property["lv"]}
+HP: {player_property["hp"]}/{player_property["max_hp"]}
+现金: {player_property["gold"]}$
+武器：{item_namespaces[pocket["equip"]["weapon"]]}  ATK {item_property[pocket["equip"]["weapon"]]["atk"]}
+盔甲：{item_namespaces[pocket["equip"]["armor"]]}  DEF {item_property[pocket["equip"]["armor"]]["def"]}
+        """)
+    # pocket UI
+    if choose == 1:
         while True:
             check_pos = g.ccbox("请选择你要查看的物品位置", choices=["已装备的物品", "物品栏"])
             if check_pos is None:
