@@ -386,7 +386,7 @@ def: {item_property[item_checking]["atk"]}
                     player_property["exp"] += mob.exp
                     break
                 fight_choose = g.indexbox(f"{item_namespaces[mob.namespace]} HP: {mob.hp}/{mob.max_hp}\n"
-                                          f"”{player}“的HP: {player_property['hp']}/{player_property['max_hp']}",
+                                          f"“{player}”的HP: {player_property['hp']}/{player_property['max_hp']}",
                                           choices=["战斗", "查看", "物品", "逃跑"])
                 if fight_choose == 0:
                     if random.randint(1, 100) < mob.miss:
