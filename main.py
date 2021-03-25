@@ -346,7 +346,7 @@ def: {item_property[item_checking]["atk"]}
                 continue
             set_up = get_key(set_up)
             if item_property[set_up]["type"] == "med":
-                cure = int(item_property[set_up]["sell"] / 4)
+                cure = int(item_property[set_up]["sell"] / 8)
             else:
                 cure = int(item_property[set_up]["sell"] / 4)
             player_property["hp"] += cure
