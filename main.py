@@ -4,6 +4,7 @@
 import easygui as g
 import random
 import settings
+import os
 
 item_namespaces = {
     0: "无",
@@ -20,12 +21,12 @@ item_namespaces = {
 pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": [30]}
 item_property = {
     # weapon
-    10: {"atk": 1, "type": "wep", "skill": "无", "description": "你无敌的手"},
-    11: {"atk": 2, "type": "wep", "skill": "无",
+    10: {"atk": [1, 1], "type": "wep", "skill": "无", "description": "你无敌的手"},
+    11: {"atk": [1, 3], "type": "wep", "skill": "无",
          "description": "一根普通的木棍，没有什么特别之处", "sell": 25},
-    12: {"atk": 3, "type": "wep", "skill": "无", "description": "经常能从波布克林身上找到的一个笨重的武器", "sell": 40},
-    13: {"atk": 5, "type": "wep", "skill": "无", "description": "蓝色波布克林使用的武器，和普通波克棒不同，它的上方"
-                                                               "附有石板以增强攻击力", "sell": 60},
+    12: {"atk": [2, 4], "type": "wep", "skill": "无", "description": "经常能从波布克林身上找到的一个笨重的武器", "sell": 40},
+    13: {"atk": [4, 7], "type": "wep", "skill": "无", "description": "蓝色波布克林使用的武器，和普通波克棒不同，它的上方"
+                                                                    "附有石板以增强攻击力", "sell": 60},
     # medicine
     30: {"heal": 2, "type": "med", "buff": "无",
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
@@ -138,6 +139,35 @@ def check_level():
                  f"你的HP上限变为了{player_property['max_hp']}\n你的HP回满了")
 
 
+def _makedir(path):
+    try:
+        os.mkdir(path)
+    except FileExistsError:
+        pass
+
+
+def _makefile(name):
+    try:
+        fd = open(name, mode="w", encoding="utf-8")
+        fd.close()
+    except FileExistsError:
+        pass
+
+
+def _back():
+    os.chdir(os.path.dirname(os.getcwd()))
+
+
+def _get_path():
+    return os.getcwd()
+
+
+def _option_go(path):
+    os.chdir(path)
+
+
+_makedir("save")
+_option_go("save")
 g.msgbox("""
                                   fight dv-003
                                       欢迎
@@ -169,7 +199,7 @@ LV: {player_property["lv"]}
 EXP: {player_property["exp"]}/{player_property["need exp"]}
 HP: {player_property["hp"]}/{player_property["max_hp"]}
 现金: {player_property["gold"]}$
-武器：{item_namespaces[pocket["equip"]["weapon"]]}  ATK {item_property[pocket["equip"]["weapon"]]["atk"]}
+武器：{item_namespaces[pocket["equip"]["weapon"]]}  ATK {item_property[pocket["equip"]["weapon"]]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]} 
 盔甲：{item_namespaces[pocket["equip"]["armor"]]}  DEF {item_property[pocket["equip"]["armor"]]["def"]}
         """)
     # pocket UI
@@ -204,7 +234,7 @@ HP: {player_property["hp"]}/{player_property["max_hp"]}
                             elif use == 1:
                                 g.msgbox(f"""
 {item_namespaces[item_checking]}
-atk: {item_property[item_checking]["atk"]}
+atk: {item_property[item_checking]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]}
 技能: {item_property[item_checking]["skill"]}
 “{item_property[item_checking]["description"]}”
     """)
@@ -232,7 +262,7 @@ atk: {item_property[item_checking]["atk"]}
                             elif use == 1:
                                 g.msgbox(f"""
                             {item_namespaces[item_checking]}
-                            def: {item_property[item_checking]["atk"]}
+                            def: {item_property[item_checking]["def"]}
                             技能: {item_property[item_checking]["skill"]}
                             “{item_property[item_checking]["description"]}”
                             """)
@@ -269,7 +299,7 @@ atk: {item_property[item_checking]["atk"]}
                             elif use == 1:
                                 g.msgbox(f"""
 {item_namespaces[item_checking]}
-atk: {item_property[item_checking]["atk"]}
+ATK: {item_property[item_checking]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]}
 技能: {item_property[item_checking]["skill"]}
 “{item_property[item_checking]["description"]}”
 """)
@@ -318,7 +348,8 @@ def: {item_property[item_checking]["atk"]}
     # shop UI
     elif choose == 2:
         while True:
-            item_buying = g.choicebox("请选择你要购买的物品", choices=[item_namespaces[30], item_namespaces[11], item_namespaces[31]])
+            item_buying = g.choicebox("请选择你要购买的物品",
+                                      choices=[item_namespaces[30], item_namespaces[11], item_namespaces[31]])
             if item_buying is None:
                 break
             item_buying = get_key(item_buying)
@@ -365,7 +396,7 @@ def: {item_property[item_checking]["atk"]}
             mob_object = item_property[random.choice(mobs)]
             mob = Mob(get_key(mob_object, item_property), mob_object["hp"],
                       mob_object["atk"], mob_object["description"], mob_object["miss"], mob_object["define"],
-                      mob_object["gear"], mob_object["gold"], mob_object["exp"] )
+                      mob_object["gear"], mob_object["gold"], mob_object["exp"])
             g.msgbox(f"{item_namespaces[mob.namespace]}出现了！")
             while True:
                 if player_property["hp"] <= 0:
@@ -392,7 +423,13 @@ def: {item_property[item_checking]["atk"]}
                     if random.randint(1, 100) < mob.miss:
                         g.msgbox(f"{item_namespaces[mob.namespace]}似乎躲开了这次攻击")
                     else:
-                        damage = int(item_property[pocket["equip"]["weapon"]]["atk"] * (1 - mob.define * 0.01))
+                        if item_property[pocket["equip"]["weapon"]]["atk"][0] != \
+                                item_property[pocket["equip"]["weapon"]]["atk"][1]:
+                            damage_current_value = random.randint(item_property[pocket["equip"]["weapon"]]["atk"][0],
+                                                                  item_property[pocket["equip"]["weapon"]]["atk"][1])
+                        else:
+                            damage_current_value = item_property[pocket["equip"]["weapon"]]["atk"][0]
+                        damage = int(damage_current_value * (1 - mob.define * 0.01))
                         mob.hp -= damage
                         g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
                 elif fight_choose == 1:
