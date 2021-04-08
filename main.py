@@ -122,6 +122,7 @@ def cure_display(item_checking):
     if player_property["hp"] > player_property["max_hp"]:
         g.msgbox(f"你的HP溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
                  "不会帮你保存溢出的HP")
+        player_property["hp"] = player_property["max_hp"]
     elif player_property["hp"] == player_property["max_hp"]:
         g.msgbox("你的HP满了")
     pocket["inventory"].remove(item_checking)
