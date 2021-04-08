@@ -5,6 +5,7 @@ import easygui as g
 import random
 import settings
 import os
+import base64
 
 item_namespaces = {
     0: "无",
@@ -167,19 +168,62 @@ def _option_go(path):
     os.chdir(path)
 
 
+def _update_save():
+    with open(player, "w") as save_obj:
+        save_txt = str(player_property) + "\n" + str(pocket)
+        save_obj.write(base64.b64encode(save_txt.encode()).decode())
+
+
+run_environment = _get_path()
 _makedir("save")
 _option_go("save")
+saves = os.listdir()
+for save in saves:
+    save.replace(run_environment, "")
 g.msgbox("""
                                   fight dv-003
                                       欢迎
 """)
+saves.append("创建新存档")
+while len(saves) < 2:
+    saves.append("无")
 while True:
-    player = g.enterbox("请输入玩家的名字")
-    if player is None:
+    save = g.choicebox("请选择存档", choices=saves)
+    if save is None:
         exit()
-    if player == "":
-        continue
-    break
+    elif save == "创建新存档":
+        breaking = False
+        while True:
+            player = g.enterbox("请输入玩家的名字")
+            if player == "":
+                continue
+            elif player is None:
+                break
+            elif player in saves:
+                if g.ccbox(f"\"{player}\"是一个已经被用过的名字，是否要覆盖原存档（请经过存档主人同意后操作）",
+                           choices=["是的", "不了"]):
+                    _makefile(player)
+                    breaking = True
+                    break
+                else:
+                    continue
+            else:
+                _makefile(player)
+                breaking = True
+                break
+        if breaking:
+            break
+    else:
+        player = save
+        with open(save) as save_obj:
+            save_txt = save_obj.read().rstrip().encode()
+            save_txt = base64.b64decode(save_txt).decode()
+            save_txt_list = save_txt.split("\n")
+            exec("player_property = " + save_txt_list[0])
+            exec("pocket = " + save_txt_list[1])
+        g.msgbox(f"存档已读取\n欢迎回来，{player}！")
+        break
+
 
 # get mob list
 for i in item_property.keys():
@@ -188,7 +232,7 @@ for i in item_property.keys():
 
 while True:
     check_level()
-    choose = g.indexbox(f"你好，{player}！\n", choices=["状态", "背包", "商店", "贤者", "与普通怪物战斗"])
+    choose = g.indexbox(f"你好，{player}！\n", choices=["状态", "背包", "商店", "贤者", "与普通怪物战斗", "存档"])
     if choose is None:
         g.msgbox("再见")
         exit()
@@ -394,6 +438,7 @@ def: {item_property[item_checking]["atk"]}
     # normal fight UI
     elif choose == 4:
         while True:
+            breaking = False
             mob_object = item_property[random.choice(mobs)]
             mob = Mob(get_key(mob_object, item_property), mob_object["hp"],
                       mob_object["atk"], mob_object["description"], mob_object["miss"], mob_object["define"],
@@ -473,3 +518,6 @@ MISS: {mob.miss}%
                 break
             if not g.ccbox("你是否要继续战斗（注意，你的血量不会回复）", choices=["是的", "不了"]):
                 break
+    elif choose == 5:
+        _update_save()
+        g.msgbox("已存档")
