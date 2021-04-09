@@ -13,6 +13,9 @@ item_namespaces = {
     # weapon
     10: "手", 11: "木棍", 12: "波克棒", 13: "石板波克棒",
 
+    # armor
+    21: "石板甲",
+
     # medicine
     30: "绷带", 31: "医用绷带",
 
@@ -28,6 +31,9 @@ item_property = {
     12: {"atk": [2, 4], "type": "wep", "skill": "无", "description": "经常能从波布克林身上找到的一个笨重的武器", "sell": 40},
     13: {"atk": [4, 7], "type": "wep", "skill": "无", "description": "蓝色波布克林使用的武器，和普通波克棒不同，它的上方"
                                                                     "附有石板以增强攻击力", "sell": 60},
+    # armor
+    21: {"def": 100, "miss": 50, "skill": "无", "type": "arm", "sell": 70,
+         "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效"},
     # medicine
     30: {"heal": 2, "type": "med", "buff": "无",
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
@@ -40,12 +46,12 @@ item_property = {
          "miss": 0, "define": 0, "gear": [11, 12], "gold": [2, 5], "exp": 3},
     42: {"hp": 25, "atk": [3, 4], "type": "mob",
          "description": "波布克林的一级加强版，聪明了些，武器也更加精良，甚至还有盔甲",
-         "miss": 2, "define": 10, "gear": [13], "gold": [7, 10], "exp": 6},
+         "miss": 2, "define": 10, "gear": [13, 21], "gold": [7, 10], "exp": 6},
     43: {"hp": 5, "atk": [0, 1], "type": "mob",
          "description": "一个极弱的怪物，甚至有可能打出0点伤害...",
          "miss": 0, "define": 0, "gear": [11], "gold": [1, 3], "exp": 2},
 
-    0: {'def': 0},
+    0: {"def": 0, "miss": 0},
 }
 player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0,
                    "need exp": 10}
@@ -203,12 +209,14 @@ while True:
                 if g.ccbox(f"\"{player}\"是一个已经被用过的名字，是否要覆盖原存档（请经过存档主人同意后操作）",
                            choices=["是的", "不了"]):
                     _makefile(player)
+                    _update_save()
                     breaking = True
                     break
                 else:
                     continue
             else:
                 _makefile(player)
+                _update_save()
                 breaking = True
                 break
         if breaking:
@@ -223,7 +231,6 @@ while True:
             exec("pocket = " + save_txt_list[1])
         g.msgbox(f"存档已读取\n欢迎回来，{player}！")
         break
-
 
 # get mob list
 for i in item_property.keys():
@@ -279,7 +286,7 @@ HP: {player_property["hp"]}/{player_property["max_hp"]}
                             elif use == 1:
                                 g.msgbox(f"""
 {item_namespaces[item_checking]}
-atk: {item_property[item_checking]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]}
+atk: {item_property[item_checking]["atk"][0]} ~ {item_property[item_checking]["atk"][1]}
 技能: {item_property[item_checking]["skill"]}
 “{item_property[item_checking]["description"]}”
     """)
@@ -306,10 +313,11 @@ atk: {item_property[item_checking]["atk"][0]} ~ {item_property[pocket["equip"]["
                                     pocket["equip"]["armor"] = 0
                             elif use == 1:
                                 g.msgbox(f"""
-                            {item_namespaces[item_checking]}
-                            def: {item_property[item_checking]["def"]}
-                            技能: {item_property[item_checking]["skill"]}
-                            “{item_property[item_checking]["description"]}”
+{item_namespaces[item_checking]}
+def: +{item_property[item_checking]["def"]}
+miss: +{item_property[item_checking]["miss"]}
+技能: {item_property[item_checking]["skill"]}
+“{item_property[item_checking]["description"]}”
                             """)
                             elif use == 2:
                                 if item_checking == 0:
@@ -344,7 +352,7 @@ atk: {item_property[item_checking]["atk"][0]} ~ {item_property[pocket["equip"]["
                             elif use == 1:
                                 g.msgbox(f"""
 {item_namespaces[item_checking]}
-ATK: {item_property[item_checking]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]}
+ATK: {item_property[item_checking]["atk"][0]} ~ {item_property[item_checking]["atk"][1]}
 技能: {item_property[item_checking]["skill"]}
 “{item_property[item_checking]["description"]}”
 """)
@@ -365,7 +373,8 @@ ATK: {item_property[item_checking]["atk"][0]} ~ {item_property[pocket["equip"]["
                             elif use == 1:
                                 g.msgbox(f"""
 {item_namespaces[item_checking]}
-def: {item_property[item_checking]["atk"]}
+def: +{item_property[item_checking]["def"]}
+miss: +{item_property[item_checking]["miss"]}
 技能: {item_property[item_checking]["skill"]}
 “{item_property[item_checking]["description"]}”
 """)
@@ -506,10 +515,13 @@ MISS: {mob.miss}%
                         break
                     else:
                         continue
-                if random.randint(1, 100) < player_property["miss"]:
+                if random.randint(1, 100) < player_property["miss"] * 0.01 + \
+                        item_property[pocket["equip"]["armor"]]["miss"] * 0.01:
                     g.msgbox(f"你似乎躲开了这次攻击")
                 else:
-                    damage = int(random.randint(mob.atk[0], mob.atk[1]) * (1 - player_property["define"] * 0.01))
+                    damage = int(random.randint(mob.atk[0], mob.atk[1]) * (1 - (player_property["define"] +
+                                                                                item_property[pocket["equip"]["armor"]][
+                                                                                    "def"]) * 0.0001))
                     player_property["hp"] -= damage
                     g.msgbox(f"{item_namespaces[mob.namespace]}对你造成了{damage}点伤害")
             check_level()
