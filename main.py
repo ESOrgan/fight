@@ -1,5 +1,5 @@
-# version <dv-003>
-# lines: 434 + 4 (project description: 2; start blank: 1; end blank: 1) = 438
+# version <dv-004>
+# lines: 596 + 4 (project description: 2; start blank: 1; end blank: 1) = 600
 
 import easygui as g
 import random
@@ -216,7 +216,7 @@ saves = os.listdir()
 for save in saves:
     save.replace(run_environment, "")
 g.msgbox("""
-                                  fight dv-003
+                                  fight dv-004
                                       欢迎
 """)
 saves.append("创建新存档")
