@@ -17,7 +17,7 @@ item_namespaces = {
     21: "石板甲",
 
     # medicine
-    30: "绷带", 31: "医用绷带",
+    30: "绷带", 31: "医用绷带", 32: "小型法力回复剂",
 
     # mobs
     41: "波布克林", 42: "蓝色波布克林", 43: "丘丘",
@@ -43,6 +43,8 @@ item_property = {
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
     31: {"heal": 5, "type": "med", "buff": [0],
          "description": "洒上酒精的绷带，这使它的治疗效果增加了2", "sell": 50},
+    32: {"heal": 30, "type": "mr",
+         "description": "非常普通的法力回复剂", "sell": 40},
 
     # mobs
     41: {"hp": 13, "atk": [1, 2], "type": "mob",
@@ -129,10 +131,22 @@ def set_inventory_display(item_filter: list = None):
                     inventory_display.append("无")
 
 
-def cure_display(item_checking):
+def mana_display(item_checking):
     """
     a function using at display
     """
+    player_property["mana"] += item_property[item_checking]["heal"]
+    g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点法力")
+    if player_property["mana"] > player_property["max_mana"]:
+        g.msgbox(f"你的法力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                 "不会帮你保存溢出的法力")
+        player_property["mana"] = player_property["max_mana"]
+    elif player_property["mana"] == player_property["max_mana"]:
+        g.msgbox("你的法力满了")
+    pocket["inventory"].remove(item_checking)
+
+
+def cure_display(item_checking):
     player_property["hp"] += item_property[item_checking]["heal"]
     g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点HP")
     if player_property["hp"] > player_property["max_hp"]:
@@ -277,6 +291,7 @@ while True:
     # status UI
     if choose == 0:
         g.msgbox(f"""
+{player}
 LV: {player_property["lv"]}
 EXP: {player_property["exp"]}/{player_property["need exp"]}
 HP: {player_property["hp"]}/{player_property["max_hp"]}
@@ -392,6 +407,7 @@ ATK: {item_property[item_checking]["atk"][0]} ~ {item_property[item_checking]["a
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
+                                break
                     elif item_property[item_checking]["type"] == "arm":
                         while True:
                             use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["装备", "信息", "丢弃"])
@@ -414,20 +430,31 @@ miss: +{item_property[item_checking]["miss"]}
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
-                    elif item_property[item_checking]["type"] == "med":
+                                break
+                    elif item_property[item_checking]["type"] == "med" or item_property[item_checking]["type"] == "mr":
                         while True:
                             use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["使用", "信息", "丢弃"])
                             if use is None:
                                 break
                             elif use == 0:
-                                cure_display(item_checking)
+                                if item_property[item_checking]["type"] == "med":
+                                    cure_display(item_checking)
+                                else:
+                                    mana_display(item_checking)
                                 break
                             elif use == 1:
-                                g.msgbox(f"""
+                                if item_property[item_checking]["type"] == "med":
+                                    g.msgbox(f"""
 {item_namespaces[item_checking]}
 回复{item_property[item_checking]["heal"]}点HP
 “{item_property[item_checking]["description"]}”
-""")
+    """)
+                                else:
+                                    g.msgbox(f"""
+{item_namespaces[item_checking]}
+回复{item_property[item_checking]["heal"]}点法力
+“{item_property[item_checking]["description"]}”
+                                        """)
                             elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
@@ -436,7 +463,8 @@ miss: +{item_property[item_checking]["miss"]}
     elif choose == 2:
         while True:
             item_buying = g.choicebox("请选择你要购买的物品",
-                                      choices=[item_namespaces[30], item_namespaces[11], item_namespaces[31]])
+                                      choices=[item_namespaces[30], item_namespaces[11], item_namespaces[31],
+                                               item_namespaces[32]])
             if item_buying is None:
                 break
             item_buying = get_key(item_buying)
@@ -557,7 +585,7 @@ MISS: {mob.miss}%
 """)
                 elif fight_choose == 2:
                     while True:
-                        set_inventory_display(["med"])
+                        set_inventory_display(["med", "mr"])
                         item_using = g.choicebox("请选择你要使用的物品（只有药物）", choices=inventory_display)
                         if item_using is None:
                             break
@@ -565,7 +593,10 @@ MISS: {mob.miss}%
                         if item_using == 0:
                             g.msgbox("你想使用空气吗？")
                         else:
-                            cure_display(item_using)
+                            if item_property[item_using]["type"] == "med":
+                                cure_display(item_using)
+                            else:
+                                mana_display(item_using)
                             break
                 elif fight_choose == 3 or fight_choose is None:
                     if g.ccbox("你确定要逃跑吗？", choices=["是的", "不了"]):
