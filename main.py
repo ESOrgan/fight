@@ -87,7 +87,7 @@ item_property = {
     16: {"atk": [15, 30], "type": "wep", "skill": [54, 55], "description": "附有石板的莫力布林棍，以重量碾压对手",
          "sell": 190},
     17: {"atk": [2, 3], "type": "wep", "skill": [56], "description": "普通的木剑", "sell": 180},
-    18: {"atk": [10, 26], "type": "wep", "skill": [54, 59, 60], "description": "海拉鲁王国的骑士所用的单手剑", "sell": 2500},
+    18: {"atk": [10, 26], "type": "wep", "skill": [54, 59, 510], "description": "海拉鲁王国的骑士所用的单手剑", "sell": 2500},
     19: {"atk": [5, 9], "type": "wep", "skill": [511, 512, 513, 514],
          "description": "更强的桃木剑，更强的灵气！", "sell": 7800},
     110: {"atk": [4, 6], "type": "wep", "skill": [515, 516], "description": "自然系的一级法杖，法杖核心是木之灵",
