@@ -185,7 +185,7 @@ item_property = {
 
     0: {"def": 0, "miss": 0},
 }
-player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0,
+player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0, "km": 0.0, "place": 1,
                    "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3}
 
 craft_expr = {
@@ -209,10 +209,17 @@ mobs = []
 
 bosses = []
 
-# 2% plank craft tool(P1) 2% broken plank 2% mystery man 4% plank craft tool(P2) 4% iron ore 10% iron ingot craft tool
-# 10% wooden stick 20% random mob 56% stone
-explore_list = [61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61,
-                61, 61, 62, 63, 63, 71, 67, 11, 11, 11, 11, 11, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 610, 610]
+places = {1: "海拉鲁台地", 2: "海拉鲁山脉", 3: "哈特尔平原", 4: "南哈特尔山脉",
+          5: "西哈特诺高原", 6: "中哈特诺盆地", 7: "东哈特尔雪山", 8: "南哈特尔山脉",
+          9: "雷之台地", 10: "漂流物岬角", 11: "南海拉鲁平原", 12: "东努克尔沙漠",
+          13: "中努克尔沙漠", 14: "北努克尔沙漠", 15: "南哈尔里丛林", 16: "哈尔里丛林深部", 17: "咕隆地区", 18: "死亡火山脚",
+          19: "死亡火山腰", 20: "死亡火山口"}
+
+explore_list = []
+
+place_display = []
+for i in places.keys():
+    place_display.append(places[i])
 
 breaking = False
 
@@ -263,6 +270,11 @@ def die_detect():
         g.msgbox("某种神秘的力量将你从死亡拉了回来，不过他似乎抽取了一些费用")
         player_property["hp"] = 1
         player_property["gold"] -= int(player_property["gold"] * 0.2)
+
+
+def add_explore(item, p, place):
+    for time in range(p):
+        explore_list[place - 1].append(item)
 
 
 def get_key(value, dict_obj=None):
@@ -586,6 +598,41 @@ def _update_save_version():
     _update_save()
 
 
+for i in range(20):
+    explore_list.append([])
+# place 1
+add_explore(62, 2, 1)
+add_explore(67, 2, 1)
+add_explore(71, 2, 1)
+add_explore(63, 4, 1)
+add_explore(68, 4, 1)
+add_explore(610, 10, 1)
+add_explore(11, 10, 1)
+add_explore(70, 10, 1)
+add_explore(61, 56, 1)
+# place 2
+add_explore(62, 1, 1)
+add_explore(67, 1, 1)
+add_explore(71, 1, 1)
+add_explore(63, 2, 1)
+add_explore(68, 8, 1)
+add_explore(610, 5, 1)
+add_explore(11, 10, 1)
+add_explore(70, 10, 1)
+add_explore(61, 60, 1)
+# place 3
+add_explore(62, 4, 1)
+add_explore(67, 2, 1)
+add_explore(71, 1, 1)
+add_explore(63, 7, 1)
+add_explore(68, 0, 1)
+add_explore(610, 6, 1)
+add_explore(11, 10, 1)
+add_explore(70, 20, 1)
+add_explore(61, 50, 1)
+
+# TODO: Finish adding percent of exploring now (3/20)
+
 run_environment = _get_path()
 _makedir("save")
 _option_go("save")
@@ -891,12 +938,14 @@ miss: +{item_property[item_checking]["miss"]}
             if g.ccbox(f"“{player}”的HP: {player_property['hp']}/{player_property['max_hp']} "
                        f"法力: {player_property['mana']}/{player_property['max_mana']} "
                        f"体力: {player_property['str']}/{player_property['max_str']}\n"
+                       f"目前位置: {places[player_property['place']]} {player_property['km']} / 10 km\n"
                        f"是否继续前进？", choices=["是的（消耗5体力）", "不了"]):
                 if player_property['str'] < 5:
                     g.msgbox("你没有足够的体力")
                     break
                 player_property["str"] -= 5
-                event = random.choice(explore_list)
+                player_property['km'] += 0.1
+                event = random.choice(explore_list[player_property["place"] - 1])
                 if event == 70:
                     fight_ui()
                 elif event == 71:
@@ -915,6 +964,25 @@ miss: +{item_property[item_checking]["miss"]}
                 else:
                     pocket["inventory"].append(event)
                     g.msgbox(f"你获得了{item_namespaces[event]}")
+                if player_property['km'] == 10:
+                    if player_property['places'] != 20:
+                        teleport = g.choicebox("你来到了地区之间的传送点，你是否要传送呢，可传送的地点列表如下",
+                                               choices=place_display)
+                        if teleport is None:
+                            player_property["place"] += 1
+                            g.msgbox(f"你来到了{places[player_property['place']]}!")
+                        else:
+                            player_property["place"] = get_key(teleport, places)
+                            g.msgbox(f"你传送到了{teleport}")
+                    else:
+                        if g.ccbox("前方就是大灾厄盖侬的巢穴了，你是否要进入挑战呢（不挑战则回到海拉鲁台地）"):
+                            g.msgbox("暂未完成，按下OK回到海拉鲁台地（作者的吐槽：打得好快）")
+                            player_property["place"] = 1
+                        else:
+                            g.msgbox("正在回到海拉鲁台地（作者的吐槽：打得好快）")
+                            player_property["place"] = 1
+                    player_property["km"] = 0.0
+
             else:
                 break
 
@@ -1133,7 +1201,6 @@ MISS: {boss.miss}%
                         if quit_yn:
                             continue
                         break
-            # TODO: finish boss fight ui
     elif choose == 7:
         _update_save()
         g.msgbox("已存档")

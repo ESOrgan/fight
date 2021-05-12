@@ -9,5 +9,7 @@ PROPERTY_EXPR = {
     "mana_reg": "player_property['mana_reg'] = int(player_property['lv'] / 5) + 1",
     "str": 'player_property["str"] = player_property["lv"] * 35 + 15',
     "max_str": 'player_property["max_str"] = player_property["str"]',
-    "str_reg": 'player_property["str_reg"] = int(player_property["lv"] * 0.1) + 1'
+    "str_reg": 'player_property["str_reg"] = int(player_property["lv"] * 0.1) + 1',
+    "place": "player_property['place'] = 1",
+    "km": "player_property['km'] = 0.0",
 }
