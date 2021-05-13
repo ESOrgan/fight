@@ -61,13 +61,22 @@ item_namespaces = {
     612: "致密铁板",
     613: "铁柄",
     614: "空魔法杖",
+    615: "一级科学机器碎片",
+    616: "二级科学机器碎片",
+    617: "铜矿",
+    618: "生铜",
+    619: "铜板",
+    620: "铜线",
+    621: "一级科学机器",
+    622: "二级科学机器",
+    623: "电路板",
 
     # events
     70: "随机怪物",
     71: "需要帮助的神秘人",
 
     # boss
-    80: "岩石巨人", 81: "棕色波克布林",
+    80: "岩石巨人", 81: "棕色波布克林",
 
     # boss skill
     91: "岩石重击",
@@ -79,28 +88,32 @@ item_property = {
     10: {"atk": [1, 1], "type": "wep", "skill": [57], "description": "你无敌的手"},
     11: {"atk": [1, 3], "type": "wep", "skill": [56],
          "description": "一根普通的木棍，没有什么特别之处", "sell": 25},
-    12: {"atk": [2, 4], "type": "wep", "skill": [51], "description": "经常能从波布克林身上找到的一个笨重的武器", "sell": 40},
+    12: {"atk": [2, 4], "type": "wep", "skill": [51], "description": "经常能从波布克林身上找到的一个笨重的武器", "sell": 40,
+         "craft": 0},
     13: {"atk": [4, 7], "type": "wep", "skill": [54], "description": "蓝色波布克林使用的武器，和普通波克棒不同，它的上方"
-                                                                     "附有石板以增强攻击力", "sell": 60},
-    14: {"atk": [2, 3], "type": "wep", "skill": [52, 53], "description": "用神木制成的剑，有很强的灵气", "sell": 1320},
+                                                                     "附有石板以增强攻击力", "sell": 60, "craft": 0},
+    14: {"atk": [2, 3], "type": "wep", "skill": [52, 53], "description": "用神木制成的剑，有很强的灵气", "sell": 1320,
+         "craft": 0},
     15: {"atk": [10, 20], "type": "wep", "skill": [54], "description": "莫力布林随身携带的武器，笨重但有效", "sell": 90},
     16: {"atk": [15, 30], "type": "wep", "skill": [54, 55], "description": "附有石板的莫力布林棍，以重量碾压对手",
-         "sell": 190},
-    17: {"atk": [2, 3], "type": "wep", "skill": [56], "description": "普通的木剑", "sell": 180},
+         "sell": 190, "craft": 0},
+    17: {"atk": [2, 3], "type": "wep", "skill": [56], "description": "普通的木剑", "sell": 180, "craft": 0},
     18: {"atk": [10, 26], "type": "wep", "skill": [54, 59, 510], "description": "海拉鲁王国的骑士所用的单手剑", "sell": 2500},
     19: {"atk": [5, 9], "type": "wep", "skill": [511, 512, 513, 514],
-         "description": "更强的桃木剑，更强的灵气！", "sell": 7800},
+         "description": "更强的桃木剑，更强的灵气！", "sell": 7800, "craft": 0},
     110: {"atk": [4, 6], "type": "wep", "skill": [515, 516], "description": "自然系的一级法杖，法杖核心是木之灵",
-          "sell": 1300},
+          "sell": 1300, "craft": 0},
     111: {"atk": [5, 8], "type": "wep", "skill": [517, 518, 519], "description": "自然系的二级法杖，法杖核心是木之心",
-          "sell": 4500},
+          "sell": 4500, "craft": 0},
     112: {"atk": [20, 25], "type": "wep", "skill": [520, 55], "description": "棕色波克布林所使用的武器，龙骨很尖锐",
           "sell": 1000},
     # armor
     21: {"def": 100, "miss": 50, "skill": [0], "type": "arm", "sell": 80,
-         "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效"},
-    22: {"def": 200, "miss": 100, "skill": [0], "type": "arm", "description": "海拉鲁王国的士兵用的防具", "sell": 3500},
-    23: {"def": 450, "miss": 70, "skill": [0], "type": "arm", "description": "海拉鲁王国的骑士所用的防具", "sell": 7200},
+         "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效", "craft": 0},
+    22: {"def": 200, "miss": 100, "skill": [0], "type": "arm", "description": "海拉鲁王国的士兵用的防具", "sell": 3500,
+         "craft": 1},
+    23: {"def": 450, "miss": 70, "skill": [0], "type": "arm", "description": "海拉鲁王国的骑士所用的防具", "sell": 7200,
+         "craft": 1},
     # medicine
     30: {"heal": 2, "type": "med", "buff": [0],
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
@@ -113,7 +126,7 @@ item_property = {
     34: {"heal": 40, "type": "med", "buff": [0],
          "description": "帮助神秘人后神秘人回赠的礼物，是一个发光的绿色小球，似乎与桃木剑有什么关系，非常珍贵", "sell": 1000},
     35: {"heal": 120, "type": "med", "buff": [0],
-         "description": "由木之灵合成的绿色小球，似乎更有生命力了，有时能感受到小球在跳动，价值连城", "sell": 4200},
+         "description": "由木之灵合成的绿色小球，似乎更有生命力了，有时能感受到小球在跳动，价值连城", "sell": 4200, "craft": 0},
 
     # mobs
     41: {"hp": 13, "atk": [1, 2], "type": "mob",
@@ -158,17 +171,26 @@ item_property = {
     61: {"type": "m", "description": "普通的石子", "sell": 1},
     62: {"type": "m", "description": "木板合成工具里的粘合剂部分", "sell": 25},
     63: {"type": "m", "description": "木板合成工具里的锯子及其他工具部分", "sell": 10},
-    64: {"type": "m", "description": "完整的木板合成工具，可以加工出一块木板", "sell": 40},
-    65: {"type": "m", "description": "崭新的木板，由木板合成工具制成", "sell": 80},
-    66: {"type": "m", "description": "一块大石板，很重", "sell": 20},
+    64: {"type": "m", "description": "完整的木板合成工具，可以加工出一块木板", "sell": 40, "craft": 0},
+    65: {"type": "m", "description": "崭新的木板，由木板合成工具制成", "sell": 80, "craft": 0},
+    66: {"type": "m", "description": "一块大石板，很重", "sell": 20, "craft": 0},
     67: {"type": "m", "description": "破旧的木板，没法使用", "sell": 30},
     68: {"type": "m", "description": "不纯的铁矿，无法使用", "sell": 100},
-    69: {"type": "m", "description": "经过加工的铁矿，可以使用了", "sell": 200},
+    69: {"type": "m", "description": "经过加工的铁矿，可以使用了", "sell": 200, "craft": 0},
     610: {"type": "m", "description": "完好的生铁加工工具，可以加工出一块生铁", "sell": 70},
-    611: {"type": "m", "description": "一块铁板", "sell": 450},
-    612: {"type": "m", "description": "二重压缩的铁板", "sell": 950},
-    613: {"type": "m", "description": "铁制的握把，广泛用于制作各种铁质工具中", "sell": 500},
-    614: {"type": "m", "description": "空的一级魔法杖，可以放入灵或心来变为元素法杖", "sell": 220},
+    611: {"type": "m", "description": "一块铁板", "sell": 450, "craft": 1},
+    612: {"type": "m", "description": "二重压缩的铁板", "sell": 950, "craft": 1},
+    613: {"type": "m", "description": "铁制的握把，广泛用于制作各种铁质工具中", "sell": 500, "craft": 1},
+    614: {"type": "m", "description": "空的一级魔法杖，可以放入灵或心来变为元素法杖", "sell": 220, "craft": 0},
+    615: {"type": "m", "description": "一级科学机器的碎片", "sell": 240},
+    616: {"type": "m", "description": "二级科学机器的碎片", "sell": 600},
+    617: {"type": "m", "description": "不纯的铜矿，无法使用", "sell": 150},
+    618: {"type": "m", "description": "经过加工的铜矿，可以使用了", "sell": 400},
+    619: {"type": "m", "description": "铜板，导电性很好", "sell": 500},
+    620: {"type": "m", "description": "铜线，导电性很好", "sell": 500},
+    621: {"type": "m", "craft": 0},
+    622: {"type": "m", "craft": 1},
+    623: {"type": "m", "description": "普通的电路板", "sell": 3000},
 
     # events
     70: {"type": "e", "*description": "summon a random mob"},
@@ -177,7 +199,8 @@ item_property = {
     # boss
     80: {"type": "boss", "hp": 50, "atk": [5, 10], "skill": [50, 91, 92], "gear": [66, 66, 66, 68, 68],
          "gold": [80, 210], "exp": 90, "define": 20, "miss": 0, "description": "浑身是岩石的大块头"},
-    81: {"type": "boss", "hp": 260, "atk": [25, 35], "skill": [520, 55], "gear": [21]},
+    81: {"type": "boss", "hp": 260, "atk": [25, 35], "skill": [520, 55], "gear": [21, 112], "gold": [300, 630],
+         "exp": 210, "define": 10, "miss": 10, "description": "波布克林的二级加强版，超强"},
 
     # boss skill
     91: {"type": "a", "atk": 28},
@@ -186,21 +209,29 @@ item_property = {
     0: {"def": 0, "miss": 0},
 }
 player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0, "km": 0.0, "place": 1,
-                   "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3}
+                   "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3,
+                   "sm1": False, "sm2": False}
 
 craft_expr = {
+    "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
+    "二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器": "10 * 616; 1 * 619; 4 * 620 -> 622",
+    "====================手====================": None,  # craft: 0
     "木棍 * 5 -> 波克棒": "5 * 11 -> 12", "小石子 * 9 -> 石板": "5 * 61 -> 66",
     "不完整的木板合成工具（P1）+ 不完整的木板合成工具（P2）-> 木板合成工具": "1 * 62; 1 * 63 -> 64",
     "木板合成工具 + 木棍 * 4 -> 木板": "1 * 64; 4 * 11 -> 65", "石板 * 4 -> 石板甲": "4 * 66 -> 21",
     "波克棒 + 石板 * 2 -> 石板波克棒": "1 * 12; 2 * 66 -> 13", "莫力布林棍 + 石板 * 6 -> 石板莫力布林棍": "1 * 15; 6 * 66 -> 16",
     "木板 * 2 + 木棍 * 1 -> 木剑": "2 * 65; 1 * 11 -> 17", "木板 * 4 + 木棍 * 2 -> 波克棒": "4 * 65; 2 * 11 -> 12",
     "破旧的木板 * 2 -> 木板": "2 * 67 -> 65", "木之灵 + 木剑 -> 桃木剑": "1 * 34; 1 * 17 -> 14",
-    "铁矿 + 生铁加工工具 + 木棍 * 2 -> 生铁": "1 * 68; 1 * 610; 2 * 11 -> 69", "生铁 * 2 -> 铁板": "2 * 69 -> 611",
-    "铁板 * 2 -> 致密铁板": "2 * 611 -> 612", "铁板 * 1 + 木棍 * 1 -> 铁柄": "1 * 611; 1 * 11 -> 613",
-    "致密铁板 * 2 + 铁柄 -> 骑士之剑": "2 * 612; 1 * 613 -> 18", "木之灵 * 4 -> 木之心": "4 * 34 -> 35",
+    "铁矿 + 生铁加工工具 + 木棍 * 2 -> 生铁": "1 * 68; 1 * 610; 2 * 11 -> 69", "木之灵 * 4 -> 木之心": "4 * 34 -> 35",
     "桃木剑 * 2 + 木之心 -> 灵木剑": "2 * 14; 1 * 35 -> 19", "木板 * 2 + 木棍 * 2 -> 空魔法杖": "2 * 65; 1 * 11 -> 614",
     "空魔法杖I + 木之灵 -> 自然法杖I": "1 * 614; 1 * 34 -> 110", "空魔法杖 + 木之心 -> 自然法杖II": "1 * 614; 1 * 35 -> 111",
+    "====================一级科学机器====================": None,  # craft: 1
+    "生铁 * 2 -> 铁板": "2 * 69 -> 611", "铜矿 * 2 -> 生铜": "2 * 617 -> 618", "生铜 * 2 -> 铜板": "2 * 618 -> 619",
+    "生铜 * 2 -> 铜线": "2 * 618 -> 620", "铜板 + 铜线 * 4 + 生铁 * 2 -> 电路板": "1 * 619; 4 * 620; 2 * 69 -> 623",
+    "铁板 * 2 -> 致密铁板": "2 * 611 -> 612", "铁板 * 1 + 木棍 * 1 -> 铁柄": "1 * 611; 1 * 11 -> 613",
+    "致密铁板 * 2 + 铁柄 -> 骑士之剑": "2 * 612; 1 * 613 -> 18",
     "铁板 * 7 -> 士兵之甲": "7 * 611 -> 22", "致密铁板 * 7 -> 骑士之甲": "7 * 612 -> 23",
+    "====================二级科学机器====================": None,  # craft: 2
 }
 
 inventory_display = []
@@ -601,37 +632,66 @@ def _update_save_version():
 for i in range(20):
     explore_list.append([])
 # place 1
+add_explore(615, 1, 1)
 add_explore(62, 2, 1)
 add_explore(67, 2, 1)
 add_explore(71, 2, 1)
-add_explore(63, 4, 1)
+add_explore(63, 3, 1)
 add_explore(68, 4, 1)
 add_explore(610, 10, 1)
 add_explore(11, 10, 1)
 add_explore(70, 10, 1)
 add_explore(61, 56, 1)
 # place 2
-add_explore(62, 1, 1)
-add_explore(67, 1, 1)
-add_explore(71, 1, 1)
-add_explore(63, 2, 1)
-add_explore(68, 8, 1)
-add_explore(610, 5, 1)
-add_explore(11, 10, 1)
-add_explore(70, 10, 1)
-add_explore(61, 60, 1)
+add_explore(62, 1, 2)
+add_explore(67, 1, 2)
+add_explore(71, 1, 2)
+add_explore(63, 2, 2)
+add_explore(68, 8, 2)
+add_explore(610, 5, 2)
+add_explore(11, 10, 2)
+add_explore(70, 10, 2)
+add_explore(61, 60, 2)
 # place 3
-add_explore(62, 4, 1)
-add_explore(67, 2, 1)
-add_explore(71, 1, 1)
-add_explore(63, 7, 1)
-add_explore(68, 0, 1)
-add_explore(610, 6, 1)
-add_explore(11, 10, 1)
-add_explore(70, 20, 1)
-add_explore(61, 50, 1)
-
-# TODO: Finish adding percent of exploring now (3/20)
+add_explore(62, 4, 3)
+add_explore(67, 2, 3)
+add_explore(71, 1, 3)
+add_explore(63, 7, 3)
+add_explore(610, 6, 3)
+add_explore(11, 10, 3)
+add_explore(70, 20, 3)
+add_explore(61, 50, 3)
+# place 4
+add_explore(68, 10, 4)
+add_explore(11, 4, 4)
+add_explore(70, 30, 4)
+add_explore(61, 56, 4)
+# place 5
+add_explore(68, 5, 5)
+add_explore(70, 35, 5)
+add_explore(61, 55, 5)
+# place 6
+add_explore(67, 5, 6)
+add_explore(64, 4, 6)
+add_explore(71, 5, 6)
+add_explore(68, 5, 6)
+add_explore(610, 5, 6)
+add_explore(11, 10, 6)
+add_explore(70, 10, 6)
+add_explore(61, 56, 6)
+# place 7
+add_explore(610, 5, 7)
+add_explore(617, 10, 7)
+add_explore(615, 15, 7)
+add_explore(70, 20, 7)
+add_explore(61, 50, 7)
+# place 8
+add_explore(68, 10, 7)
+add_explore(617, 10, 7)
+add_explore(616, 15, 7)
+add_explore(70, 15, 7)
+add_explore(61, 50, 7)
+# TODO: Finish adding percent of exploring now (8/20)
 
 run_environment = _get_path()
 _makedir("save")
@@ -804,13 +864,31 @@ miss: +{item_property[item_checking]["miss"]}
                         break
                     elif item_checking == "合成界面":
                         while True:
+                            if player_property["sm1"]:
+                                craft_expr.pop("一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器", None)
                             craft_display = []
                             for craft_key in craft_expr.keys():
                                 craft_display.append(craft_key)
-                            crafting_item = g.choicebox("请选择你要合成的物品", choices=craft_display)
+                            sm_display = []
+                            for i in range(2):
+                                if player_property[f"sm{i + 1}"]:
+                                    sm_display.append("✔")
+                                else:
+                                    sm_display.append("❌")
+                            crafting_item = g.choicebox(f"请选择你要合成的物品 一级科学机器: {sm_display[0]}"
+                                                        f"二级科学机器: {sm_display[1]}",
+                                                        choices=craft_display)
                             if crafting_item is None:
                                 break
+                            elif craft_expr[crafting_item] is None:
+                                continue
                             craft_materials = craft_expr_interpreter(craft_expr[crafting_item])
+                            if item_property[craft_materials[1]]["craft"] == 1 and not player_property["sm1"]:
+                                g.msgbox("你没有一级科学机器")
+                                continue
+                            elif item_property[craft_materials[1]]["craft"] == 2 and not player_property["sm2"]:
+                                g.msgbox("你没有二级科学机器")
+                                continue
                             materials_collections = collections.Counter(craft_materials[0])
                             pocket_collections = collections.Counter(pocket["inventory"])
                             cyn = False
@@ -828,8 +906,14 @@ miss: +{item_property[item_checking]["miss"]}
                                 continue
                             for mat in craft_materials[0]:
                                 pocket["inventory"].remove(mat)
-                            pocket["inventory"].append(craft_materials[1])
                             g.msgbox(f"你合成了{item_namespaces[craft_materials[1]]}")
+                            if craft_materials[1] == 621:
+                                player_property["sm1"] = True
+                            elif craft_materials[1] == 622:
+                                player_property["sm2"] = True
+                            else:
+                                pocket["inventory"].append(craft_materials[1])
+
                         continue
                     item_checking = get_key(item_checking)
                     if item_checking == 0:
@@ -945,6 +1029,7 @@ miss: +{item_property[item_checking]["miss"]}
                     break
                 player_property["str"] -= 5
                 player_property['km'] += 0.1
+                player_property['km'] = round(player_property['km'], 1)
                 event = random.choice(explore_list[player_property["place"] - 1])
                 if event == 70:
                     fight_ui()
