@@ -2,7 +2,7 @@ REBIRTH = False
 
 auto_save = False  # test function
 
-PROPERTY_KEY = ["max_mana", "mana", "mana_reg", "str", "max_str", "str_reg", "place", "km", "sm1", "sm2"]
+PROPERTY_KEY = ["max_mana", "mana", "mana_reg", "str", "max_str", "str_reg", "place", "km", "sm1", "sm2", "sm3"]
 PROPERTY_EXPR = {
     "max_mana": "player_property['max_mana'] = player_property['lv'] * 10 + 20",
     "mana": "player_property['mana'] = player_property['max_mana']",
@@ -14,4 +14,5 @@ PROPERTY_EXPR = {
     "km": "player_property['km'] = 0.0",
     "sm1": "player_property['sm1'] = False",
     "sm2": "player_property['sm2'] = False",
+    "sm3": "player_property['sm3'] = False",
 }

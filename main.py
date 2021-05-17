@@ -1,5 +1,5 @@
-# version <dv-005>
-# lines: 1136 + 4 (project description: 2; start blank: 1; end blank: 1) = 1137
+# version <dv-006>
+# lines: 1414 + 4 (project description: 2; start blank: 1; end blank: 1) = 1418
 
 import easygui as g
 import random
@@ -13,12 +13,13 @@ item_namespaces = {
 
     # weapon
     10: "手", 11: "木棍", 12: "波克棒", 13: "石板波克棒", 14: "桃木剑", 15: "莫力布林棍", 16: "石板莫力布林棍", 17: "木剑",
-    18: "骑士之剑", 19: "灵木剑", 110: "自然法杖I", 111: "自然法杖II", 112: "龙骨波克棒",
+    18: "骑士之剑", 19: "灵木剑", 110: "自然法杖I", 111: "自然法杖II", 112: "龙骨波克棒", 113: "精英骑士之剑", 114: "荣誉骑士之剑",
+    115: "铂金骑士之剑", 116: "钻石骑士之剑",
     # armor
     21: "石板甲", 22: "士兵之甲", 23: "骑士之甲",
 
     # medicine
-    30: "绷带", 31: "医用绷带", 32: "小型法力回复剂", 33: "小型体力回复剂", 34: "木之灵", 35: "木之心",
+    30: "绷带", 31: "医用绷带", 32: "小型法力回复剂", 33: "小型体力回复剂", 34: "木之灵", 35: "木之心", 36: "仙人掌果",
 
     # mobs
     41: "波布克林", 42: "蓝色波布克林", 43: "丘丘", 44: "莫力布林", 45: "蓝色莫力布林",
@@ -45,6 +46,8 @@ item_namespaces = {
     518: "自然之灵的祝福（治疗）",
     519: "树叶镖（攻击）",
     520: "跳劈重击IV（攻击）",
+    521: "精英骑士之魂（治疗）",
+    522: "金属骑士之魂（治疗）",
 
     # materials
     61: "小石子",
@@ -70,6 +73,17 @@ item_namespaces = {
     621: "一级科学机器",
     622: "二级科学机器",
     623: "电路板",
+    624: "锡矿",
+    625: "生锡",
+    626: "锡线",
+    627: "铜铁合金",
+    628: "铜铁合金板",
+    629: "致密铜铁合金板",
+    630: "中级电路板",
+    631: "三级科学机器碎片",
+    632: "三级科学机器",
+    633: "铜锡合金",
+    634: "铜锡合金版",
 
     # events
     70: "随机怪物",
@@ -98,7 +112,8 @@ item_property = {
     16: {"atk": [15, 30], "type": "wep", "skill": [54, 55], "description": "附有石板的莫力布林棍，以重量碾压对手",
          "sell": 190, "craft": 0},
     17: {"atk": [2, 3], "type": "wep", "skill": [56], "description": "普通的木剑", "sell": 180, "craft": 0},
-    18: {"atk": [10, 26], "type": "wep", "skill": [54, 59, 510], "description": "海拉鲁王国的骑士所用的单手剑", "sell": 2500},
+    18: {"atk": [10, 26], "type": "wep", "skill": [54, 59, 510], "description": "海拉鲁王国的骑士所用的单手剑", "sell": 2500
+        , "craft": 1},
     19: {"atk": [5, 9], "type": "wep", "skill": [511, 512, 513, 514],
          "description": "更强的桃木剑，更强的灵气！", "sell": 7800, "craft": 0},
     110: {"atk": [4, 6], "type": "wep", "skill": [515, 516], "description": "自然系的一级法杖，法杖核心是木之灵",
@@ -107,6 +122,14 @@ item_property = {
           "sell": 4500, "craft": 0},
     112: {"atk": [20, 25], "type": "wep", "skill": [520, 55], "description": "棕色波克布林所使用的武器，龙骨很尖锐",
           "sell": 1000},
+    113: {"atk": [16, 26], "type": "wep", "skill": [54, 59, 521], "description": "海拉鲁王国的精英骑士所用的单手剑",
+          "sell": 4000, "craft": 2},
+    114: {"atk": [20, 30], "type": "wep", "skill": [520, 59, 521], "description": "海拉鲁王国的荣誉骑士所用的单手剑",
+          "craft": 2, "sell": 9000},
+    115: {"atk": [26, 30], "type": "wep", "skill": [520, 59, 521], "description": "海拉鲁王国的铂金骑士所用的单手剑",
+          "craft": 3, "sell": 11000},
+    116: {"atk": [35, 50], "type": "wep", "skill": [520, 59, 522], "description": "海拉鲁王国的钻石骑士所用的单手剑",
+          "craft": 3, "sell": 22000},
     # armor
     21: {"def": 100, "miss": 50, "skill": [0], "type": "arm", "sell": 80,
          "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效", "craft": 0},
@@ -127,6 +150,7 @@ item_property = {
          "description": "帮助神秘人后神秘人回赠的礼物，是一个发光的绿色小球，似乎与桃木剑有什么关系，非常珍贵", "sell": 1000},
     35: {"heal": 120, "type": "med", "buff": [0],
          "description": "由木之灵合成的绿色小球，似乎更有生命力了，有时能感受到小球在跳动，价值连城", "sell": 4200, "craft": 0},
+    36: {"heal": 7, "type": "med", "buff": [0], "description": "在沙漠能找到的果子", "sell": 60},
 
     # mobs
     41: {"hp": 13, "atk": [1, 2], "type": "mob",
@@ -166,6 +190,8 @@ item_property = {
     518: {"final": False, "type": "c", "heal": 10, "cost_mana": 20},
     519: {"final": False, "type": "a", "atk": 30, "cost_mana": 10},
     520: {"final": False, "type": "a", "atk": 60, "cost_mana": 55},
+    521: {"final": False, "type": "c", "heal": 45, "cost_mana": 40},
+    522: {"final": False, "type": "c", "heal": 60, "cost_mana": 40},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
@@ -185,12 +211,24 @@ item_property = {
     615: {"type": "m", "description": "一级科学机器的碎片", "sell": 240},
     616: {"type": "m", "description": "二级科学机器的碎片", "sell": 600},
     617: {"type": "m", "description": "不纯的铜矿，无法使用", "sell": 150},
-    618: {"type": "m", "description": "经过加工的铜矿，可以使用了", "sell": 400},
-    619: {"type": "m", "description": "铜板，导电性很好", "sell": 500},
-    620: {"type": "m", "description": "铜线，导电性很好", "sell": 500},
+    618: {"type": "m", "description": "经过加工的铜矿，可以使用了", "sell": 400, "craft": 1},
+    619: {"type": "m", "description": "铜板，导电性很好", "sell": 500, "craft": 1},
+    620: {"type": "m", "description": "铜线，导电性很好", "sell": 500, "craft": 1},
     621: {"type": "m", "craft": 0},
     622: {"type": "m", "craft": 1},
-    623: {"type": "m", "description": "普通的电路板", "sell": 3000},
+    623: {"type": "m", "description": "普通的电路板", "sell": 3000, "craft": 1},
+    624: {"type": "m", "description": "不纯的锡矿, 无法使用", "sell": 200},
+    625: {"type": "m", "description": "经过加工的锡矿, 可以使用了", "sell": 500, "craft": 2},
+    626: {"type": "m", "description": "锡质导线，电能损耗降低了", "sell": 700, "craft": 2},
+    627: {"type": "m", "description": "铜与铁的合金，更加坚硬", "sell": 700, "craft": 2},
+    628: {"type": "m", "description": "铜与铁的合金做成的板，质地十分坚硬", "sell": 1600, "craft": 2},
+    629: {"type": "m", "description": "二重压缩的铜铁合金板", "sell": 3500, "craft": 2},
+    630: {"type": "m", "description": "可以处理更多数据和进行更多计算的电路板", "sell": 7000, "craft": 2},
+    631: {"type": "m", "description": "三级科学机器的碎片", "sell": 1000},
+    632: {"type": "m", "craft": 2},
+    633: {"type": "m", "description": "铜与锡的合金", "sell": 1000, "craft": 3},
+    634: {"type": "m", "description": "铜锡合金压制成的板", "sell": 2500, "craft": 3},
+    635: {"type": "m", "description": "二重压缩的铜锡合金版", "sell": 5500, "craft": 3},
 
     # events
     70: {"type": "e", "*description": "summon a random mob"},
@@ -210,11 +248,12 @@ item_property = {
 }
 player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0, "km": 0.0, "place": 1,
                    "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3,
-                   "sm1": False, "sm2": False}
+                   "sm1": False, "sm2": False, "sm3": False}
 
 craft_expr = {
     "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
     "二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器": "10 * 616; 1 * 619; 4 * 620 -> 622",
+    "三级科学机器碎片 * 15 + 中级电路板 -> 三级科学机器": "15 * 631; 1 * 630",
     "====================手====================": None,  # craft: 0
     "木棍 * 5 -> 波克棒": "5 * 11 -> 12", "小石子 * 9 -> 石板": "5 * 61 -> 66",
     "不完整的木板合成工具（P1）+ 不完整的木板合成工具（P2）-> 木板合成工具": "1 * 62; 1 * 63 -> 64",
@@ -232,6 +271,15 @@ craft_expr = {
     "致密铁板 * 2 + 铁柄 -> 骑士之剑": "2 * 612; 1 * 613 -> 18",
     "铁板 * 7 -> 士兵之甲": "7 * 611 -> 22", "致密铁板 * 7 -> 骑士之甲": "7 * 612 -> 23",
     "====================二级科学机器====================": None,  # craft: 2
+    "锡矿 * 2 -> 生锡": "2 * 624 -> 625", "生锡 -> 锡线": "1 * 625 -> 626", "生铁 * 2 + 生铜 * 2 -> 铜铁合金":
+        "2 * 69; 2 * 618 -> 627", "铜铁合金 * 2 -> 铜铁合金板": "2 * 627 -> 628",
+    "铜铁合金板 * 2 -> 致密铜铁合金板": "2 * 628 -> 629", "铜铁合金板 * 2 + 铁柄 -> 精英骑士之剑": "2 * 628; 1 * 613 -> 113",
+    "致密铜铁合金板 * 2 + 铁柄 -> 荣誉骑士之剑": "2 * 629; 1 * 613 -> 114",
+    "铜板 + 锡线 * 8 + 生锡 * 3 -> 中级电路板": "1 * 619; 8 * 626; 3 * 625 -> 630",
+    "====================三级科学机器====================": None,  # craft: 3
+    "生铜 * 3 + 生锡 * 3 -> 铜锡合金": "3 * 618; 3 * 625 -> 633", "铜锡合金 * 3 -> 铜锡合金板": "3 * 633 -> 634",
+    "铜锡合金板 * 3 -> 致密铜锡合金版": "3 * 634 -> 635", "铜锡合金板 * 4 + 铁柄 -> 铂金骑士之剑": "4 * 634; 1 * 613 -> 115",
+    "致密铜锡合金板 * 4 + 铁柄 -> 钻石骑士之剑": "4 * 635; 1 * 613 -> 116",
 }
 
 inventory_display = []
@@ -365,7 +413,7 @@ def mana_display(item_checking):
         pocket["inventory"].remove(item_checking)
 
 
-def cure_display(item_checking):
+def cure_display(item_checking, skill=False):
     if item_property[item_checking]["heal"] == "all":
         player_property["hp"] = player_property["max_hp"]
         g.msgbox("你的HP回满了！")
@@ -378,6 +426,7 @@ def cure_display(item_checking):
             player_property["hp"] = player_property["max_hp"]
         elif player_property["hp"] == player_property["max_hp"]:
             g.msgbox("你的HP满了")
+    if not skill:
         pocket["inventory"].remove(item_checking)
 
 
@@ -686,12 +735,83 @@ add_explore(615, 15, 7)
 add_explore(70, 20, 7)
 add_explore(61, 50, 7)
 # place 8
-add_explore(68, 10, 7)
-add_explore(617, 10, 7)
-add_explore(616, 15, 7)
-add_explore(70, 15, 7)
-add_explore(61, 50, 7)
-# TODO: Finish adding percent of exploring now (8/20)
+add_explore(68, 10, 8)
+add_explore(617, 10, 8)
+add_explore(616, 15, 8)
+add_explore(70, 15, 8)
+add_explore(61, 50, 8)
+# place 9
+add_explore(67, 2, 9)
+add_explore(68, 8, 9)
+add_explore(617, 10, 9)
+add_explore(610, 10, 9)
+add_explore(70, 20, 9)
+add_explore(61, 50, 9)
+# place 10
+add_explore(70, 6, 10)
+add_explore(616, 10, 10)
+add_explore(67, 14, 10)
+add_explore(610, 15, 10)
+add_explore(615, 20, 10)
+add_explore(617, 20, 10)
+add_explore(68, 30, 10)
+# place 11
+add_explore(62, 2, 11)
+add_explore(67, 2, 11)
+add_explore(71, 3, 11)
+add_explore(63, 3, 11)
+add_explore(610, 4, 11)
+add_explore(11, 6, 11)
+add_explore(70, 40, 11)
+add_explore(61, 40, 11)
+# place 12
+add_explore(36, 5, 12)
+add_explore(624, 10, 12)
+add_explore(617, 25, 12)
+add_explore(68, 30, 12)
+add_explore(70, 30, 12)
+# place 13
+add_explore(624, 10, 13)
+add_explore(617, 20, 13)
+add_explore(68, 25, 13)
+add_explore(70, 45, 13)
+# place 14
+add_explore(36, 5, 14)
+add_explore(624, 15, 14)
+add_explore(617, 25, 14)
+add_explore(70, 25, 14)
+add_explore(68, 30, 14)
+# place 15
+add_explore(68, 5, 15)
+add_explore(65, 10, 15)
+add_explore(11, 10, 15)
+add_explore(70, 20, 15)
+add_explore(67, 25, 15)
+add_explore(71, 30, 15)
+# place 16
+add_explore(11, 5, 16)
+add_explore(65, 25, 16)
+add_explore(67, 30, 16)
+add_explore(71, 40, 16)
+# place 17
+add_explore(70, 10, 17)
+add_explore(624, 20, 17)
+add_explore(617, 30, 17)
+add_explore(68, 40, 17)
+# place 18
+add_explore(70, 15, 18)
+add_explore(624, 15, 18)
+add_explore(617, 30, 18)
+add_explore(68, 40, 18)
+# place 19
+add_explore(624, 15, 19)
+add_explore(617, 15, 19)
+add_explore(68, 30, 19)
+add_explore(70, 40, 19)
+# place 20
+add_explore(624, 5, 20)
+add_explore(617, 10, 20)
+add_explore(70, 85, 20)
 
 run_environment = _get_path()
 _makedir("save")
@@ -700,7 +820,7 @@ saves = os.listdir()
 for save in saves:
     save.replace(run_environment, "")
 g.msgbox("""
-                                  fight dv-005
+                                  fight dv-006
                                       欢迎
 """)
 saves.append("创建新存档")
@@ -866,17 +986,21 @@ miss: +{item_property[item_checking]["miss"]}
                         while True:
                             if player_property["sm1"]:
                                 craft_expr.pop("一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器", None)
+                            elif player_property["sm2"]:
+                                craft_expr.pop("二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器", None)
+                            elif player_property["sm3"]:
+                                craft_expr.pop("三级科学机器碎片 * 15 + 中级电路板 -> 三级科学机器", None)
                             craft_display = []
                             for craft_key in craft_expr.keys():
                                 craft_display.append(craft_key)
                             sm_display = []
-                            for i in range(2):
+                            for i in range(3):
                                 if player_property[f"sm{i + 1}"]:
                                     sm_display.append("✔")
                                 else:
                                     sm_display.append("❌")
                             crafting_item = g.choicebox(f"请选择你要合成的物品 一级科学机器: {sm_display[0]}"
-                                                        f"二级科学机器: {sm_display[1]}",
+                                                        f"二级科学机器: {sm_display[1]} 三级科学机器: {sm_display[2]}",
                                                         choices=craft_display)
                             if crafting_item is None:
                                 break
@@ -1050,7 +1174,7 @@ miss: +{item_property[item_checking]["miss"]}
                     pocket["inventory"].append(event)
                     g.msgbox(f"你获得了{item_namespaces[event]}")
                 if player_property['km'] == 10:
-                    if player_property['places'] != 20:
+                    if player_property['place'] != 20:
                         teleport = g.choicebox("你来到了地区之间的传送点，你是否要传送呢，可传送的地点列表如下",
                                                choices=place_display)
                         if teleport is None:
@@ -1077,7 +1201,9 @@ miss: +{item_property[item_checking]["miss"]}
             item_buying = g.choicebox("请选择你要购买的物品",
                                       choices=["收购", item_namespaces[30], item_namespaces[14], item_namespaces[11],
                                                item_namespaces[31], item_namespaces[32], item_namespaces[33],
-                                               item_namespaces[68], item_namespaces[610]])
+                                               item_namespaces[68], item_namespaces[617], item_namespaces[624],
+                                               item_namespaces[610], item_namespaces[615],
+                                               item_namespaces[616], item_namespaces[631]])
             if item_buying is None:
                 break
             elif item_buying == "收购":
@@ -1151,7 +1277,6 @@ miss: +{item_property[item_checking]["miss"]}
                         boss_object["miss"], boss_object["define"], boss_object["description"])
             g.msgbox(f"{item_namespaces[boss.namespace]}出现了！")
             while True:
-                die_detect()
                 if boss.hp <= 0:
                     gear_display = ""
                     for gear in boss.gear:
@@ -1179,6 +1304,7 @@ miss: +{item_property[item_checking]["miss"]}
                     g.msgbox(f"{item_namespaces[boss.namespace]}对你造成了{damage}点伤害")
                     player_property["hp"] -= damage
                 while True:
+                    die_detect()
                     fight_choose = g.indexbox(f"{item_namespaces[boss.namespace]} HP: {boss.hp}/{boss.max_hp}\n"
                                               f"“{player}”的HP: {player_property['hp']}/{player_property['max_hp']} "
                                               f"法力: {player_property['mana']}/{player_property['max_mana']} "
@@ -1228,7 +1354,7 @@ miss: +{item_property[item_checking]["miss"]}
                                                 boss.hp -= damage
                                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
                                         elif skill_type == "c":
-                                            cure_display(skill_num)
+                                            cure_display(skill_num, True)
                                         elif skill_type == "m":
                                             mana_display(skill_num)
                                         else:
@@ -1244,7 +1370,7 @@ miss: +{item_property[item_checking]["miss"]}
                                             boss.hp -= damage
                                             g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
                                     elif item_property[skill_num]["type"] == "c":
-                                        cure_display(skill_num)
+                                        cure_display(skill_num, True)
                                     elif item_property[skill_num]["type"] == "m":
                                         mana_display(skill_num)
                                     else:
