@@ -183,7 +183,7 @@ item_property = {
     37: {"heal": 25, "type": "exp", "description": "小型的经验瓶", "sell": 40},
     38: {"heal": 90, "type": "exp", "description": "中型的经验瓶", "sell": 100},
     39: {"heal": 100, "type": "mr", "description": "大一点的法力回复剂", "sell": 30},
-    310: {"heal": 300, "type": "mr", "description": "大一点的体力回复剂", "sell": 10},
+    310: {"heal": 300, "type": "sr", "description": "大一点的体力回复剂", "sell": 10},
 
     # mobs
     41: {"hp": 13, "atk": [1, 2], "type": "mob",
