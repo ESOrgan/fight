@@ -1,12 +1,13 @@
-# version <dv-006>
-# lines: 1414 + 4 (project description: 2; start blank: 1; end blank: 1) = 1418
-
+# version <dv-007>
+# lines: 1669 + 4 (project description: 2; start blank: 1; end blank: 1) = 1673
+import time
 import easygui as g
 import random
 import settings
 import os
 import base64
 import collections
+import pygame.mixer
 
 item_namespaces = {
     0: "无",
@@ -14,12 +15,13 @@ item_namespaces = {
     # weapon
     10: "手", 11: "木棍", 12: "波克棒", 13: "石板波克棒", 14: "桃木剑", 15: "莫力布林棍", 16: "石板莫力布林棍", 17: "木剑",
     18: "骑士之剑", 19: "灵木剑", 110: "自然法杖I", 111: "自然法杖II", 112: "龙骨波克棒", 113: "精英骑士之剑", 114: "荣誉骑士之剑",
-    115: "铂金骑士之剑", 116: "钻石骑士之剑",
+    115: "铂金骑士之剑", 116: "钻石骑士之剑", 117: "[UT限定][光]龙骨炮", 118: "[光]近卫骑士之剑", 119: "[流彩]荣耀骑士之剑",
     # armor
     21: "石板甲", 22: "士兵之甲", 23: "骑士之甲",
 
     # medicine
     30: "绷带", 31: "医用绷带", 32: "小型法力回复剂", 33: "小型体力回复剂", 34: "木之灵", 35: "木之心", 36: "仙人掌果",
+    37: "小型经验瓶", 38: "中型经验瓶", 39: "中型法力回复剂", 310: "中型体力回复剂",
 
     # mobs
     41: "波布克林", 42: "蓝色波布克林", 43: "丘丘", 44: "莫力布林", 45: "蓝色莫力布林",
@@ -48,6 +50,11 @@ item_namespaces = {
     520: "跳劈重击IV（攻击）",
     521: "精英骑士之魂（治疗）",
     522: "金属骑士之魂（治疗）",
+    523: "跳劈重击V（攻击）",
+    524: "[UT限定][光]龙骨激光（攻击）",
+    525: "横扫攻击IV（攻击）",
+    526: "[光]近卫荣耀！（终极技能）（攻击/治疗）",
+    527: "[流彩]荣耀骑士的信仰（终极技能）（攻击/回体力）",
 
     # materials
     61: "小石子",
@@ -83,18 +90,36 @@ item_namespaces = {
     631: "三级科学机器碎片",
     632: "三级科学机器",
     633: "铜锡合金",
-    634: "铜锡合金版",
+    634: "铜锡合金板",
+    635: "致密铜锡合金板",
+    636: "基础机械外壳",
+    637: "采矿机器人",
+    638: "采矿机器人储存升级模块",
+    639: "四级科学机器碎片",
+    640: "四级科学机器",
+    641: "高级电路板",
+    642: "初级全合金",
+    643: "初级全合金板",
+    644: "致密初级全合金板",
+    645: "采矿机器人升级模块",
+    646: "[MC限定][史诗]龙蛋",
 
     # events
     70: "随机怪物",
     71: "需要帮助的神秘人",
 
     # boss
-    80: "岩石巨人", 81: "棕色波布克林",
+    80: "岩石巨人", 81: "棕色波布克林", 82: "大型守护者（陆地型）", 83: "[UT限定]Sans", 84: "[MC限定]末影龙",
 
     # boss skill
     91: "岩石重击",
     92: "岩石炮",
+    93: "能量炮",
+    94: "守护者之斩",
+    95: "[MC限定]飞高高",
+    96: "[MC限定]龙息弹",
+    97: "[MC限定][光]龙息轰炸机！",
+    98: "[MC限定][光]急速飞高高",
 }
 pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": [30]}
 item_property = {
@@ -112,8 +137,8 @@ item_property = {
     16: {"atk": [15, 30], "type": "wep", "skill": [54, 55], "description": "附有石板的莫力布林棍，以重量碾压对手",
          "sell": 190, "craft": 0},
     17: {"atk": [2, 3], "type": "wep", "skill": [56], "description": "普通的木剑", "sell": 180, "craft": 0},
-    18: {"atk": [10, 26], "type": "wep", "skill": [54, 59, 510], "description": "海拉鲁王国的骑士所用的单手剑", "sell": 2500
-        , "craft": 1},
+    18: {"atk": [10, 26], "type": "wep", "skill": [54, 59, 510], "description": "海拉鲁王国的骑士所用的单手剑", "sell": 2500,
+         "craft": 1},
     19: {"atk": [5, 9], "type": "wep", "skill": [511, 512, 513, 514],
          "description": "更强的桃木剑，更强的灵气！", "sell": 7800, "craft": 0},
     110: {"atk": [4, 6], "type": "wep", "skill": [515, 516], "description": "自然系的一级法杖，法杖核心是木之灵",
@@ -128,8 +153,14 @@ item_property = {
           "craft": 2, "sell": 9000},
     115: {"atk": [26, 30], "type": "wep", "skill": [520, 59, 521], "description": "海拉鲁王国的铂金骑士所用的单手剑",
           "craft": 3, "sell": 11000},
-    116: {"atk": [35, 50], "type": "wep", "skill": [520, 59, 522], "description": "海拉鲁王国的钻石骑士所用的单手剑",
+    116: {"atk": [35, 50], "type": "wep", "skill": [523, 59, 522], "description": "海拉鲁王国的钻石骑士所用的单手剑",
           "craft": 3, "sell": 22000},
+    117: {"atk": [10, 20], "type": "wep", "skill": [],
+          "description": "[UT限定][光]那些去挑战Sans的人们从未返乡，拿到了它的你拥有无上荣耀！"},
+    118: {"atk": [40, 70], "type": "wep", "skill": [523, 525, 526], "description": "[光]海拉鲁王国的近卫骑士所用的单手剑",
+          "sell": 15000, "craft": 4},
+    119: {"atk": [50, 80], "type": "wep", "skill": [523, 525, 526, 527],
+          "description": "[流彩]海拉鲁王国的荣耀骑士所用的单手剑", "sell": 32000, "craft": 4},
     # armor
     21: {"def": 100, "miss": 50, "skill": [0], "type": "arm", "sell": 80,
          "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效", "craft": 0},
@@ -142,15 +173,17 @@ item_property = {
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
     31: {"heal": 5, "type": "med", "buff": [0],
          "description": "洒上酒精的绷带，这使它的治疗效果增加了3", "sell": 50},
-    32: {"heal": 30, "type": "mr",
-         "description": "非常普通的法力回复剂", "sell": 10},
-    33: {"heal": 100, "type": "sr",
-         "description": "非常普通的体力回复剂, 因为制作材料很常见，所以很便宜", "sell": 5},
+    32: {"heal": 30, "type": "mr", "description": "非常普通的法力回复剂", "sell": 10},
+    33: {"heal": 100, "type": "sr", "description": "非常普通的体力回复剂, 因为制作材料很常见，所以很便宜", "sell": 5},
     34: {"heal": 40, "type": "med", "buff": [0],
          "description": "帮助神秘人后神秘人回赠的礼物，是一个发光的绿色小球，似乎与桃木剑有什么关系，非常珍贵", "sell": 1000},
     35: {"heal": 120, "type": "med", "buff": [0],
          "description": "由木之灵合成的绿色小球，似乎更有生命力了，有时能感受到小球在跳动，价值连城", "sell": 4200, "craft": 0},
     36: {"heal": 7, "type": "med", "buff": [0], "description": "在沙漠能找到的果子", "sell": 60},
+    37: {"heal": 25, "type": "exp", "description": "小型的经验瓶", "sell": 40},
+    38: {"heal": 90, "type": "exp", "description": "中型的经验瓶", "sell": 100},
+    39: {"heal": 100, "type": "mr", "description": "大一点的法力回复剂", "sell": 30},
+    310: {"heal": 300, "type": "mr", "description": "大一点的体力回复剂", "sell": 10},
 
     # mobs
     41: {"hp": 13, "atk": [1, 2], "type": "mob",
@@ -192,6 +225,11 @@ item_property = {
     520: {"final": False, "type": "a", "atk": 60, "cost_mana": 55},
     521: {"final": False, "type": "c", "heal": 45, "cost_mana": 40},
     522: {"final": False, "type": "c", "heal": 60, "cost_mana": 40},
+    523: {"final": False, "type": "a", "atk": 75, "cost_mana": 60},
+    524: {"final": False, "type": "a", "atk": 35, "cost_mana": 5},
+    525: {"final": False, "type": "a", "atk": 40, "cost_mana": 30},
+    526: {"final": True, "type": "a;c", "atk": 65, "heal": 55, "cost_mana": 130},
+    527: {"final": True, "type": "a;s", "atk": 90, "heal_s": 280, "Cost_mana": 160},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
@@ -229,6 +267,18 @@ item_property = {
     633: {"type": "m", "description": "铜与锡的合金", "sell": 1000, "craft": 3},
     634: {"type": "m", "description": "铜锡合金压制成的板", "sell": 2500, "craft": 3},
     635: {"type": "m", "description": "二重压缩的铜锡合金版", "sell": 5500, "craft": 3},
+    636: {"type": "m", "description": "基础机械的铁质外壳，可以适用于大多数机器", "sell": 2000, "craft": 2},
+    637: {"type": "m", "craft": 3},
+    638: {"type": "m", "description": "可以将采矿机器人的储存上限提升2000的模块", "sell": 5000, "craft": 3},
+    639: {"type": "m", "description": "四级科学机器的碎片", "sell": 1500},
+    640: {"type": "m", "craft": 3},
+    641: {"type": "m", "description": "高级的电路板，极大的运算量", "craft": 4, "sell": 10000},
+    642: {"type": "m", "description": "由铜，铁，锡三种金属制成的合金", "craft": 4, "sell": 3000},
+    643: {"type": "m", "description": "被压制成板的初级全合金", "craft": 4, "sell": 7000},
+    644: {"type": "m", "description": "二重压缩的初级全合金", "craft": 4, "sell": 15000},
+    645: {"type": "m", "description": "提升采矿机器人等级的工具，等级提升可以让挖矿机器人挖矿机器人每次采矿的时间缩短", "craft": 3,
+          "sell": 6000},
+    646: {"type": "m", "description": "[MC限定][史诗]打败末影龙获得的东西，价值连城", "sell": 50000},
 
     # events
     70: {"type": "e", "*description": "summon a random mob"},
@@ -239,21 +289,37 @@ item_property = {
          "gold": [80, 210], "exp": 90, "define": 20, "miss": 0, "description": "浑身是岩石的大块头"},
     81: {"type": "boss", "hp": 260, "atk": [25, 35], "skill": [520, 55], "gear": [21, 112], "gold": [300, 630],
          "exp": 210, "define": 10, "miss": 10, "description": "波布克林的二级加强版，超强"},
+    82: {"type": "boss", "hp": 1500, "atk": [10, 12], "skill": [93, 94], "gear": [69, 69, 618, 618, 620, 620, 628,
+                                                                                  635, 635],
+         "gold": [3000, 6000], "exp": 2000, "define": 30, "miss": 20,
+         "description": "古代希卡族为对抗灾厄盖侬而打造出的机械自动兵器，但现在被灾厄盖侬的怨念夺走"},
+    83: {"type": "boss", "hp": 1, "atk": [1, 5], "skill": [], "gear": [83], "gold": [210, 500], "exp": 999,
+         "define": 0, "miss": 99.99, "description": "最弱的Boss，他不可能一直躲下去"},
+    84: {"type": "boss", "hp": 200, "atk": [1, 3], "skill": [95, 96, 97, 98, 99], "gear": [646], "gold": [100, 120],
+         "exp": 150, "define": 35, "miss": 42.01, "description": "盘踞于末路之地的龙，守护着她宝贵的龙蛋"},
 
     # boss skill
     91: {"type": "a", "atk": 28},
     92: {"type": "a", "atk": 32},
+    93: {"type": "a", "atk": 50},
+    94: {"type": "a", "atk": 48},
+    95: {"type": "a", "atk": 24},
+    96: {"type": "a", "atk": 8},
+    97: {"type": "a", "atk": 55},
+    98: {"type": "a", "atk": 30},
 
     0: {"def": 0, "miss": 0},
 }
 player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0, "km": 0.0, "place": 1,
                    "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3,
-                   "sm1": False, "sm2": False, "sm3": False}
+                   "sm1": False, "sm2": False, "sm3": False, "sm4": False, "miner_tier": 1,
+                   "miner": False, "miner_max": 1000, "last_login": None}
 
 craft_expr = {
     "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
-    "二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器": "10 * 616; 1 * 619; 4 * 620 -> 622",
-    "三级科学机器碎片 * 15 + 中级电路板 -> 三级科学机器": "15 * 631; 1 * 630",
+    "二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器": "10 * 616; 1 * 623 -> 622",
+    "三级科学机器碎片 * 15 + 中级电路板 -> 三级科学机器": "15 * 631; 1 * 630 -> 632",
+    "四级科学机器碎片 * 5 + 高级电路板 -> 四级科学机器": "5 * 639; 1 * 641 -> 642",
     "====================手====================": None,  # craft: 0
     "木棍 * 5 -> 波克棒": "5 * 11 -> 12", "小石子 * 9 -> 石板": "5 * 61 -> 66",
     "不完整的木板合成工具（P1）+ 不完整的木板合成工具（P2）-> 木板合成工具": "1 * 62; 1 * 63 -> 64",
@@ -276,10 +342,20 @@ craft_expr = {
     "铜铁合金板 * 2 -> 致密铜铁合金板": "2 * 628 -> 629", "铜铁合金板 * 2 + 铁柄 -> 精英骑士之剑": "2 * 628; 1 * 613 -> 113",
     "致密铜铁合金板 * 2 + 铁柄 -> 荣誉骑士之剑": "2 * 629; 1 * 613 -> 114",
     "铜板 + 锡线 * 8 + 生锡 * 3 -> 中级电路板": "1 * 619; 8 * 626; 3 * 625 -> 630",
+    "铁板 * 4 -> 基础机械外壳": "4 * 611 -> 636",
     "====================三级科学机器====================": None,  # craft: 3
     "生铜 * 3 + 生锡 * 3 -> 铜锡合金": "3 * 618; 3 * 625 -> 633", "铜锡合金 * 3 -> 铜锡合金板": "3 * 633 -> 634",
-    "铜锡合金板 * 3 -> 致密铜锡合金版": "3 * 634 -> 635", "铜锡合金板 * 4 + 铁柄 -> 铂金骑士之剑": "4 * 634; 1 * 613 -> 115",
+    "铜锡合金板 * 3 -> 致密铜锡合金板": "3 * 634 -> 635", "铜锡合金板 * 4 + 铁柄 -> 铂金骑士之剑": "4 * 634; 1 * 613 -> 115",
     "致密铜锡合金板 * 4 + 铁柄 -> 钻石骑士之剑": "4 * 635; 1 * 613 -> 116",
+    "基础机械外壳 * 2 + 中级电路板 + 电路板 + 锡线 * 4 -> 采矿机器人": "2 * 636; 1 * 630; 1 * 623; 4 * 626 -> 637",
+    "电路板 + 铁板 * 4 -> 采矿机器人储存升级模块": "1 * 623; 4 * 611 -> 638",
+    "铜锡合金板 + 锡线 * 3 -> 高级电路板": "1 * 634; 3 * 626 -> 641",
+    "电路板 + 铜线 * 3 + 锡线 * 1 -> 采矿机器人升级模块": "1 * 623; 3 * 620; 1 * 626",
+    "====================四级科学机器====================": None,  # craft: 4
+    "生铁 * 3 + 生锡 * 2 + 生铜 -> 初级全合金": "3 * 69; 2 * 618; 1 * 625 -> 642",
+    "初级全合金 * 2 -> 初级全合金板": "2 * 642 -> 643", "初级全合金板 * 2 -> 致密初级全合金板": "2 * 643 -> 644",
+    "初级全合金板 + 铁柄 -> [光]近卫骑士之剑": "1 * 643; 1 * 613 -> 118",
+    "致密初级全合金板 + 铁柄 -> [流彩]荣耀骑士之剑": "1 * 644; 1 * 613 -> 119",
 }
 
 inventory_display = []
@@ -324,6 +400,7 @@ class Boss:
         self.max_hp = hp
         self.hp = hp
         self.skill = skill
+        self.skill.append(50)
         self.gear = gear
         self.gold = gold
         self.exp = exp
@@ -432,8 +509,8 @@ def cure_display(item_checking, skill=False):
 
 def strength_display(item_checking):
     if item_property[item_checking]["heal"] == "all":
-        player_property["hp"] = player_property["max_hp"]
-        g.msgbox("你的HP回满了！")
+        player_property["str"] = player_property["str"]
+        g.msgbox("你的体力回满了！")
     else:
         player_property["str"] += item_property[item_checking]["heal"]
         g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点体力")
@@ -492,7 +569,7 @@ def fight_ui():
                     continue
                 g.msgbox(f"你消耗了{str_need}点体力")
                 player_property["str"] -= str_need
-                if random.randint(1, 100) < mob.miss:
+                if random.randint(1, 10000) < mob.miss * 100:
                     g.msgbox(f"{item_namespaces[mob.namespace]}似乎躲开了这次攻击")
                 else:
                     if item_property[pocket["equip"]["weapon"]]["atk"][0] != \
@@ -601,17 +678,19 @@ def range_avg():
 def check_level():
     global player_property
     if player_property["exp"] >= player_property["need exp"]:
-        player_property["lv"] += 1
-        player_property["exp"] = player_property["exp"] - player_property["need exp"]
-        player_property["need exp"] = player_property["lv"] * (10 + player_property["lv"]) + player_property["lv"] - 1
-        player_property["max_hp"] = player_property["lv"] * 10 + int(player_property["lv"] * 2 - 1)
-        player_property["hp"] = player_property["max_hp"]
-        player_property["max_mana"] = player_property["lv"] * 10 + 20
-        player_property["mana"] = player_property["max_mana"]
-        player_property["mana_reg"] = int(player_property["lv"] / 5) + 1
-        player_property["str"] = player_property["lv"] * 35 + 15
-        player_property["max_str"] = player_property["str"]
-        player_property["str_reg"] = int(player_property["lv"] * 0.1) + 1
+        while player_property["exp"] >= player_property["need exp"]:
+            player_property["lv"] += 1
+            player_property["exp"] = player_property["exp"] - player_property["need exp"]
+            player_property["need exp"] = player_property["lv"] * (10 + player_property["lv"]) + player_property[
+                "lv"] - 1
+            player_property["max_hp"] = player_property["lv"] * 10 + int(player_property["lv"] * 2 - 1)
+            player_property["hp"] = player_property["max_hp"]
+            player_property["max_mana"] = player_property["lv"] * 10 + 20
+            player_property["mana"] = player_property["max_mana"]
+            player_property["mana_reg"] = int(player_property["lv"] / 5) + 1
+            player_property["str"] = player_property["lv"] * 35 + 15
+            player_property["max_str"] = player_property["str"]
+            player_property["str_reg"] = int(player_property["lv"] * 0.1) + 1
         g.msgbox(f"你升级了！\n你目前的LV为{player_property['lv']}\n"
                  f"你的HP上限变为了{player_property['max_hp']}\n你的HP回满了\n你的法力上限变为了{player_property['max_mana']}"
                  f"\n你的法力回满了\n你的体力上限变为了{player_property['max_str']}\n你的体力回满了")
@@ -677,6 +756,10 @@ def _update_save_version():
             exec(settings.PROPERTY_EXPR[i])
     _update_save()
 
+
+pygame.mixer.init()
+pygame.mixer_music.load("bgm.mp3")
+pygame.mixer_music.play(-1)
 
 for i in range(20):
     explore_list.append([])
@@ -817,12 +900,46 @@ run_environment = _get_path()
 _makedir("save")
 _option_go("save")
 saves = os.listdir()
-for save in saves:
-    save.replace(run_environment, "")
 g.msgbox("""
-                                  fight dv-006
+                                  fight dv-007
                                       欢迎
 """)
+_back()
+mod_list = os.listdir()
+index = 0
+while index < len(mod_list):
+    if mod_list[index].split(".")[-1] != "py" or mod_list[index].split("_")[-1] != "mod.py":
+        mod_list.remove(mod_list[index])
+        continue
+    mod = mod_list[index].replace(".py", "")
+    mod_list[index] = mod
+    index += 1
+print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]start mod preload")
+mod_objects = []
+mod_gui = False
+list_mod_gui = False
+mod_gui_count = 0
+mod_display = []
+for mod_name in mod_list:
+    exec(f"""
+import {mod_name}
+mod_class_name = {mod_name}.class_name
+exec(f"mod_object = {{mod_name}}.{{mod_class_name}}()")
+mod_objects.append(mod_object)
+if mod_objects[-1].GUI:
+    mod_gui = True
+    mod_gui_count += 1
+    if mod_gui_count > 2:
+        list_mod_gui = True
+    """)
+    mod_display.append(mod_name.replace("_mod", "", 1))
+print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]mod preload finished")
+_option_go("save")
+if len(mod_list) != 0:
+    if g.ccbox(f"已加载{len(mod_list)}个模组 是否查看模组列表？", choices=["是的", "不了"]):
+        while len(mod_display) < 2:
+            mod_display.append("无")
+        g.choicebox("按任意键退出", choices=mod_display)
 saves.append("创建新存档")
 while len(saves) < 2:
     saves.append("无")
@@ -830,6 +947,8 @@ while True:
     save = g.choicebox("请选择存档", choices=saves)
     if save is None:
         exit()
+    elif save == "无":
+        continue
     elif save == "创建新存档":
         breaking = False
         while True:
@@ -842,6 +961,13 @@ while True:
                 if g.ccbox(f"\"{player}\"是一个已经被用过的名字，是否要覆盖原存档（请经过存档主人同意后操作）",
                            choices=["是的", "不了"]):
                     _makefile(player)
+                    if player == "EM":
+                        g.msgbox("你获得了开发者的眷顾")
+                        player_property["gold"] = 10000
+                    elif player == "PM":
+                        g.msgbox("你获得了开发者的眷顾II")
+                        player_property["gold"] = 99999
+                        pocket["inventory"].append(119)
                     _update_save()
                     breaking = True
                     break
@@ -849,6 +975,10 @@ while True:
                     continue
             else:
                 _makefile(player)
+                if player == "EM":
+                    g.msgbox("你获得了开发者的眷顾")
+                    player_property["gold"] = 10000
+                # There is no "egg" XD
                 _update_save()
                 breaking = True
                 break
@@ -876,17 +1006,35 @@ for i in item_property.keys():
     if str(i)[0] == "8":
         bosses.append(item_namespaces[i])
 
+if player_property["miner"]:
+    get_gold = int((time.time() - player_property["last_login"]) / (3600 / player_property["miner_tier"])) * 5
+    if get_gold > player_property["miner_max"]:
+        get_gold = player_property["miner_max"]
+    player_property["gold"] += get_gold
+    g.msgbox(f"在你离开的这段时间里，采矿机器人为你收集了{get_gold}$")
+player_property["last_login"] = time.time()
 while True:
     check_level()
-    choose = g.indexbox(f"你好，{player}！\n", choices=["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗",
-                                                    "与Boss级怪物战斗", "存档"])
+    main_choices = ["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗", "与Boss级怪物战斗", "存档", "更换存档"]
+    mod_keys = {}
+    if mod_gui:
+        if list_mod_gui:
+            main_choices.append("模组界面")
+            mod_keys[len(main_choices) - 1] = "mod list"
+        else:
+            for mod in mod_objects:
+                if mod.GUI:
+                    main_choices.append(mod.name)
+                    mod_keys[len(main_choices) - 1] = mod_objects.index(mod)
+    choose = g.indexbox(f"你好，{player}！\n", choices=main_choices)
     if choose is None:
-        g.msgbox("再见")
-        exit()
+        if g.ccbox("你确定要退出存档吗（若要更换存档，可在主界面的更换存档处操作）", choices=["是的", "不了"]):
+            g.msgbox("再见")
+            exit()
 
     # status UI
-    if choose == 0:
-        g.msgbox(f"""
+    elif choose == 0:
+        if g.ccbox(f"""
 {player}
 LV: {player_property["lv"]}
 EXP: {player_property["exp"]}/{player_property["need exp"]}
@@ -898,7 +1046,21 @@ HP: {player_property["hp"]}/{player_property["max_hp"]}
 现金: {player_property["gold"]}$
 武器：{item_namespaces[pocket["equip"]["weapon"]]}  ATK {item_property[pocket["equip"]["weapon"]]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]} 
 盔甲：{item_namespaces[pocket["equip"]["armor"]]}  DEF {item_property[pocket["equip"]["armor"]]["def"]}
-        """)
+        """, choices=["更换角色名字", "OK"]):
+            while True:
+                new_player = g.enterbox("请输入玩家的名字")
+                if new_player == "":
+                    continue
+                elif new_player is None:
+                    break
+                elif new_player in saves:
+                    if g.ccbox(f"\"{player}\"是一个已经被用过的名字，是否要覆盖原存档（请经过存档主人同意后操作）",
+                               choices=["是的", "不了"]):
+                        pass
+                else:
+                    os.rename(player, new_player)
+                    player = new_player
+                    break
     # pocket UI
     elif choose == 1:
         while True:
@@ -979,28 +1141,41 @@ miss: +{item_property[item_checking]["miss"]}
             else:
                 while True:
                     set_inventory_display(pocket_yn=True)
-                    item_checking = g.choicebox("请选择你要操作的物品", choices=inventory_display)
+                    if player_property["miner"]:
+                        miner_display = "✔"
+                        max_store_display = player_property["miner_max"]
+                        tier = player_property["miner_tier"]
+                    else:
+                        miner_display = "❌"
+                        max_store_display = "/"
+                        tier = "/"
+                    item_checking = g.choicebox(f"请选择你要操作的物品 采矿机器人: {miner_display} LV {tier} "
+                                                f"采矿机器人最大储存量: {max_store_display}",
+                                                choices=inventory_display)
                     if item_checking is None:
                         break
                     elif item_checking == "合成界面":
                         while True:
                             if player_property["sm1"]:
                                 craft_expr.pop("一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器", None)
-                            elif player_property["sm2"]:
+                            if player_property["sm2"]:
                                 craft_expr.pop("二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器", None)
-                            elif player_property["sm3"]:
+                            if player_property["sm3"]:
                                 craft_expr.pop("三级科学机器碎片 * 15 + 中级电路板 -> 三级科学机器", None)
+                            if player_property["miner"]:
+                                craft_expr.pop("基础机械外壳 * 2 + 中级电路板 + 电路板 + 锡线 * 4 -> 采矿机器人", None)
                             craft_display = []
                             for craft_key in craft_expr.keys():
                                 craft_display.append(craft_key)
                             sm_display = []
-                            for i in range(3):
+                            for i in range(4):
                                 if player_property[f"sm{i + 1}"]:
                                     sm_display.append("✔")
                                 else:
                                     sm_display.append("❌")
                             crafting_item = g.choicebox(f"请选择你要合成的物品 一级科学机器: {sm_display[0]}"
-                                                        f"二级科学机器: {sm_display[1]} 三级科学机器: {sm_display[2]}",
+                                                        f"二级科学机器: {sm_display[1]} 三级科学机器: {sm_display[2]}"
+                                                        f"四级科学机器: {sm_display[3]}",
                                                         choices=craft_display)
                             if crafting_item is None:
                                 break
@@ -1012,6 +1187,12 @@ miss: +{item_property[item_checking]["miss"]}
                                 continue
                             elif item_property[craft_materials[1]]["craft"] == 2 and not player_property["sm2"]:
                                 g.msgbox("你没有二级科学机器")
+                                continue
+                            elif item_property[craft_materials[1]]["craft"] == 3 and not player_property["sm3"]:
+                                g.msgbox("你没有三级科学机器")
+                                continue
+                            elif item_property[craft_materials[1]]["craft"] == 4 and not player_property["sm4"]:
+                                g.msgbox("你没有四级科学机器")
                                 continue
                             materials_collections = collections.Counter(craft_materials[0])
                             pocket_collections = collections.Counter(pocket["inventory"])
@@ -1035,6 +1216,12 @@ miss: +{item_property[item_checking]["miss"]}
                                 player_property["sm1"] = True
                             elif craft_materials[1] == 622:
                                 player_property["sm2"] = True
+                            elif craft_materials[1] == 632:
+                                player_property["sm3"] = True
+                            elif craft_materials[1] == 640:
+                                player_property["sm4"] = True
+                            elif craft_materials[1] == 637:
+                                player_property["miner"] = True
                             else:
                                 pocket["inventory"].append(craft_materials[1])
 
@@ -1125,13 +1312,36 @@ miss: +{item_property[item_checking]["miss"]}
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
                                 break
+                    elif item_property[item_checking]["type"] == "exp":
+                        while True:
+                            use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["使用", "信息", "丢弃"])
+                            if use is None:
+                                break
+                            elif use == 0:
+                                player_property["exp"] += item_property[item_checking]["heal"]
+                                pocket["inventory"].remove(item_checking)
+                                g.msgbox(f"你增加了{item_property[item_checking]['heal']}点EXP")
+                                check_level()
+                                break
+                            elif use == 1:
+                                g.msgbox(f"""
+{item_namespaces[item_checking]}
+增加{item_property[item_checking]["heal"]}点EXP
+                                """)
                     elif item_property[item_checking]["type"] == "m":
                         while True:
                             use = g.indexbox(f"{item_namespaces[item_checking]}", choices=["使用", "信息", "丢弃"])
                             if use is None:
                                 break
                             if use == 0:
-                                g.msgbox("你无法使用一个材料")
+                                if item_checking == 638:
+                                    player_property["miner_max"] += 2000
+                                    g.msgbox("你的采矿机器人的储存量增加了2000")
+                                elif item_checking == 645:
+                                    player_property["miner_tier"] += 1
+                                    g.msgbox("你的采矿机器人升级了")
+                                else:
+                                    g.msgbox("你无法使用一个材料")
                             elif use == 1:
                                 g.msgbox(f"""
 {item_namespaces[item_checking]}
@@ -1200,10 +1410,12 @@ miss: +{item_property[item_checking]["miss"]}
         while True:
             item_buying = g.choicebox("请选择你要购买的物品",
                                       choices=["收购", item_namespaces[30], item_namespaces[14], item_namespaces[11],
-                                               item_namespaces[31], item_namespaces[32], item_namespaces[33],
-                                               item_namespaces[68], item_namespaces[617], item_namespaces[624],
-                                               item_namespaces[610], item_namespaces[615],
-                                               item_namespaces[616], item_namespaces[631]])
+                                               item_namespaces[31], item_namespaces[37], item_namespaces[38],
+                                               item_namespaces[32], item_namespaces[33], item_namespaces[39],
+                                               item_namespaces[310], item_namespaces[68], item_namespaces[617],
+                                               item_namespaces[624], item_namespaces[610],
+                                               item_namespaces[615], item_namespaces[616], item_namespaces[631],
+                                               item_namespaces[639], item_namespaces[623]])
             if item_buying is None:
                 break
             elif item_buying == "收购":
@@ -1297,10 +1509,16 @@ miss: +{item_property[item_checking]["miss"]}
                         item_property[pocket["equip"]["armor"]]["miss"] * 0.01:
                     g.msgbox(f"你似乎躲开了这次攻击")
                 else:
-                    damage = int(boss.random_atk() * (1 - (player_property["define"] +
-                                                           item_property[
-                                                               pocket["equip"]["armor"]][
-                                                               "def"]) * 0.0001))
+                    if boss_skill_using == 50:
+                        damage = int(boss.random_atk() * (1 - (player_property["define"] +
+                                                               item_property[
+                                                                   pocket["equip"]["armor"]][
+                                                                   "def"]) * 0.0001))
+                    else:
+                        damage = int(item_property[boss_skill_using]["atk"] * (1 - (player_property["define"] +
+                                                                                    item_property[
+                                                                                        pocket["equip"]["armor"]][
+                                                                                        "def"]) * 0.0001))
                     g.msgbox(f"{item_namespaces[boss.namespace]}对你造成了{damage}点伤害")
                     player_property["hp"] -= damage
                 while True:
@@ -1362,7 +1580,7 @@ miss: +{item_property[item_checking]["miss"]}
 
                                 else:
                                     if item_property[skill_num]["type"] == "a":
-                                        if random.randint(1, 100) < boss.miss:
+                                        if random.randint(1, 10000) < boss.miss * 100:
                                             g.msgbox(f"{item_namespaces[boss.namespace]}似乎躲开了这次攻击")
                                         else:
                                             damage_current_value = item_property[skill_num]["atk"]
@@ -1412,6 +1630,44 @@ MISS: {boss.miss}%
                         if quit_yn:
                             continue
                         break
+                    else:
+                        continue
+                    player_property["str"] += player_property["str_reg"]
+                    g.msgbox(f"你回复了{player_property['str_reg']}体力")
+                    if player_property["str"] > player_property["max_str"]:
+                        player_property["str"] = player_property["max_str"]
+                        g.msgbox("你的体力溢出了，可你无法保存溢出的体力")
+                    player_property["mana"] += player_property["mana_reg"]
+                    g.msgbox(f"你回复了{player_property['mana_reg']}法力")
+                    if player_property["mana"] > player_property["max_mana"]:
+                        player_property["mana"] = player_property["max_mana"]
+                        g.msgbox("你的法力溢出了，可你无法保存溢出的法力")
     elif choose == 7:
         _update_save()
         g.msgbox("已存档")
+    elif choose == 8:
+        while True:
+            if "创建新存档" in saves:
+                saves.remove("创建新存档")
+            save_changing = g.choicebox("请选择你要更换的存档（若要创建新存档，请重启游戏）", choices=saves)
+            if save_changing is None:
+                break
+            elif save_changing == "无":
+                continue
+            player = save_changing
+            with open(save_changing) as save_obj:
+                save_txt = save_obj.read().rstrip().encode()
+                save_txt = base64.b64decode(save_txt).decode()
+                save_txt_list = save_txt.split("\n")
+                exec("player_property = " + save_txt_list[0])
+                exec("pocket = " + save_txt_list[1])
+                _update_save_version()
+            g.msgbox(f"存档已读取\n欢迎回来，{player}！")
+            break
+    else:
+        choosing_mod = mod_keys[choose]
+        if choosing_mod == "mod list":
+            pass
+        else:
+            mod_checking = mod_objects[choosing_mod]
+            mod_checking.main(g)
