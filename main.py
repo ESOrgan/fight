@@ -507,7 +507,7 @@ def cure_display(item_checking, skill=False):
         pocket["inventory"].remove(item_checking)
 
 
-def strength_display(item_checking):
+def strength_display(item_checking, skill=False):
     if item_property[item_checking]["heal"] == "all":
         player_property["str"] = player_property["str"]
         g.msgbox("你的体力回满了！")
@@ -520,6 +520,7 @@ def strength_display(item_checking):
             player_property["str"] = player_property["max_str"]
         elif player_property["str"] == player_property["max_str"]:
             g.msgbox("你的体力满了")
+    if not skill:
         pocket["inventory"].remove(item_checking)
 
 
@@ -592,21 +593,21 @@ def fight_ui():
                             if skill_type == "a":
                                 attack_response()
                             elif skill_type == "c":
-                                cure_display(skill_num)
+                                cure_display(skill_num, True)
                             elif skill_type == "m":
                                 mana_display(skill_num)
                             else:
-                                strength_display(skill_num)
+                                strength_display(skill_num, True)
 
                     else:
                         if item_property[skill_num]["type"] == "a":
                             attack_response()
                         elif item_property[skill_num]["type"] == "c":
-                            cure_display(skill_num)
+                            cure_display(skill_num, True)
                         elif item_property[skill_num]["type"] == "m":
                             mana_display(skill_num)
                         else:
-                            strength_display(skill_num)
+                            strength_display(skill_num, True)
                 else:
                     g.msgbox("你没有足够的法力！")
                     continue
@@ -1198,7 +1199,6 @@ miss: +{item_property[item_checking]["miss"]}
                             pocket_collections = collections.Counter(pocket["inventory"])
                             cyn = False
                             for mat in materials_collections.keys():
-                                cyn = False
                                 if mat not in pocket_collections:
                                     g.msgbox("你没有足够的材料")
                                     cyn = True
@@ -1209,21 +1209,52 @@ miss: +{item_property[item_checking]["miss"]}
                                     break
                             if cyn:
                                 continue
-                            for mat in craft_materials[0]:
-                                pocket["inventory"].remove(mat)
-                            g.msgbox(f"你合成了{item_namespaces[craft_materials[1]]}")
-                            if craft_materials[1] == 621:
-                                player_property["sm1"] = True
-                            elif craft_materials[1] == 622:
-                                player_property["sm2"] = True
-                            elif craft_materials[1] == 632:
-                                player_property["sm3"] = True
-                            elif craft_materials[1] == 640:
-                                player_property["sm4"] = True
-                            elif craft_materials[1] == 637:
-                                player_property["miner"] = True
+                            while True:
+                                breaking_craft_num = False
+                                craft_num = g.enterbox("请输入你要合成的数量")
+                                if craft_num is None:
+                                    breaking_craft_num = True
+                                    break
+                                try:
+                                    craft_num = int(craft_num)
+                                except ValueError:
+                                    continue
+                                else:
+                                    break
+                            if breaking_craft_num:
+                                break
+                            craft_count = 0
+                            while craft_count < craft_num:
+                                pocket_collections = collections.Counter(pocket["inventory"])
+                                cyn = False
+                                for mat in materials_collections.keys():
+                                    if mat not in pocket_collections:
+                                        cyn = True
+                                        break
+                                    elif pocket_collections[mat] < materials_collections[mat]:
+                                        cyn = True
+                                        break
+                                if cyn:
+                                    break
+                                for mat in craft_materials[0]:
+                                    pocket["inventory"].remove(mat)
+                                if craft_materials[1] == 621:
+                                    player_property["sm1"] = True
+                                elif craft_materials[1] == 622:
+                                    player_property["sm2"] = True
+                                elif craft_materials[1] == 632:
+                                    player_property["sm3"] = True
+                                elif craft_materials[1] == 640:
+                                    player_property["sm4"] = True
+                                elif craft_materials[1] == 637:
+                                    player_property["miner"] = True
+                                else:
+                                    pocket["inventory"].append(craft_materials[1])
+                                craft_count += 1
+                            if cyn:
+                                g.msgbox(f"由于你的材料不够，你只合成了{craft_count} * {item_namespaces[craft_materials[1]]}")
                             else:
-                                pocket["inventory"].append(craft_materials[1])
+                                g.msgbox(f"你合成了{craft_count} * {item_namespaces[craft_materials[1]]}")
 
                         continue
                     item_checking = get_key(item_checking)
@@ -1423,12 +1454,29 @@ miss: +{item_property[item_checking]["miss"]}
                     item_selling = g.choicebox("请选择你要出售的物品", choices=inventory_display)
                     if item_selling is None:
                         break
+                    while True:
+                        buy_num = g.enterbox("请输入你要售出的数量")
+                        if buy_num is None:
+                            break
+                        try:
+                            buy_num = int(buy_num)
+                        except ValueError:
+                            continue
+                        else:
+                            break
                     item_selling = item_selling.split(" ")[0]
                     item_selling = get_key(item_selling)
                     get_gold = int(item_property[item_selling]["sell"] / 4)
-                    player_property["gold"] += get_gold
-                    pocket["inventory"].remove(item_selling)
-                    g.msgbox(f"你通过出售{item_namespaces[item_selling]}获得了{get_gold}$")
+                    buy_count = 0
+                    while buy_count != buy_num and item_selling in pocket["inventory"]:
+                        player_property["gold"] += get_gold
+                        pocket["inventory"].remove(item_selling)
+                        buy_count += 1
+                    if buy_count == buy_num:
+                        g.msgbox(f"你通过出售{item_namespaces[item_selling]} * {buy_count}获得了{get_gold * buy_count}$")
+                    else:
+                        g.msgbox(f"由于物品不够，你只通过出售{item_namespaces[item_selling]} * {buy_count}"
+                                 f"获得了{get_gold * buy_count}$")
                 continue
             item_buying = get_key(item_buying)
             if g.ccbox(f"""
@@ -1437,12 +1485,30 @@ miss: +{item_property[item_checking]["miss"]}
 {item_property[item_buying]["description"]}
             """, choices=["购买", "取消"]):
                 if player_property["gold"] >= item_property[item_buying]["sell"]:
-                    player_property["gold"] -= item_property[item_buying]["sell"]
-                    pocket["inventory"].append(item_buying)
-                    g.msgbox(f"你花费{item_property[item_buying]['sell']}$购买了"
-                             f"{item_namespaces[item_buying]}")
+                    while True:
+                        buy_num = g.enterbox("请输入你要购买的数量")
+                        if buy_num is None:
+                            break
+                        try:
+                            buy_num = int(buy_num)
+                        except ValueError:
+                            continue
+                        else:
+                            break
+                    buy_count = 0
+                    while player_property["gold"] >= item_property[item_buying]["sell"]:
+                        player_property["gold"] -= item_property[item_buying]["sell"]
+                        pocket["inventory"].append(item_buying)
+                        buy_count += 1
+                    if buy_count == buy_num:
+                        g.msgbox(f"你花费{item_property[item_buying]['sell'] * buy_count}$购买了"
+                                 f"{buy_count} * {item_namespaces[item_buying]}")
+                    else:
+                        g.msgbox(f"由于钱不够，你只花费{item_property[item_buying]['sell'] * buy_count}$购买了"
+                                 f"{buy_count} * {item_namespaces[item_buying]}")
                 else:
                     g.msgbox("你没有足够的钱")
+
     # sage UI
     elif choose == 4:
         while True:
@@ -1575,7 +1641,7 @@ miss: +{item_property[item_checking]["miss"]}
                                         elif skill_type == "m":
                                             mana_display(skill_num)
                                         else:
-                                            strength_display(skill_num)
+                                            strength_display(skill_num, True)
 
                                 else:
                                     if item_property[skill_num]["type"] == "a":
@@ -1591,7 +1657,7 @@ miss: +{item_property[item_checking]["miss"]}
                                     elif item_property[skill_num]["type"] == "m":
                                         mana_display(skill_num)
                                     else:
-                                        strength_display(skill_num)
+                                        strength_display(skill_num, True)
                             else:
                                 g.msgbox("你没有足够的法力！")
                                 continue
