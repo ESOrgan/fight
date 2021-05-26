@@ -80,7 +80,7 @@ def main():
 
             elif event.type == KEYDOWN and event.key in blits.keys():
                 t1 = time.time()
-                # blits is a dict keyed with key -> blit flag.  eg BLEND_ADD.
+                # blits is a dict keyed with key -> blit flag.  easygui BLEND_ADD.
                 im1.blit(img_to_blit, (0, 0), None, blits[event.key])
                 t2 = time.time()
                 print("one pixel is:%s:" % [im1.get_at((0, 0))])
@@ -104,7 +104,7 @@ def main():
 
             elif event.type == KEYDOWN and event.key in [K_o]:
                 t1 = time.time()
-                # blits is a dict keyed with key -> blit flag.  eg BLEND_ADD.
+                # blits is a dict keyed with key -> blit flag.  easygui BLEND_ADD.
                 im1.blit(iaa, (0, 0))
                 t2 = time.time()
                 print("one pixel is:%s:" % [im1.get_at((0, 0))])

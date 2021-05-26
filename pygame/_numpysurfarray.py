@@ -26,7 +26,7 @@ external Numpy package.
 
 Note, that numpyarray is an optional module. It requires that Numpy is
 installed to be used. If not installed, an exception will be raised when
-it is used. eg. ImportError: no module named numpy
+it is used. easygui. ImportError: no module named numpy
 
 Every pixel is stored as a single integer value to represent the red,
 green, and blue colors. The 8bit images use a value that looks into a

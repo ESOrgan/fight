@@ -93,7 +93,7 @@ def make_echo(sound, samples_per_second, mydebug=True):
 
 def slow_down_sound(sound, rate):
     """  returns a sound which is a slowed down version of the original.
-           rate - at which the sound should be slowed down.  eg. 0.5 would be half speed.
+           rate - at which the sound should be slowed down.  easygui. 0.5 would be half speed.
     """
 
     raise NotImplementedError()
@@ -130,7 +130,7 @@ def sound_from_pos(sound, start_pos, samples_per_second=None, inplace=1):
         a1 = pygame.sndarray.array(sound)
 
     # see if samples per second has been given.  If not, query the mixer.
-    #   eg. it might be set to 22050
+    #   easygui. it might be set to 22050
     if samples_per_second is None:
         samples_per_second = pygame.mixer.get_init()[0]
 

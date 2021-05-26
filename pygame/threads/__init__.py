@@ -3,7 +3,7 @@
 
 Like the map function, but can use a pool of threads.
 
-Really easy to use threads.  eg.  tmap(f, alist)
+Really easy to use threads.  easygui.  tmap(f, alist)
 
 If you know how to use the map function, you can use threads.
 """

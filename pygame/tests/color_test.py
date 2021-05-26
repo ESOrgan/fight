@@ -756,7 +756,7 @@ class ColorTypeTest(unittest.TestCase):
 
             try:
                 setattr(other, prop, getattr(c, prop))
-                # eg other.hsla = c.hsla
+                # easygui other.hsla = c.hsla
 
             except ValueError:
                 fails += 1
@@ -784,7 +784,7 @@ class ColorTypeTest(unittest.TestCase):
 
             try:
                 setattr(other, prop, getattr(c, prop))
-                # eg other.hsla = c.hsla
+                # easygui other.hsla = c.hsla
 
                 self.assertTrue(abs(other.r - c.r) <= 1)
                 self.assertTrue(abs(other.b - c.b) <= 1)

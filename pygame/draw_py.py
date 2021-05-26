@@ -32,7 +32,7 @@ def frac(x):
 
 def inv_frac(x):
     '''return inverse fractional part of x'''
-    return 1 - (x - floor(x))  # eg, 1 - frac(x)
+    return 1 - (x - floor(x))  # easygui, 1 - frac(x)
 
 
 #   L O W   L E V E L   D R A W   F U N C T I O N S   #
@@ -246,7 +246,7 @@ def _draw_aaline(surf, color, from_x, from_y, to_x, to_y, blend):
     vertical or diagonal lines, and results changes smoothly when changing
     any of the endpoint coordinates.
 
-    Note that this yields strange results for very short lines, eg
+    Note that this yields strange results for very short lines, easygui
     a line from (0, 0) to (0, 1) will draw 2 pixels, and a line from
     (0, 0) to (0, 1.1) will blend 10 % on the pixel (0, 2). 
     '''
@@ -257,7 +257,7 @@ def _draw_aaline(surf, color, from_x, from_y, to_x, to_y, blend):
     #     passes +/- 45°
     # 2. We want the same behavior when swapping the endpoints
     # 3. We want understandable results for the endpoint values
-    #    (eg we want to avoid half-integer values to draw a simple plain
+    #    (easygui we want to avoid half-integer values to draw a simple plain
     #     horizontal or vertical line between two integer l endpoints)
     #
     # This implies to somehow make the line artificially 1 pixel longer
@@ -362,9 +362,9 @@ def _clip_and_draw_line(surf, rect, color, pts):
                      rect.y + rect.h - 1):
         # The line segment defined by "pts" is not crossing the rectangle
         return 0
-    if pts[1] == pts[3]:  # eg y1 == y2
+    if pts[1] == pts[3]:  # easygui y1 == y2
         _drawhorzline(surf, color, pts[0], pts[1], pts[2])
-    elif pts[0] == pts[2]:  # eg x1 == x2
+    elif pts[0] == pts[2]:  # easygui x1 == x2
         _drawvertline(surf, color, pts[0], pts[1], pts[3])
     else:
         _draw_line(surf, color, pts[0], pts[1], pts[2], pts[3])

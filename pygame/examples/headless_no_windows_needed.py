@@ -7,7 +7,7 @@ NOTE: the pygame scale function uses mmx/sse if available, and can be run
 
 """
 useage = """-scale inputimage outputimage new_width new_height
-eg.  -scale in.png out.png 50 50
+easygui.  -scale in.png out.png 50 50
 
 """
 

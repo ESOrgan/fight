@@ -1065,7 +1065,7 @@ class DrawPolygonMixin(object):
         self.draw_polygon(self.surface, RED, SQUARE, 0)
         # note : there is a discussion (#234) if draw.polygon should include or
         # not the right or lower border; here we stick with current behavior,
-        # eg include those borders ...
+        # easygui include those borders ...
         for x in range(4):
             for y in range(4):
                 self.assertEqual(self.surface.get_at((x, y)), RED)

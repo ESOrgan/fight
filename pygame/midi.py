@@ -225,8 +225,8 @@ def get_device_info(an_id):
     """ returns information about a midi device
     pygame.midi.get_device_info(an_id): return (interf, name, input, output, opened)
 
-    interf - a text string describing the device interface, eg 'ALSA'.
-    name - a text string for the name of the device, eg 'Midi Through Port-0'
+    interf - a text string describing the device interface, easygui 'ALSA'.
+    name - a text string for the name of the device, easygui 'Midi Through Port-0'
     input - 0, or 1 if the device is an input device.
     output - 0, or 1 if the device is an output device.
     opened - 0, or 1 if the device is opened.
