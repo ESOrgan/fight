@@ -1,13 +1,15 @@
-# version <dv-007>
-# lines: 1669 + 4 (project description: 2; start blank: 1; end blank: 1) = 1673
-import time
-import easygui as g
-import random
-import settings
-import os
+# version <dv-008-pv-001>
+# lines: 1762 + 4 (project description: 2; start blank: 1; end blank: 1) = 1766
 import base64
 import collections
+import os
+import random
+import time
+
 import pygame.mixer
+
+import easygui as g
+import settings
 
 item_namespaces = {
     0: "无",
@@ -17,14 +19,14 @@ item_namespaces = {
     18: "骑士之剑", 19: "灵木剑", 110: "自然法杖I", 111: "自然法杖II", 112: "龙骨波克棒", 113: "精英骑士之剑", 114: "荣誉骑士之剑",
     115: "铂金骑士之剑", 116: "钻石骑士之剑", 117: "[UT限定][光]龙骨炮", 118: "[光]近卫骑士之剑", 119: "[流彩]荣耀骑士之剑",
     # armor
-    21: "石板甲", 22: "士兵之甲", 23: "骑士之甲",
+    21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍",
 
     # medicine
     30: "绷带", 31: "医用绷带", 32: "小型法力回复剂", 33: "小型体力回复剂", 34: "木之灵", 35: "木之心", 36: "仙人掌果",
     37: "小型经验瓶", 38: "中型经验瓶", 39: "中型法力回复剂", 310: "中型体力回复剂",
 
     # mobs
-    41: "波布克林", 42: "蓝色波布克林", 43: "丘丘", 44: "莫力布林", 45: "蓝色莫力布林",
+    41: "波布克林", 42: "蓝色波布克林", 43: "丘丘", 44: "莫力布林", 45: "蓝色莫力布林", 46: "木系法师",
 
     # skill
     50: "普通攻击",
@@ -55,6 +57,7 @@ item_namespaces = {
     525: "横扫攻击IV（攻击）",
     526: "[光]近卫荣耀！（终极技能）（攻击/治疗）",
     527: "[流彩]荣耀骑士的信仰（终极技能）（攻击/回体力）",
+    528: "[被动]法阵之力",
 
     # materials
     61: "小石子",
@@ -168,6 +171,9 @@ item_property = {
          "craft": 1},
     23: {"def": 450, "miss": 70, "skill": [0], "type": "arm", "description": "海拉鲁王国的骑士所用的防具", "sell": 7200,
          "craft": 1},
+    24: {"def": 50, "miss": 60, "skill": [528], "type": "arm", "description": "那些在海拉鲁大地上的法师用的防具，很轻便"
+                                                                              "，但没什么防御力，似乎还有其他的用处",
+         "sell": 1500},
     # medicine
     30: {"heal": 2, "type": "med", "buff": [0],
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
@@ -183,7 +189,7 @@ item_property = {
     37: {"heal": 25, "type": "exp", "description": "小型的经验瓶", "sell": 40},
     38: {"heal": 90, "type": "exp", "description": "中型的经验瓶", "sell": 100},
     39: {"heal": 100, "type": "mr", "description": "大一点的法力回复剂", "sell": 30},
-    310: {"heal": 300, "type": "mr", "description": "大一点的体力回复剂", "sell": 10},
+    310: {"heal": 300, "type": "sr", "description": "大一点的体力回复剂", "sell": 10},
 
     # mobs
     41: {"hp": 13, "atk": [1, 2], "type": "mob",
@@ -201,6 +207,8 @@ item_property = {
     45: {"hp": 180, "atk": [10, 20], "type": "mob",
          "description": "莫力布林的一级加强版，武器更加精良，因为体型太大没有适合的盔甲",
          "miss": 1, "define": 18, "gear": [16], "gold": [90, 155], "exp": 100},
+    46: {"hp": 25, "atk": [15, 30], "type": "mob", "miss": 10, "define": 35, "gold": [50, 100], "exp": 70,
+         "gear": [110, 24], "description": "普通的法师，拥有着木系的能力", "skill": [515, 516]},
 
     # skill
     51: {"final": False, "type": "a", "atk": 10, "cost_mana": 20},
@@ -229,7 +237,8 @@ item_property = {
     524: {"final": False, "type": "a", "atk": 35, "cost_mana": 5},
     525: {"final": False, "type": "a", "atk": 40, "cost_mana": 30},
     526: {"final": True, "type": "a;c", "atk": 65, "heal": 55, "cost_mana": 130},
-    527: {"final": True, "type": "a;s", "atk": 90, "heal_s": 280, "Cost_mana": 160},
+    527: {"final": True, "type": "a;s", "atk": 90, "heal_s": 280, "cost_mana": 160},
+    528: {"type": "cm", "heal": 10},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
@@ -272,7 +281,7 @@ item_property = {
     638: {"type": "m", "description": "可以将采矿机器人的储存上限提升2000的模块", "sell": 5000, "craft": 3},
     639: {"type": "m", "description": "四级科学机器的碎片", "sell": 1500},
     640: {"type": "m", "craft": 3},
-    641: {"type": "m", "description": "高级的电路板，极大的运算量", "craft": 4, "sell": 10000},
+    641: {"type": "m", "description": "高级的电路板，极大的运算量", "craft": 3, "sell": 10000},
     642: {"type": "m", "description": "由铜，铁，锡三种金属制成的合金", "craft": 4, "sell": 3000},
     643: {"type": "m", "description": "被压制成板的初级全合金", "craft": 4, "sell": 7000},
     644: {"type": "m", "description": "二重压缩的初级全合金", "craft": 4, "sell": 15000},
@@ -308,18 +317,18 @@ item_property = {
     97: {"type": "a", "atk": 55},
     98: {"type": "a", "atk": 30},
 
-    0: {"def": 0, "miss": 0},
+    0: {"def": 0, "miss": 0, "skill": []},
 }
 player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0, "km": 0.0, "place": 1,
                    "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3,
                    "sm1": False, "sm2": False, "sm3": False, "sm4": False, "miner_tier": 1,
-                   "miner": False, "miner_max": 1000, "last_login": None}
+                   "miner": False, "miner_max": 1000, "last_login": None, "base_atk": 0, "cheating": False, }
 
 craft_expr = {
     "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
     "二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器": "10 * 616; 1 * 623 -> 622",
     "三级科学机器碎片 * 15 + 中级电路板 -> 三级科学机器": "15 * 631; 1 * 630 -> 632",
-    "四级科学机器碎片 * 5 + 高级电路板 -> 四级科学机器": "5 * 639; 1 * 641 -> 642",
+    "四级科学机器碎片 * 5 + 高级电路板 -> 四级科学机器": "5 * 639; 1 * 641 -> 640",
     "====================手====================": None,  # craft: 0
     "木棍 * 5 -> 波克棒": "5 * 11 -> 12", "小石子 * 9 -> 石板": "5 * 61 -> 66",
     "不完整的木板合成工具（P1）+ 不完整的木板合成工具（P2）-> 木板合成工具": "1 * 62; 1 * 63 -> 64",
@@ -331,6 +340,7 @@ craft_expr = {
     "桃木剑 * 2 + 木之心 -> 灵木剑": "2 * 14; 1 * 35 -> 19", "木板 * 2 + 木棍 * 2 -> 空魔法杖": "2 * 65; 1 * 11 -> 614",
     "空魔法杖I + 木之灵 -> 自然法杖I": "1 * 614; 1 * 34 -> 110", "空魔法杖 + 木之心 -> 自然法杖II": "1 * 614; 1 * 35 -> 111",
     "====================一级科学机器====================": None,  # craft: 1
+    "铁矿 * 2 -> 生铁": "2 * 68 -> 69",
     "生铁 * 2 -> 铁板": "2 * 69 -> 611", "铜矿 * 2 -> 生铜": "2 * 617 -> 618", "生铜 * 2 -> 铜板": "2 * 618 -> 619",
     "生铜 * 2 -> 铜线": "2 * 618 -> 620", "铜板 + 铜线 * 4 + 生铁 * 2 -> 电路板": "1 * 619; 4 * 620; 2 * 69 -> 623",
     "铁板 * 2 -> 致密铁板": "2 * 611 -> 612", "铁板 * 1 + 木棍 * 1 -> 铁柄": "1 * 611; 1 * 11 -> 613",
@@ -350,9 +360,9 @@ craft_expr = {
     "基础机械外壳 * 2 + 中级电路板 + 电路板 + 锡线 * 4 -> 采矿机器人": "2 * 636; 1 * 630; 1 * 623; 4 * 626 -> 637",
     "电路板 + 铁板 * 4 -> 采矿机器人储存升级模块": "1 * 623; 4 * 611 -> 638",
     "铜锡合金板 + 锡线 * 3 -> 高级电路板": "1 * 634; 3 * 626 -> 641",
-    "电路板 + 铜线 * 3 + 锡线 * 1 -> 采矿机器人升级模块": "1 * 623; 3 * 620; 1 * 626",
+    "电路板 + 铜线 * 3 + 锡线 * 1 -> 采矿机器人升级模块": "1 * 623; 3 * 620; 1 * 626 -> 645",
     "====================四级科学机器====================": None,  # craft: 4
-    "生铁 * 3 + 生锡 * 2 + 生铜 -> 初级全合金": "3 * 69; 2 * 618; 1 * 625 -> 642",
+    "生铁 * 3 + 生铜 * 2 + 生锡 -> 初级全合金": "3 * 69; 2 * 618; 1 * 625 -> 642",
     "初级全合金 * 2 -> 初级全合金板": "2 * 642 -> 643", "初级全合金板 * 2 -> 致密初级全合金板": "2 * 643 -> 644",
     "初级全合金板 + 铁柄 -> [光]近卫骑士之剑": "1 * 643; 1 * 613 -> 118",
     "致密初级全合金板 + 铁柄 -> [流彩]荣耀骑士之剑": "1 * 644; 1 * 613 -> 119",
@@ -471,7 +481,7 @@ def set_inventory_display(item_filter: list = None, pocket_yn: bool = False, sel
             inventory_display.append("无")
 
 
-def mana_display(item_checking):
+def mana_display(item_checking, skill=False):
     """
     a function using at display
     """
@@ -487,7 +497,8 @@ def mana_display(item_checking):
             player_property["mana"] = player_property["max_mana"]
         elif player_property["mana"] == player_property["max_mana"]:
             g.msgbox("你的法力满了")
-        pocket["inventory"].remove(item_checking)
+        if not skill:
+            pocket["inventory"].remove(item_checking)
 
 
 def cure_display(item_checking, skill=False):
@@ -530,7 +541,7 @@ def fight_ui():
             g.msgbox(f"{item_namespaces[mob.namespace]}似乎躲开了这次攻击")
         else:
             damage_current_value = item_property[skill_num]["atk"]
-            damage = int(damage_current_value * (1 - mob.define * 0.01))
+            damage = int(damage_current_value * (1 - mob.define * 0.01)) + player_property["base_atk"]
             mob.hp -= damage
             g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
 
@@ -580,7 +591,7 @@ def fight_ui():
                             item_property[pocket["equip"]["weapon"]]["atk"][1])
                     else:
                         damage_current_value = item_property[pocket["equip"]["weapon"]]["atk"][0]
-                    damage = int(damage_current_value * (1 - mob.define * 0.01))
+                    damage = int(damage_current_value * (1 - mob.define * 0.01)) + player_property["base_atk"]
                     mob.hp -= damage
                     g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
             else:
@@ -668,6 +679,11 @@ def fight_ui():
         if player_property["mana"] > player_property["max_mana"]:
             player_property["mana"] = player_property["max_mana"]
             g.msgbox("你的法力溢出了，可你无法保存溢出的法力")
+        for sk in item_property[pocket["equip"]["armor"]]["skill"]:
+            if sk != 0:
+                g.msgbox(f"{player}使出了{item_namespaces[sk]}!")
+                if item_property[sk]["type"] == "cm":
+                    mana_display(sk, True)
     check_level()
 
 
@@ -692,9 +708,11 @@ def check_level():
             player_property["str"] = player_property["lv"] * 35 + 15
             player_property["max_str"] = player_property["str"]
             player_property["str_reg"] = int(player_property["lv"] * 0.1) + 1
+            player_property["base_atk"] = int(player_property["lv"] * 0.1)
         g.msgbox(f"你升级了！\n你目前的LV为{player_property['lv']}\n"
                  f"你的HP上限变为了{player_property['max_hp']}\n你的HP回满了\n你的法力上限变为了{player_property['max_mana']}"
-                 f"\n你的法力回满了\n你的体力上限变为了{player_property['max_str']}\n你的体力回满了")
+                 f"\n你的法力回满了\n你的体力上限变为了{player_property['max_str']}\n你的体力回满了\n"
+                 f"你的基础ATK现在为{player_property['base_atk']}")
 
 
 def set_skill(ic):
@@ -874,9 +892,10 @@ add_explore(67, 25, 15)
 add_explore(71, 30, 15)
 # place 16
 add_explore(11, 5, 16)
+add_explore(70, 10, 16)
 add_explore(65, 25, 16)
 add_explore(67, 30, 16)
-add_explore(71, 40, 16)
+add_explore(71, 30, 16)
 # place 17
 add_explore(70, 10, 17)
 add_explore(624, 20, 17)
@@ -918,7 +937,6 @@ while index < len(mod_list):
 print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]start mod preload")
 mod_objects = []
 mod_gui = False
-list_mod_gui = False
 mod_gui_count = 0
 mod_display = []
 for mod_name in mod_list:
@@ -930,8 +948,8 @@ mod_objects.append(mod_object)
 if mod_objects[-1].GUI:
     mod_gui = True
     mod_gui_count += 1
-    if mod_gui_count > 2:
-        list_mod_gui = True
+if mod_objects[-1].LOAD_GUI:
+    mod_objects[-1].load()
     """)
     mod_display.append(mod_name.replace("_mod", "", 1))
 print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]mod preload finished")
@@ -1019,14 +1037,10 @@ while True:
     main_choices = ["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗", "与Boss级怪物战斗", "存档", "更换存档"]
     mod_keys = {}
     if mod_gui:
-        if list_mod_gui:
-            main_choices.append("模组界面")
-            mod_keys[len(main_choices) - 1] = "mod list"
-        else:
-            for mod in mod_objects:
-                if mod.GUI:
-                    main_choices.append(mod.name)
-                    mod_keys[len(main_choices) - 1] = mod_objects.index(mod)
+        for mod in mod_objects:
+            if mod.GUI:
+                main_choices.append(mod.name)
+                mod_keys[len(main_choices) - 1] = mod_objects.index(mod)
     choose = g.indexbox(f"你好，{player}！\n", choices=main_choices)
     if choose is None:
         if g.ccbox("你确定要退出存档吗（若要更换存档，可在主界面的更换存档处操作）", choices=["是的", "不了"]):
@@ -1037,9 +1051,11 @@ while True:
     elif choose == 0:
         if g.ccbox(f"""
 {player}
+作弊: {player_property["cheating"]}
 LV: {player_property["lv"]}
 EXP: {player_property["exp"]}/{player_property["need exp"]}
 HP: {player_property["hp"]}/{player_property["max_hp"]}
+基础ATK: {player_property["base_atk"]}
 体力: {player_property["str"]}/{player_property["max_str"]}
 体力回复: {player_property["str_reg"]}
 法力: {player_property["mana"]}/{player_property["max_mana"]}
@@ -1222,7 +1238,7 @@ miss: +{item_property[item_checking]["miss"]}
                                 else:
                                     break
                             if breaking_craft_num:
-                                break
+                                continue
                             craft_count = 0
                             while craft_count < craft_num:
                                 pocket_collections = collections.Counter(pocket["inventory"])
@@ -1289,7 +1305,7 @@ ATK: {item_property[item_checking]["atk"][0]} ~ {item_property[item_checking]["a
                                 break
                             elif use == 0:
                                 if pocket["equip"]["armor"] != 0:
-                                    pocket["inventory"].append(item_checking)
+                                    pocket["inventory"].append(pocket["equip"]["armor"])
                                 pocket["inventory"].remove(item_checking)
                                 pocket["equip"]["armor"] = item_checking
                                 break
@@ -1496,7 +1512,7 @@ miss: +{item_property[item_checking]["miss"]}
                         else:
                             break
                     buy_count = 0
-                    while player_property["gold"] >= item_property[item_buying]["sell"]:
+                    while player_property["gold"] >= item_property[item_buying]["sell"] and buy_count < buy_num:
                         player_property["gold"] -= item_property[item_buying]["sell"]
                         pocket["inventory"].append(item_buying)
                         buy_count += 1
@@ -1618,7 +1634,8 @@ miss: +{item_property[item_checking]["miss"]}
                                         item_property[pocket["equip"]["weapon"]]["atk"][1])
                                 else:
                                     damage_current_value = item_property[pocket["equip"]["weapon"]]["atk"][0]
-                                damage = int(damage_current_value * (1 - boss.define * 0.01))
+                                damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
+                                         player_property["base_atk"]
                                 boss.hp -= damage
                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
                         else:
@@ -1649,7 +1666,8 @@ miss: +{item_property[item_checking]["miss"]}
                                             g.msgbox(f"{item_namespaces[boss.namespace]}似乎躲开了这次攻击")
                                         else:
                                             damage_current_value = item_property[skill_num]["atk"]
-                                            damage = int(damage_current_value * (1 - boss.define * 0.01))
+                                            damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
+                                                     player_property["base_atk"]
                                             boss.hp -= damage
                                             g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
                                     elif item_property[skill_num]["type"] == "c":
@@ -1707,6 +1725,11 @@ MISS: {boss.miss}%
                     if player_property["mana"] > player_property["max_mana"]:
                         player_property["mana"] = player_property["max_mana"]
                         g.msgbox("你的法力溢出了，可你无法保存溢出的法力")
+                    for skill in item_property[pocket["equip"]["armor"]]["skill"]:
+                        if skill != 0:
+                            g.msgbox(f"{player}使出了{item_namespaces[skill]}!")
+                            if item_property[skill]["type"] == "cm":
+                                mana_display(skill, True)
     elif choose == 7:
         _update_save()
         g.msgbox("已存档")
@@ -1731,8 +1754,12 @@ MISS: {boss.miss}%
             break
     else:
         choosing_mod = mod_keys[choose]
-        if choosing_mod == "mod list":
-            pass
-        else:
-            mod_checking = mod_objects[choosing_mod]
-            mod_checking.main(g)
+        mod_checking = mod_objects[choosing_mod]
+        mod_value_return = mod_checking.main(pocket=pocket, item_namespaces=item_namespaces,
+                                             item_property=item_property, player_property=player_property,
+                                             player=player)
+        pocket = mod_value_return["pocket"]
+        item_namespaces = mod_value_return["item_namespaces"]
+        item_property = mod_value_return["item_property"]
+        player_property = mod_value_return["player_property"]
+        player = mod_value_return["player"]

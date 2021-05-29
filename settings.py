@@ -1,9 +1,7 @@
 REBIRTH = False
 
-auto_save = False  # test function
-
 PROPERTY_KEY = ["max_mana", "mana", "mana_reg", "str", "max_str", "str_reg", "place", "km", "sm1", "sm2", "sm3", "sm4",
-                "miner", "miner_max", "last_login", "miner_tier"]
+                "miner", "miner_max", "last_login", "miner_tier", "base_atk", "cheating"]
 PROPERTY_EXPR = {
     "max_mana": "player_property['max_mana'] = player_property['lv'] * 10 + 20",
     "mana": "player_property['mana'] = player_property['max_mana']",
@@ -20,5 +18,7 @@ PROPERTY_EXPR = {
     "miner": "player_property['miner'] = False",
     "miner_max": "player_property['miner_max'] = 1000",
     "last_login": "player_property['last_login'] = None",
-    "miner_tier": "player_property['miner_tier'] = 1"
+    "miner_tier": "player_property['miner_tier'] = 1",
+    "base_atk": 'player_property["base_atk"] = int(player_property["lv"] * 0.1)',
+    "cheating": "player_property['cheating'] = False",
 }
