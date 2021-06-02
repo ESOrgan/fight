@@ -1,5 +1,5 @@
-# version <dv-008-pv-001>
-# lines: 1762 + 4 (project description: 2; start blank: 1; end blank: 1) = 1766
+# version <dv-008-pv-002>
+# lines: 1796 + 4 (project description: 2; start blank: 1; end blank: 1) = 1800
 import base64
 import collections
 import os
@@ -19,7 +19,7 @@ item_namespaces = {
     18: "骑士之剑", 19: "灵木剑", 110: "自然法杖I", 111: "自然法杖II", 112: "龙骨波克棒", 113: "精英骑士之剑", 114: "荣誉骑士之剑",
     115: "铂金骑士之剑", 116: "钻石骑士之剑", 117: "[UT限定][光]龙骨炮", 118: "[光]近卫骑士之剑", 119: "[流彩]荣耀骑士之剑",
     # armor
-    21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍",
+    21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍", 25: "[MC限定]唤魔者长袍",
 
     # medicine
     30: "绷带", 31: "医用绷带", 32: "小型法力回复剂", 33: "小型体力回复剂", 34: "木之灵", 35: "木之心", 36: "仙人掌果",
@@ -58,6 +58,8 @@ item_namespaces = {
     526: "[光]近卫荣耀！（终极技能）（攻击/治疗）",
     527: "[流彩]荣耀骑士的信仰（终极技能）（攻击/回体力）",
     528: "[被动]法阵之力",
+    529: "[MC限定][被动]法阵之力II",
+    530: "[MC限定][被动]恼鬼攻击",
 
     # materials
     61: "小石子",
@@ -112,7 +114,8 @@ item_namespaces = {
     71: "需要帮助的神秘人",
 
     # boss
-    80: "岩石巨人", 81: "棕色波布克林", 82: "大型守护者（陆地型）", 83: "[UT限定]Sans", 84: "[MC限定]末影龙",
+    80: "岩石巨人", 81: "棕色波布克林", 82: "大型守护者（陆地型）", 83: "[UT限定]Sans", 84: "[MC限定]小末影龙",
+    85: "[MC限定]唤魔者",
 
     # boss skill
     91: "岩石重击",
@@ -123,6 +126,10 @@ item_namespaces = {
     96: "[MC限定]龙息弹",
     97: "[MC限定][光]龙息轰炸机！",
     98: "[MC限定][光]急速飞高高",
+    99: "[MC限定]尖牙突刺",
+    910: "[MC限定]尖牙锁定VI",
+    911: "[MC限定][光]尖牙锁定X",
+    912: "[MC限定][光]恼鬼大军"
 }
 pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": [30]}
 item_property = {
@@ -174,6 +181,8 @@ item_property = {
     24: {"def": 50, "miss": 60, "skill": [528], "type": "arm", "description": "那些在海拉鲁大地上的法师用的防具，很轻便"
                                                                               "，但没什么防御力，似乎还有其他的用处",
          "sell": 1500},
+    25: {"def": 100, "miss": 70, "skill": [529, 530], "type": "arm",
+         "description": "那些在海拉鲁大地上的唤魔者用的防具，非常轻便，但没什么防御力，似乎还有其他的用处", "sell": 1500},
     # medicine
     30: {"heal": 2, "type": "med", "buff": [0],
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
@@ -239,6 +248,8 @@ item_property = {
     526: {"final": True, "type": "a;c", "atk": 65, "heal": 55, "cost_mana": 130},
     527: {"final": True, "type": "a;s", "atk": 90, "heal_s": 280, "cost_mana": 160},
     528: {"type": "cm", "heal": 10},
+    529: {"type": "cm", "heal": 15},
+    530: {"type": "ca", "atk": 5},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
@@ -305,7 +316,9 @@ item_property = {
     83: {"type": "boss", "hp": 1, "atk": [1, 5], "skill": [], "gear": [83], "gold": [210, 500], "exp": 999,
          "define": 0, "miss": 99.99, "description": "最弱的Boss，他不可能一直躲下去"},
     84: {"type": "boss", "hp": 200, "atk": [1, 3], "skill": [95, 96, 97, 98, 99], "gear": [646], "gold": [100, 120],
-         "exp": 150, "define": 35, "miss": 42.01, "description": "盘踞于末路之地的龙，守护着她宝贵的龙蛋"},
+         "exp": 150, "define": 35, "miss": 42.01, "description": "盘踞于末路之地的龙的孩子，也守护着她宝贵的龙蛋"},
+    85: {"type": "boss", "hp": 60, "atk": [5, 10], "skill": [99, 910, 911, 912], "gear": [25], "gold": [40, 70],
+         "exp": 240, "define": 50, "miss": 15, "description": "法师的头子，比较强大"},
 
     # boss skill
     91: {"type": "a", "atk": 28},
@@ -316,6 +329,10 @@ item_property = {
     96: {"type": "a", "atk": 8},
     97: {"type": "a", "atk": 55},
     98: {"type": "a", "atk": 30},
+    99: {"type": "a", "atk": 20},
+    910: {"type": "a", "atk": 50},
+    911: {"type": "a", "atk": 90},
+    912: {"type": "a", "atk": 70},
 
     0: {"def": 0, "miss": 0, "skill": []},
 }
@@ -684,6 +701,15 @@ def fight_ui():
                 g.msgbox(f"{player}使出了{item_namespaces[sk]}!")
                 if item_property[sk]["type"] == "cm":
                     mana_display(sk, True)
+                elif item_property[sk]["type"] == "ca":
+                    if random.randint(1, 10000) < mob.miss * 100:
+                        g.msgbox(f"{item_namespaces[mob.namespace]}似乎躲开了这次攻击")
+                    else:
+                        damage_current_value = item_property[sk]["atk"]
+                        damage = int(damage_current_value * (1 - mob.define * 0.01)) + \
+                                 player_property["base_atk"]
+                        mob.hp -= damage
+                        g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
     check_level()
 
 
@@ -921,7 +947,8 @@ _makedir("save")
 _option_go("save")
 saves = os.listdir()
 g.msgbox("""
-                                  fight dv-007
+                                  fight dv-008
+                                     pv-002
                                       欢迎
 """)
 _back()
@@ -1580,7 +1607,7 @@ miss: +{item_property[item_checking]["miss"]}
                     player_property["gold"] += gold
                     player_property["exp"] += boss.exp
                     g.msgbox(f"你获得了{gold}$和{boss.exp}点经验")
-                    g.msgbox(f"你获得了 {gear_display}")
+                    g.msgbox(f"你获得了{gear_display}")
                     break
                 boss_skill_using = boss.random_skill()
                 g.msgbox(f"{item_namespaces[boss.namespace]}使出了{item_namespaces[boss_skill_using]}")
@@ -1713,21 +1740,31 @@ MISS: {boss.miss}%
                         break
                     else:
                         continue
-                    player_property["str"] += player_property["str_reg"]
-                    g.msgbox(f"你回复了{player_property['str_reg']}体力")
-                    if player_property["str"] > player_property["max_str"]:
-                        player_property["str"] = player_property["max_str"]
-                        g.msgbox("你的体力溢出了，可你无法保存溢出的体力")
-                    player_property["mana"] += player_property["mana_reg"]
-                    g.msgbox(f"你回复了{player_property['mana_reg']}法力")
-                    if player_property["mana"] > player_property["max_mana"]:
-                        player_property["mana"] = player_property["max_mana"]
-                        g.msgbox("你的法力溢出了，可你无法保存溢出的法力")
-                    for skill in item_property[pocket["equip"]["armor"]]["skill"]:
-                        if skill != 0:
-                            g.msgbox(f"{player}使出了{item_namespaces[skill]}!")
-                            if item_property[skill]["type"] == "cm":
-                                mana_display(skill, True)
+                player_property["str"] += player_property["str_reg"]
+                g.msgbox(f"你回复了{player_property['str_reg']}体力")
+                if player_property["str"] > player_property["max_str"]:
+                    player_property["str"] = player_property["max_str"]
+                    g.msgbox("你的体力溢出了，可你无法保存溢出的体力")
+                player_property["mana"] += player_property["mana_reg"]
+                g.msgbox(f"你回复了{player_property['mana_reg']}法力")
+                if player_property["mana"] > player_property["max_mana"]:
+                    player_property["mana"] = player_property["max_mana"]
+                    g.msgbox("你的法力溢出了，可你无法保存溢出的法力")
+                for skill in item_property[pocket["equip"]["armor"]]["skill"]:
+                    if skill != 0:
+                        g.msgbox(f"{player}使出了{item_namespaces[skill]}!")
+                        if item_property[skill]["type"] == "cm":
+                            mana_display(skill, True)
+                        elif item_property[skill]["type"] == "ca":
+                            if random.randint(1, 10000) < boss.miss * 100:
+                                g.msgbox(f"{item_namespaces[boss.namespace]}似乎躲开了这次攻击")
+                            else:
+                                damage_current_value = item_property[skill]["atk"]
+                                damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
+                                         player_property["base_atk"]
+                                boss.hp -= damage
+                                g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
+
     elif choose == 7:
         _update_save()
         g.msgbox("已存档")
