@@ -1509,19 +1509,17 @@ miss: +{item_property[item_checking]["miss"]}
                             buy_num = int(buy_num)
                         except ValueError:
                             continue
+                        buy_count = 0
+                        while buy_count < buy_num and player_property["gold"] >= item_property[item_buying]["sell"]:
+                            player_property["gold"] -= item_property[item_buying]["sell"]
+                            pocket["inventory"].append(item_buying)
+                            buy_count += 1
+                        if buy_count == buy_num:
+                            g.msgbox(f"你花费{item_property[item_buying]['sell'] * buy_count}$购买了"
+                                     f"{buy_count} * {item_namespaces[item_buying]}")
                         else:
-                            break
-                    buy_count = 0
-                    while player_property["gold"] >= item_property[item_buying]["sell"] and buy_count < buy_num:
-                        player_property["gold"] -= item_property[item_buying]["sell"]
-                        pocket["inventory"].append(item_buying)
-                        buy_count += 1
-                    if buy_count == buy_num:
-                        g.msgbox(f"你花费{item_property[item_buying]['sell'] * buy_count}$购买了"
-                                 f"{buy_count} * {item_namespaces[item_buying]}")
-                    else:
-                        g.msgbox(f"由于钱不够，你只花费{item_property[item_buying]['sell'] * buy_count}$购买了"
-                                 f"{buy_count} * {item_namespaces[item_buying]}")
+                            g.msgbox(f"由于钱不够，你只花费{item_property[item_buying]['sell'] * buy_count}$购买了"
+                                     f"{buy_count} * {item_namespaces[item_buying]}")
                 else:
                     g.msgbox("你没有足够的钱")
 
