@@ -1,7 +1,7 @@
 REBIRTH = False
 
 PROPERTY_KEY = ["max_mana", "mana", "mana_reg", "str", "max_str", "str_reg", "place", "km", "sm1", "sm2", "sm3", "sm4",
-                "miner", "miner_max", "last_login", "miner_tier", "base_atk", "cheating"]
+                "miner", "miner_max", "last_login", "miner_tier", "base_atk", "cheating", "nether", "nether_dlc"]
 PROPERTY_EXPR = {
     "max_mana": "player_property['max_mana'] = player_property['lv'] * 10 + 20",
     "mana": "player_property['mana'] = player_property['max_mana']",
@@ -21,4 +21,6 @@ PROPERTY_EXPR = {
     "miner_tier": "player_property['miner_tier'] = 1",
     "base_atk": 'player_property["base_atk"] = int(player_property["lv"] * 0.1)',
     "cheating": "player_property['cheating'] = False",
+    "nether": "player_property['nether'] = False",
+    "nether_dlc": "player_property['nether_dlc'] = False",
 }

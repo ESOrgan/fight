@@ -1,5 +1,5 @@
-# version <dv-008-pv-002>
-# lines: 1796 + 4 (project description: 2; start blank: 1; end blank: 1) = 1800
+# version <dv-008>
+# lines: 2083 + 4 (project description: 2; start blank: 1; end blank: 1) = 2087
 import base64
 import collections
 import os
@@ -18,8 +18,10 @@ item_namespaces = {
     10: "手", 11: "木棍", 12: "波克棒", 13: "石板波克棒", 14: "桃木剑", 15: "莫力布林棍", 16: "石板莫力布林棍", 17: "木剑",
     18: "骑士之剑", 19: "灵木剑", 110: "自然法杖I", 111: "自然法杖II", 112: "龙骨波克棒", 113: "精英骑士之剑", 114: "荣誉骑士之剑",
     115: "铂金骑士之剑", 116: "钻石骑士之剑", 117: "[UT限定][光]龙骨炮", 118: "[光]近卫骑士之剑", 119: "[流彩]荣耀骑士之剑",
+    120: "[下界DLC]诡异之剑", 121: "[跨次元联动][三次元限定][传说]咬鱼の剑", 122: "[史诗]王者骑士之剑",
+    123: "[跨次元联动][三次元限定][传说]青槍", 124: "[下界DLC]绯红之剑",
     # armor
-    21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍", 25: "[MC限定]唤魔者长袍",
+    21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍", 25: "[MC限定]唤魔者长袍", 26: "[流彩]荣耀骑士之甲",
 
     # medicine
     30: "绷带", 31: "医用绷带", 32: "小型法力回复剂", 33: "小型体力回复剂", 34: "木之灵", 35: "木之心", 36: "仙人掌果",
@@ -60,6 +62,19 @@ item_namespaces = {
     528: "[被动]法阵之力",
     529: "[MC限定][被动]法阵之力II",
     530: "[MC限定][被动]恼鬼攻击",
+    531: "[下界DLC]怨魂斩（攻击）",
+    532: "[跨次元联动][三次元限定][传说]咬鱼の斬撃（终极技能）（攻击+/回体力）",
+    533: "[跨次元联动][三次元限定][传说]咬鱼の魂（终极技能）（回体力/回法力）",
+    534: "[跨次元联动][三次元限定][传说]咬鱼の襲撃（终极技能）（攻击-/治疗）",
+    535: "[流彩]最强骑士的跳劈！（终极技能）（攻击+/治疗-）",
+    536: "[流彩]最强骑士的横扫！（终极技能）（攻击-/治疗+）",
+    537: "[流彩]最强骑士之魂！！（终极技能）（攻击-/治疗+/回体力）",
+    538: "[跨次元联动][三次元限定][传说]ケチャップホップチョップ（番茄酱跳劈）（终极技能）（攻击/治疗-）",
+    539: "[跨次元联动][三次元限定][传说]犬の頭を食べる（吃狗头）（治疗+）",
+    540: "[跨次元联动][三次元限定][传说]ブルーアタック（蓝色攻击）（回体力）",
+    541: "[跨次元联动][三次元限定][传说]オレンジアタック（橙色攻击）（回法力）",
+    542: "[流彩][被动]荣耀骑士的力量（治疗）",
+    543: "[下界DLC]炽刃斩（攻击）",
 
     # materials
     61: "小石子",
@@ -108,6 +123,15 @@ item_namespaces = {
     644: "致密初级全合金板",
     645: "采矿机器人升级模块",
     646: "[MC限定][史诗]龙蛋",
+    647: "金粒",
+    648: "金锭",
+    649: "[下界DLC]末影珍珠",
+    650: "[下界DLC][光]末影传送盒",
+    651: "[下界DLC]菌光体",
+    652: "[下界DLC]诡异木板",
+    653: "严密初级全合金板",
+    654: "[DLC]异世界返回传送器",
+    655: "[下界DLC]绯红木板",
 
     # events
     70: "随机怪物",
@@ -129,7 +153,11 @@ item_namespaces = {
     99: "[MC限定]尖牙突刺",
     910: "[MC限定]尖牙锁定VI",
     911: "[MC限定][光]尖牙锁定X",
-    912: "[MC限定][光]恼鬼大军"
+    912: "[MC限定][光]恼鬼大军",
+
+    # dlc mobs
+    101: "[下界DLC]僵尸猪灵",
+    102: "[下界DLC]末影人",
 }
 pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": [30]}
 item_property = {
@@ -171,6 +199,16 @@ item_property = {
           "sell": 15000, "craft": 4},
     119: {"atk": [50, 80], "type": "wep", "skill": [523, 525, 526, 527],
           "description": "[流彩]海拉鲁王国的荣耀骑士所用的单手剑", "sell": 32000, "craft": 4},
+    120: {"atk": [5, 9], "type": "wep", "skill": [531], "description": "由诡异木板制成的剑，有些诡异，似乎蕴藏着怨魂的力量",
+          "sell": 1500, "craft": 0},
+    121: {"atk": [100, 200], "type": "wep", "skill": [523, 59, 532, 533, 534],
+          "description": "传说!!!\n作者的好朋友咬鱼的剑", "sell": 500000},
+    122: {"atk": [90, 150], "type": "wep", "skill": [523, 59, 535, 536, 537],
+          "description": "史诗!\n海拉鲁王国的王者骑士所用的单手剑", "sell": 40000, "craft": 4},
+    123: {"atk": [150, 250], "type": "wep", "skill": [523, 59, 538, 539, 540, 541],
+          "description": "传说!!!\n一把破旧的长矛，但依旧是大犬汪最趁手的武器", "sell": 500000},
+    124: {"atk": [10, 15], "type": "wep", "skill": [531], "description": "由绯红木板制成的剑，有些炽热，似乎蕴藏着火焰的力量",
+          "sell": 1500, "craft": 0},
     # armor
     21: {"def": 100, "miss": 50, "skill": [0], "type": "arm", "sell": 80,
          "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效", "craft": 0},
@@ -183,6 +221,8 @@ item_property = {
          "sell": 1500},
     25: {"def": 100, "miss": 70, "skill": [529, 530], "type": "arm",
          "description": "那些在海拉鲁大地上的唤魔者用的防具，非常轻便，但没什么防御力，似乎还有其他的用处", "sell": 1500},
+    26: {"def": 600, "miss": 50, "skill": [542], "type": "arm", "description": "海拉鲁王国的荣耀骑士所用的防具",
+         "sell": 70000, "craft": 4},
     # medicine
     30: {"heal": 2, "type": "med", "buff": [0],
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
@@ -203,19 +243,19 @@ item_property = {
     # mobs
     41: {"hp": 13, "atk": [1, 2], "type": "mob",
          "description": "一个浑身通红的怪物，四肢发达，头脑简单，还特别弱",
-         "miss": 0, "define": 0, "gear": [11, 12], "gold": [5, 10], "exp": 5},
+         "miss": 0, "define": 0, "gear": [11, 12], "gold": [5, 10], "exp": 5, "skill": []},
     42: {"hp": 25, "atk": [3, 4], "type": "mob",
          "description": "波布克林的一级加强版，聪明了些，武器也更加精良，甚至还有盔甲",
-         "miss": 2, "define": 10, "gear": [13, 21], "gold": [18, 30], "exp": 12},
+         "miss": 2, "define": 10, "gear": [13, 21], "gold": [18, 30], "exp": 12, "skill": [56]},
     43: {"hp": 5, "atk": [0, 1], "type": "mob",
          "description": "一个极弱的怪物，甚至有可能打出0点伤害...",
          "miss": 0, "define": 0, "gear": [11], "gold": [3, 7], "exp": 3},
     44: {"hp": 70, "atk": [5, 10], "type": "mob",
          "description": "波克布林的亲戚，更加强壮了，因此攻击力增强",
-         "miss": 0, "define": 15, "gear": [15], "gold": [40, 85], "exp": 40},
+         "miss": 0, "define": 15, "gear": [15], "gold": [40, 85], "exp": 40, "skill": [51, 58]},
     45: {"hp": 180, "atk": [10, 20], "type": "mob",
          "description": "莫力布林的一级加强版，武器更加精良，因为体型太大没有适合的盔甲",
-         "miss": 1, "define": 18, "gear": [16], "gold": [90, 155], "exp": 100},
+         "miss": 1, "define": 18, "gear": [16], "gold": [90, 155], "exp": 100, "skill": [54, 55]},
     46: {"hp": 25, "atk": [15, 30], "type": "mob", "miss": 10, "define": 35, "gold": [50, 100], "exp": 70,
          "gear": [110, 24], "description": "普通的法师，拥有着木系的能力", "skill": [515, 516]},
 
@@ -250,6 +290,19 @@ item_property = {
     528: {"type": "cm", "heal": 10},
     529: {"type": "cm", "heal": 15},
     530: {"type": "ca", "atk": 5},
+    531: {"final": False, "type": "a", "atk": 40, "cost_mana": 25},
+    532: {"final": True, "type": "a;s", "atk": 900, "heal_s": 400, "cost_mana": 1200},
+    533: {"final": True, "type": "s;m", "heal_s": 100, "heal_m": 50, "cost_mana": 0},
+    534: {"final": True, "type": "a;c", "atk": 800, "heal": 300, "cost_mana": 1100},
+    535: {"final": True, "type": "a;c", "atk": 500, "heal": 100, "cost_mana": 600},
+    536: {"final": True, "type": "a;c", "atk": 300, "heal": 200, "cost_mana": 700},
+    537: {"final": True, "type": "a;c;s", "atk": 200, "heal": 150, "heal_s": 200, "cost_mana": 950},
+    538: {"final": True, "type": "a;c", "atk": 1000, "heal": 400, "cost_mana": 1600},
+    539: {"final": False, "type": "c", "heal": 600, "cost_mana": 800},
+    540: {"final": False, "type": "s", "heal": 1000, "cost_mana": 400},
+    541: {"final": False, "type": "m", "heal": 50, "cost_mana": 0},
+    542: {"type": "cc", "heal": 20},
+    543: {"final": False, "type": "a", "atk": 60, "cost_mana": 35},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
@@ -299,6 +352,15 @@ item_property = {
     645: {"type": "m", "description": "提升采矿机器人等级的工具，等级提升可以让挖矿机器人挖矿机器人每次采矿的时间缩短", "craft": 3,
           "sell": 6000},
     646: {"type": "m", "description": "[MC限定][史诗]打败末影龙获得的东西，价值连城", "sell": 50000},
+    647: {"type": "m", "description": "一小块金", "sell": 2000},
+    648: {"type": "m", "description": "标准大小的金", "sell": 20000},
+    649: {"type": "m", "description": "击败末影人后的战利品，使用后可以快速前进1km", "sell": 5000},
+    650: {"type": "m", "description": "一次性的传送用具，使用后可以传送到当前维度的任意地区", "sell": 35000},
+    651: {"type": "m", "description": "一种存于下界的真菌，会发光", "sell": 1000},
+    652: {"type": "m", "description": "由一种存于下界的大型青蓝色真菌的茎制成的类似于木板的物品", "sell": 500},
+    653: {"type": "m", "description": "三重压缩的初级全合金", "sell": 35000},
+    654: {"type": "m", "description": "用于从DLC的维度返回主世界的传送器", "sell": 500},
+    655: {"type": "m", "description": "由一种存于下界的大型绯红色真菌的茎制成的类似于木板的物品", "sell": 500},
 
     # events
     70: {"type": "e", "*description": "summon a random mob"},
@@ -334,12 +396,19 @@ item_property = {
     911: {"type": "a", "atk": 90},
     912: {"type": "a", "atk": 70},
 
-    0: {"def": 0, "miss": 0, "skill": []},
+    # dlc mob
+    101: {"type": "dlcnm", "hp": 45, "atk": [10, 15], "miss": 5, "define": 65, "gold": [145, 235], "exp": 90,
+          "gear": [647, 647, 647, 647, 648], "skill": [54], "description": "下界中最常见的怪物，可以从它身上获取金"},
+    102: {"type": "dlcnm", "hp": 100, "atk": [5, 10], "miss": 65, "define": 0, "gold": [55, 120], "exp": 180,
+          "gear": [649], "skill": [58], "description": "神奇的瘦长怪物，可以通过操作末影珍珠瞬移，家乡是末路之地"},
+
+    0: {"def": 0, "miss": 0, "skill": [], "type": ""},
 }
 player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "define": 0, "exp": 0, "km": 0.0, "place": 1,
                    "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3,
                    "sm1": False, "sm2": False, "sm3": False, "sm4": False, "miner_tier": 1,
-                   "miner": False, "miner_max": 1000, "last_login": None, "base_atk": 0, "cheating": False, }
+                   "miner": False, "miner_max": 1000, "last_login": None, "base_atk": 0, "cheating": False,
+                   "nether_dlc": False, "nether": False}
 
 craft_expr = {
     "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
@@ -378,11 +447,13 @@ craft_expr = {
     "电路板 + 铁板 * 4 -> 采矿机器人储存升级模块": "1 * 623; 4 * 611 -> 638",
     "铜锡合金板 + 锡线 * 3 -> 高级电路板": "1 * 634; 3 * 626 -> 641",
     "电路板 + 铜线 * 3 + 锡线 * 1 -> 采矿机器人升级模块": "1 * 623; 3 * 620; 1 * 626 -> 645",
+    "[下界DLC]末影珍珠 * 4 + 铜锡合金板 * 4 -> [下界DLC]末影传送盒": "4 * 649; 4 * 634 -> 650",
     "====================四级科学机器====================": None,  # craft: 4
     "生铁 * 3 + 生铜 * 2 + 生锡 -> 初级全合金": "3 * 69; 2 * 618; 1 * 625 -> 642",
     "初级全合金 * 2 -> 初级全合金板": "2 * 642 -> 643", "初级全合金板 * 2 -> 致密初级全合金板": "2 * 643 -> 644",
     "初级全合金板 + 铁柄 -> [光]近卫骑士之剑": "1 * 643; 1 * 613 -> 118",
     "致密初级全合金板 + 铁柄 -> [流彩]荣耀骑士之剑": "1 * 644; 1 * 613 -> 119",
+    "严密初级全合金板 + 铁柄 -> [史诗]王者骑士之剑": "1 * 653; 1 * 613 -> 122",
 }
 
 inventory_display = []
@@ -395,20 +466,26 @@ places = {1: "海拉鲁台地", 2: "海拉鲁山脉", 3: "哈特尔平原", 4: "
           5: "西哈特诺高原", 6: "中哈特诺盆地", 7: "东哈特尔雪山", 8: "南哈特尔山脉",
           9: "雷之台地", 10: "漂流物岬角", 11: "南海拉鲁平原", 12: "东努克尔沙漠",
           13: "中努克尔沙漠", 14: "北努克尔沙漠", 15: "南哈尔里丛林", 16: "哈尔里丛林深部", 17: "咕隆地区", 18: "死亡火山脚",
-          19: "死亡火山腰", 20: "死亡火山口"}
+          19: "死亡火山腰", 20: "死亡火山口", 80: "下界传送门"}
+nether_places = {0: "下界传送门", 1: "下界荒漠", 2: "诡异森林", 3: "绯红森林"}
 
 explore_list = []
+nether_explore_list = []
 
 place_display = []
 for i in places.keys():
     place_display.append(places[i])
+
+nether_place_display = []
+for i in nether_places.keys():
+    nether_place_display.append(nether_places[i])
 
 breaking = False
 
 
 # classes
 class Mob:
-    def __init__(self, namespace, max_hp, atk, description, miss, define, gear, gold, exp):
+    def __init__(self, namespace, max_hp, atk, description, miss, define, gear, gold, exp, skill):
         self.namespace = namespace
         self.max_hp = max_hp
         self.hp = max_hp
@@ -419,6 +496,10 @@ class Mob:
         self.gear = gear
         self.gold = gold
         self.exp = exp
+        if skill is []:
+            self.skill = [50]
+        else:
+            self.skill = skill
 
 
 class Boss:
@@ -458,6 +539,11 @@ def die_detect():
 def add_explore(item, p, place):
     for time in range(p):
         explore_list[place - 1].append(item)
+
+
+def add_nether_explore(item, p, place):
+    for t in range(p):
+        nether_explore_list[place - 1].append(item)
 
 
 def get_key(value, dict_obj=None):
@@ -502,20 +588,62 @@ def mana_display(item_checking, skill=False):
     """
     a function using at display
     """
-    if item_property[item_checking]["heal"] == "all":
-        player_property["hp"] = player_property["max_hp"]
-        g.msgbox("你的HP回满了！")
+    if skill:
+        if "cm" not in item_property[item_checking]["type"]:
+            if item_property[item_checking]["final"]:
+                if item_property[item_checking]["heal_m"] == "all":
+                    player_property["mana"] = player_property["max_mana"]
+                    g.msgbox("你的法力回满了！")
+                else:
+                    player_property["mana"] += item_property[item_checking]["heal_m"]
+                    g.msgbox("你回复了" + str(item_property[item_checking]["heal_m"]) + "点法力")
+                    if player_property["mana"] > player_property["max_mana"]:
+                        g.msgbox(f"你的法力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                                 "不会帮你保存溢出的法力")
+                        player_property["mana"] = player_property["max_mana"]
+                    elif player_property["mana"] == player_property["max_mana"]:
+                        g.msgbox("你的法力满了")
+            else:
+                if item_property[item_checking]["heal"] == "all":
+                    player_property["mana"] = player_property["max_mana"]
+                    g.msgbox("你的法力回满了！")
+                else:
+                    player_property["mana"] += item_property[item_checking]["heal"]
+                    g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点法力")
+                    if player_property["mana"] > player_property["max_mana"]:
+                        g.msgbox(f"你的法力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                                 "不会帮你保存溢出的法力")
+                        player_property["mana"] = player_property["max_mana"]
+                    elif player_property["mana"] == player_property["max_mana"]:
+                        g.msgbox("你的法力满了")
+        else:
+            if item_property[item_checking]["heal"] == "all":
+                player_property["mana"] = player_property["max_mana"]
+                g.msgbox("你的法力回满了！")
+            else:
+                player_property["mana"] += item_property[item_checking]["heal"]
+                g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点法力")
+                if player_property["mana"] > player_property["max_mana"]:
+                    g.msgbox(f"你的法力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                             "不会帮你保存溢出的法力")
+                    player_property["mana"] = player_property["max_mana"]
+                elif player_property["mana"] == player_property["max_mana"]:
+                    g.msgbox("你的法力满了")
+
     else:
-        player_property["mana"] += item_property[item_checking]["heal"]
-        g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点法力")
-        if player_property["mana"] > player_property["max_mana"]:
-            g.msgbox(f"你的法力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
-                     "不会帮你保存溢出的法力")
+        if item_property[item_checking]["heal"] == "all":
             player_property["mana"] = player_property["max_mana"]
-        elif player_property["mana"] == player_property["max_mana"]:
-            g.msgbox("你的法力满了")
-        if not skill:
-            pocket["inventory"].remove(item_checking)
+            g.msgbox("你的法力回满了！")
+        else:
+            player_property["mana"] += item_property[item_checking]["heal"]
+            g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点法力")
+            if player_property["mana"] > player_property["max_mana"]:
+                g.msgbox(f"你的法力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                         "不会帮你保存溢出的法力")
+                player_property["mana"] = player_property["max_mana"]
+            elif player_property["mana"] == player_property["max_mana"]:
+                g.msgbox("你的法   力满了")
+        pocket["inventory"].remove(item_checking)
 
 
 def cure_display(item_checking, skill=False):
@@ -536,23 +664,65 @@ def cure_display(item_checking, skill=False):
 
 
 def strength_display(item_checking, skill=False):
-    if item_property[item_checking]["heal"] == "all":
-        player_property["str"] = player_property["str"]
-        g.msgbox("你的体力回满了！")
+    if skill:
+        if "cs" not in item_property[item_checking]["type"]:
+            if item_property[item_checking]["final"]:
+                if item_property[item_checking]["heal_s"] == "all":
+                    player_property["str"] = player_property["str"]
+                    g.msgbox("你的体力回满了！")
+                else:
+                    player_property["str"] += item_property[item_checking]["heal_s"]
+                    g.msgbox("你回复了" + str(item_property[item_checking]["heal_s"]) + "点体力")
+                    if player_property["str"] > player_property["max_str"]:
+                        g.msgbox(f"你的体力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                                 "不会帮你保存溢出的体力")
+                        player_property["str"] = player_property["max_str"]
+                    elif player_property["str"] == player_property["max_str"]:
+                        g.msgbox("你的体力满了")
+            else:
+                if item_property[item_checking]["heal"] == "all":
+                    player_property["str"] = player_property["str"]
+                    g.msgbox("你的体力回满了！")
+                else:
+                    player_property["str"] += item_property[item_checking]["heal"]
+                    g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点体力")
+                    if player_property["str"] > player_property["max_str"]:
+                        g.msgbox(f"你的体力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                                 "不会帮你保存溢出的体力")
+                        player_property["str"] = player_property["max_str"]
+                    elif player_property["str"] == player_property["max_str"]:
+                        g.msgbox("你的体力满了")
+        else:
+            if item_property[item_checking]["heal"] == "all":
+                player_property["str"] = player_property["str"]
+                g.msgbox("你的体力回满了！")
+            else:
+                player_property["str"] += item_property[item_checking]["heal"]
+                g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点体力")
+                if player_property["str"] > player_property["max_str"]:
+                    g.msgbox(f"你的体力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                             "不会帮你保存溢出的体力")
+                    player_property["str"] = player_property["max_str"]
+                elif player_property["str"] == player_property["max_str"]:
+                    g.msgbox("你的体力满了")
+            pocket["inventory"].remove(item_checking)
     else:
-        player_property["str"] += item_property[item_checking]["heal"]
-        g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点体力")
-        if player_property["str"] > player_property["max_str"]:
-            g.msgbox(f"你的体力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
-                     "不会帮你保存溢出的体力")
-            player_property["str"] = player_property["max_str"]
-        elif player_property["str"] == player_property["max_str"]:
-            g.msgbox("你的体力满了")
-    if not skill:
+        if item_property[item_checking]["heal"] == "all":
+            player_property["str"] = player_property["str"]
+            g.msgbox("你的体力回满了！")
+        else:
+            player_property["str"] += item_property[item_checking]["heal"]
+            g.msgbox("你回复了" + str(item_property[item_checking]["heal"]) + "点体力")
+            if player_property["str"] > player_property["max_str"]:
+                g.msgbox(f"你的体力溢出了\n可惜的是，{item_namespaces[item_checking]}似乎"
+                         "不会帮你保存溢出的体力")
+                player_property["str"] = player_property["max_str"]
+            elif player_property["str"] == player_property["max_str"]:
+                g.msgbox("你的体力满了")
         pocket["inventory"].remove(item_checking)
 
 
-def fight_ui():
+def fight_ui(dlc=None):
     def attack_response():
         if random.randint(1, 100) < mob.miss:
             g.msgbox(f"{item_namespaces[mob.namespace]}似乎躲开了这次攻击")
@@ -562,10 +732,13 @@ def fight_ui():
             mob.hp -= damage
             g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
 
-    mob_object = item_property[random.choice(mobs)]
+    if dlc is None:
+        mob_object = item_property[random.choice(mobs)]
+    else:
+        mob_object = item_property[random.choice(dlc_mobs["nether"])]
     mob = Mob(get_key(mob_object, item_property), mob_object["hp"],
               mob_object["atk"], mob_object["description"], mob_object["miss"], mob_object["define"],
-              mob_object["gear"], mob_object["gold"], mob_object["exp"])
+              mob_object["gear"], mob_object["gold"], mob_object["exp"], mob_object["skill"])
     g.msgbox(f"{item_namespaces[mob.namespace]}出现了！")
     while True:
         die_detect()
@@ -623,7 +796,7 @@ def fight_ui():
                             elif skill_type == "c":
                                 cure_display(skill_num, True)
                             elif skill_type == "m":
-                                mana_display(skill_num)
+                                mana_display(skill_num, True)
                             else:
                                 strength_display(skill_num, True)
 
@@ -633,7 +806,7 @@ def fight_ui():
                         elif item_property[skill_num]["type"] == "c":
                             cure_display(skill_num, True)
                         elif item_property[skill_num]["type"] == "m":
-                            mana_display(skill_num)
+                            mana_display(skill_num, True)
                         else:
                             strength_display(skill_num, True)
                 else:
@@ -710,6 +883,8 @@ def fight_ui():
                                  player_property["base_atk"]
                         mob.hp -= damage
                         g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
+                elif item_property[sk]["type"] == "cc":
+                    cure_display(sk, True)
     check_level()
 
 
@@ -808,6 +983,8 @@ pygame.mixer_music.play(-1)
 
 for i in range(20):
     explore_list.append([])
+for i in range(5):
+    nether_explore_list.append([])
 # place 1
 add_explore(615, 1, 1)
 add_explore(62, 2, 1)
@@ -942,13 +1119,27 @@ add_explore(624, 5, 20)
 add_explore(617, 10, 20)
 add_explore(70, 85, 20)
 
+# nether
+# place 1
+add_nether_explore(647, 5, 1)
+add_nether_explore(70, 95, 1)
+
+# place 2
+add_nether_explore(651, 15, 2)
+add_nether_explore(652, 30, 2)
+add_nether_explore(70, 55, 2)
+
+# place 3
+add_nether_explore(651, 25, 3)
+add_nether_explore(655, 5, 3)
+add_nether_explore(70, 70, 3)
+
 run_environment = _get_path()
 _makedir("save")
 _option_go("save")
 saves = os.listdir()
 g.msgbox("""
                                   fight dv-008
-                                     pv-002
                                       欢迎
 """)
 _back()
@@ -966,6 +1157,7 @@ mod_objects = []
 mod_gui = False
 mod_gui_count = 0
 mod_display = []
+dlc_mobs = {"nether": []}
 for mod_name in mod_list:
     exec(f"""
 import {mod_name}
@@ -976,7 +1168,7 @@ if mod_objects[-1].GUI:
     mod_gui = True
     mod_gui_count += 1
 if mod_objects[-1].LOAD_GUI:
-    mod_objects[-1].load()
+    mod_objects[-1].load(item_property=item_property, item_namespaces=item_namespaces)
     """)
     mod_display.append(mod_name.replace("_mod", "", 1))
 print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]mod preload finished")
@@ -1052,6 +1244,12 @@ for i in item_property.keys():
     if str(i)[0] == "8":
         bosses.append(item_namespaces[i])
 
+# get dlc mob list
+for i in item_property.keys():
+    if "dlc" in item_property[i]["type"] and "m" in item_property[i]["type"]:
+        if "n" in item_property[i]["type"]:
+            dlc_mobs["nether"].append(i)
+
 if player_property["miner"]:
     get_gold = int((time.time() - player_property["last_login"]) / (3600 / player_property["miner_tier"])) * 5
     if get_gold > player_property["miner_max"]:
@@ -1061,7 +1259,7 @@ if player_property["miner"]:
 player_property["last_login"] = time.time()
 while True:
     check_level()
-    main_choices = ["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗", "与Boss级怪物战斗", "存档", "更换存档"]
+    main_choices = ["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗", "与Boss级怪物战斗", "存档", "更换存档", "DLC兑换"]
     mod_keys = {}
     if mod_gui:
         for mod in mod_objects:
@@ -1410,9 +1608,42 @@ miss: +{item_property[item_checking]["miss"]}
                                 if item_checking == 638:
                                     player_property["miner_max"] += 2000
                                     g.msgbox("你的采矿机器人的储存量增加了2000")
+                                    pocket["inventory"].remove(item_checking)
+                                    break
                                 elif item_checking == 645:
                                     player_property["miner_tier"] += 1
                                     g.msgbox("你的采矿机器人升级了")
+                                    pocket["inventory"].remove(item_checking)
+                                    break
+                                elif item_checking == 649:
+                                    player_property["km"] += 1
+                                    g.msgbox("你通过投掷末影珍珠前进了1km")
+                                    pocket["inventory"].remove(item_checking)
+                                    break
+                                elif item_checking == 650:
+                                    if not player_property["nether"]:
+                                        teleport = g.choicebox("末影传送盒面板: 可传送的地点列表如下",
+                                                               choices=place_display)
+                                        if teleport is None:
+                                            continue
+                                        player_property["place"] = get_key(teleport, places)
+                                        pocket["inventory"].remove(item_checking)
+                                        g.msgbox(f"你传送到了{teleport}")
+                                        break
+                                    else:
+                                        teleport = g.choicebox("末影传送盒面板: 可传送的地点列表如下",
+                                                               choices=nether_place_display)
+                                        if teleport is None:
+                                            continue
+                                        player_property["place"] = get_key(teleport, places)
+                                        pocket["inventory"].remove(item_checking)
+                                        g.msgbox(f"你传送到了{teleport}")
+                                        break
+                                elif item_checking == 654:
+                                    player_property["nether"] = False
+                                    player_property["place"] = 1
+                                    pocket["inventory"].remove(item_checking)
+                                    g.msgbox("你回到了海拉鲁台地")
                                 else:
                                     g.msgbox("你无法使用一个材料")
                             elif use == 1:
@@ -1420,19 +1651,38 @@ miss: +{item_property[item_checking]["miss"]}
 {item_namespaces[item_checking]}
 “{item_property[item_checking]["description"]}”
 """)
+                            elif use == 2:
                                 pocket["inventory"].remove(item_checking)
                                 g.msgbox(f"{item_namespaces[item_checking]}被扔的远远的")
                                 break
     # explore UI
     elif choose == 2:
         while True:
-            if g.ccbox(f"“{player}”的HP: {player_property['hp']}/{player_property['max_hp']} "
-                       f"法力: {player_property['mana']}/{player_property['max_mana']} "
-                       f"体力: {player_property['str']}/{player_property['max_str']}\n"
-                       f"目前位置: {places[player_property['place']]} {player_property['km']} / 10 km\n"
-                       f"是否继续前进？", choices=["是的（消耗5体力）", "不了"]):
-                if player_property['str'] < 5:
-                    g.msgbox("你没有足够的体力")
+            if not player_property["nether"]:
+                if player_property["place"] == 80:
+                    if not player_property["nether_dlc"]:
+                        g.msgbox("你没有解锁下界DLC")
+                        g.msgbox("正在回到海拉鲁台地")
+                        player_property["place"] = 1
+                        continue
+                    elif not g.ccbox("前方就是下界传送门了，你要进入吗?（不进入则回到海拉鲁台地）", choices=["进入", "不了"]):
+                        g.msgbox("正在回到海拉鲁台地")
+                        player_property["place"] = 1
+                        continue
+                    else:
+                        player_property["nether"] = True
+                        player_property["place"] = 1
+                        continue
+                    player_property["km"] = 0.0
+                if g.ccbox(f"“{player}”的HP: {player_property['hp']}/{player_property['max_hp']} "
+                           f"法力: {player_property['mana']}/{player_property['max_mana']} "
+                           f"体力: {player_property['str']}/{player_property['max_str']}\n"
+                           f"目前位置: {places[player_property['place']]} {player_property['km']} / 10 km\n"
+                           f"是否继续前进？", choices=["是的（消耗5体力）", "不了"]):
+                    if player_property['str'] < 5:
+                        g.msgbox("你没有足够的体力")
+                        break
+                else:
                     break
                 player_property["str"] -= 5
                 player_property['km'] += 0.1
@@ -1456,7 +1706,7 @@ miss: +{item_property[item_checking]["miss"]}
                 else:
                     pocket["inventory"].append(event)
                     g.msgbox(f"你获得了{item_namespaces[event]}")
-                if player_property['km'] == 10:
+                if player_property['km'] >= 10:
                     if player_property['place'] != 20:
                         teleport = g.choicebox("你来到了地区之间的传送点，你是否要传送呢，可传送的地点列表如下",
                                                choices=place_display)
@@ -1474,21 +1724,44 @@ miss: +{item_property[item_checking]["miss"]}
                             g.msgbox("正在回到海拉鲁台地（作者的吐槽：打得好快）")
                             player_property["place"] = 1
                     player_property["km"] = 0.0
-
-            else:
-                break
-
+            elif player_property["nether_dlc"]:
+                if g.ccbox(f"“{player}”的HP: {player_property['hp']}/{player_property['max_hp']} "
+                           f"法力: {player_property['mana']}/{player_property['max_mana']} "
+                           f"体力: {player_property['str']}/{player_property['max_str']}\n"
+                           f"目前位置: {nether_places[player_property['place']]} {player_property['km']} / 10 km\n"
+                           f"是否继续前进？", choices=["是的（消耗5体力）", "不了"]):
+                    if player_property['str'] < 5:
+                        g.msgbox("你没有足够的体力")
+                        break
+                else:
+                    break
+                player_property["str"] -= 5
+                player_property['km'] += 0.1
+                player_property['km'] = round(player_property['km'], 1)
+                event = random.choice(nether_explore_list[player_property["place"] - 1])
+                if event == 70:
+                    fight_ui("nether")
+                else:
+                    pocket["inventory"].append(event)
+                    g.msgbox(f"你获得了{item_namespaces[event]}")
+                if player_property['km'] >= 10:
+                    player_property["place"] += 1
+                    if player_property["place"] > 2:
+                        player_property["place"] = 1
+                    g.msgbox(f"你来到了{places[player_property['place']]}!")
     # shop UI
     elif choose == 3:
         while True:
             item_buying = g.choicebox("请选择你要购买的物品",
-                                      choices=["收购", item_namespaces[30], item_namespaces[14], item_namespaces[11],
+                                      choices=["收购", item_namespaces[121], item_namespaces[123],
+                                               item_namespaces[30], item_namespaces[14], item_namespaces[11],
                                                item_namespaces[31], item_namespaces[37], item_namespaces[38],
                                                item_namespaces[32], item_namespaces[33], item_namespaces[39],
                                                item_namespaces[310], item_namespaces[68], item_namespaces[617],
                                                item_namespaces[624], item_namespaces[610],
                                                item_namespaces[615], item_namespaces[616], item_namespaces[631],
-                                               item_namespaces[639], item_namespaces[623]])
+                                               item_namespaces[639], item_namespaces[623], item_namespaces[653],
+                                               item_namespaces[653]])
             if item_buying is None:
                 break
             elif item_buying == "收购":
@@ -1505,21 +1778,20 @@ miss: +{item_property[item_checking]["miss"]}
                             buy_num = int(buy_num)
                         except ValueError:
                             continue
+                        item_selling = item_selling.split(" ")[0]
+                        item_selling = get_key(item_selling)
+                        get_gold = int(item_property[item_selling]["sell"] / 4)
+                        buy_count = 0
+                        while buy_count != buy_num and item_selling in pocket["inventory"]:
+                            player_property["gold"] += get_gold
+                            pocket["inventory"].remove(item_selling)
+                            buy_count += 1
+                        if buy_count == buy_num:
+                            g.msgbox(f"你通过出售{item_namespaces[item_selling]} * {buy_count}获得了{get_gold * buy_count}$")
                         else:
-                            break
-                    item_selling = item_selling.split(" ")[0]
-                    item_selling = get_key(item_selling)
-                    get_gold = int(item_property[item_selling]["sell"] / 4)
-                    buy_count = 0
-                    while buy_count != buy_num and item_selling in pocket["inventory"]:
-                        player_property["gold"] += get_gold
-                        pocket["inventory"].remove(item_selling)
-                        buy_count += 1
-                    if buy_count == buy_num:
-                        g.msgbox(f"你通过出售{item_namespaces[item_selling]} * {buy_count}获得了{get_gold * buy_count}$")
-                    else:
-                        g.msgbox(f"由于物品不够，你只通过出售{item_namespaces[item_selling]} * {buy_count}"
-                                 f"获得了{get_gold * buy_count}$")
+                            g.msgbox(f"由于物品不够，你只通过出售{item_namespaces[item_selling]} * {buy_count}"
+                                     f"获得了{get_gold * buy_count}$")
+                        break
                 continue
             item_buying = get_key(item_buying)
             if g.ccbox(f"""
@@ -1547,6 +1819,7 @@ miss: +{item_property[item_checking]["miss"]}
                         else:
                             g.msgbox(f"由于钱不够，你只花费{item_property[item_buying]['sell'] * buy_count}$购买了"
                                      f"{buy_count} * {item_namespaces[item_buying]}")
+                        break
                 else:
                     g.msgbox("你没有足够的钱")
 
@@ -1675,13 +1948,14 @@ miss: +{item_property[item_checking]["miss"]}
                                                 g.msgbox(f"{item_namespaces[boss.namespace]}似乎躲开了这次攻击")
                                             else:
                                                 damage_current_value = item_property[skill_num]["atk"]
-                                                damage = int(damage_current_value * (1 - boss.define * 0.01))
+                                                damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
+                                                         player_property["base_atk"]
                                                 boss.hp -= damage
                                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
                                         elif skill_type == "c":
                                             cure_display(skill_num, True)
                                         elif skill_type == "m":
-                                            mana_display(skill_num)
+                                            mana_display(skill_num, True)
                                         else:
                                             strength_display(skill_num, True)
 
@@ -1698,7 +1972,7 @@ miss: +{item_property[item_checking]["miss"]}
                                     elif item_property[skill_num]["type"] == "c":
                                         cure_display(skill_num, True)
                                     elif item_property[skill_num]["type"] == "m":
-                                        mana_display(skill_num)
+                                        mana_display(skill_num, True)
                                     else:
                                         strength_display(skill_num, True)
                             else:
@@ -1764,6 +2038,8 @@ MISS: {boss.miss}%
                                          player_property["base_atk"]
                                 boss.hp -= damage
                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
+                        elif item_property[sk]["type"] == "cc":
+                            cure_display(sk, True)
 
     elif choose == 7:
         _update_save()
@@ -1787,6 +2063,15 @@ MISS: {boss.miss}%
                 _update_save_version()
             g.msgbox(f"存档已读取\n欢迎回来，{player}！")
             break
+    elif choose == 9:
+        while True:
+            active_code = g.enterbox("请输入DLC兑换码")
+            if active_code is None:
+                break
+            if base64.b64decode(active_code.encode()).decode() == player + "nether":
+                player_property["nether_dlc"] = True
+                g.msgbox("下界DLC已激活")
+                break
     else:
         choosing_mod = mod_keys[choose]
         mod_checking = mod_objects[choosing_mod]
