@@ -1,5 +1,5 @@
-# version <dv-008>
-# lines: 2083 + 4 (project description: 2; start blank: 1; end blank: 1) = 2087
+# version <dv-009-pv-001>
+# lines: 2129 + 4 (project description: 2; start blank: 1; end blank: 1) = 2133
 import base64
 import collections
 import os
@@ -18,8 +18,9 @@ item_namespaces = {
     10: "手", 11: "木棍", 12: "波克棒", 13: "石板波克棒", 14: "桃木剑", 15: "莫力布林棍", 16: "石板莫力布林棍", 17: "木剑",
     18: "骑士之剑", 19: "灵木剑", 110: "自然法杖I", 111: "自然法杖II", 112: "龙骨波克棒", 113: "精英骑士之剑", 114: "荣誉骑士之剑",
     115: "铂金骑士之剑", 116: "钻石骑士之剑", 117: "[UT限定][光]龙骨炮", 118: "[光]近卫骑士之剑", 119: "[流彩]荣耀骑士之剑",
-    120: "[下界DLC]诡异之剑", 121: "[跨次元联动][三次元限定][传说]咬鱼の剑", 122: "[史诗]王者骑士之剑",
-    123: "[跨次元联动][三次元限定][传说]青槍", 124: "[下界DLC]绯红之剑",
+    120: "[下界DLC]诡异之剑", 121: "[跨次元联动][三次元限定][传说]一口魚の兵器", 122: "[史诗]王者骑士之剑",
+    123: "[跨次元联动][三次元限定][传说]青槍", 124: "[下界DLC]绯红之剑", 125: "[下界DLC]骸骨", 126: "[下界DLC][流彩]骸骨之歌",
+    127: "[跨次元联动][三次元限定][传说]得力の文具",
     # armor
     21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍", 25: "[MC限定]唤魔者长袍", 26: "[流彩]荣耀骑士之甲",
 
@@ -63,9 +64,9 @@ item_namespaces = {
     529: "[MC限定][被动]法阵之力II",
     530: "[MC限定][被动]恼鬼攻击",
     531: "[下界DLC]怨魂斩（攻击）",
-    532: "[跨次元联动][三次元限定][传说]咬鱼の斬撃（终极技能）（攻击+/回体力）",
-    533: "[跨次元联动][三次元限定][传说]咬鱼の魂（终极技能）（回体力/回法力）",
-    534: "[跨次元联动][三次元限定][传说]咬鱼の襲撃（终极技能）（攻击-/治疗）",
+    532: "[跨次元联动][三次元限定][传说]武器を投げる（投掷武器）（攻击+/回体力-）",
+    533: "[跨次元联动][三次元限定][传说]MAX·涅槃（终极技能）（回体力+/回法力+/治疗-）",
+    534: "[跨次元联动][三次元限定][传说]吸う（吸噬）（攻击-/治疗++）",
     535: "[流彩]最强骑士的跳劈！（终极技能）（攻击+/治疗-）",
     536: "[流彩]最强骑士的横扫！（终极技能）（攻击-/治疗+）",
     537: "[流彩]最强骑士之魂！！（终极技能）（攻击-/治疗+/回体力）",
@@ -75,6 +76,14 @@ item_namespaces = {
     541: "[跨次元联动][三次元限定][传说]オレンジアタック（橙色攻击）（回法力）",
     542: "[流彩][被动]荣耀骑士的力量（治疗）",
     543: "[下界DLC]炽刃斩（攻击）",
+    544: "[下界DLC]骸骨斩（终极技能）（攻击/治疗-）",
+    545: "[下界DLC]骸骨の歌（终极技能）（治疗+/回体力）",
+    546: "[跨次元联动][三次元限定][传说]何もないから（无中生有）（终极技能）（回法力/回体力-）",
+    547: "[跨次元联动][三次元限定][传说]幾何学的パズル（几何难题）（终极技能）（攻击+/治疗+）",
+    548: "[跨次元联动][三次元限定][传说]文房具の実体（文具真身）（终极技能）（治疗+/回体力+）",
+    549: "[跨次元联动][三次元限定][传说]得力症候群（得力综合征）（终极技能）（攻击++）（高耗蓝）",
+    550: "[跨次元联动][三次元限定][传说]私の仏は思いやりがあります（我佛慈悲）（终极技能）（攻击+/回体力-/治疗-）",
+    551: "[跨次元联动][三次元限定][传说]デーモンスラッシュ（魔之斩）（攻击++）（高耗蓝）",
 
     # materials
     61: "小石子",
@@ -132,6 +141,9 @@ item_namespaces = {
     653: "严密初级全合金板",
     654: "[DLC]异世界返回传送器",
     655: "[下界DLC]绯红木板",
+    656: "[下界DLC]骨头",
+    657: "[下界DLC]骨块",
+    658: "[下界DLC]骸骨结晶",
 
     # events
     70: "随机怪物",
@@ -154,10 +166,13 @@ item_namespaces = {
     910: "[MC限定]尖牙锁定VI",
     911: "[MC限定][光]尖牙锁定X",
     912: "[MC限定][光]恼鬼大军",
+    913: "[下界DLC]骸骨斩",
 
     # dlc mobs
     101: "[下界DLC]僵尸猪灵",
     102: "[下界DLC]末影人",
+    103: "[下界DLC]炼狱骷髅",
+    104: "[下界DLC][BOSS]炼狱骷髅西诺克斯",
 }
 pocket = {"equip": {"weapon": 10, "armor": 0}, "inventory": [30]}
 item_property = {
@@ -201,14 +216,20 @@ item_property = {
           "description": "[流彩]海拉鲁王国的荣耀骑士所用的单手剑", "sell": 32000, "craft": 4},
     120: {"atk": [5, 9], "type": "wep", "skill": [531], "description": "由诡异木板制成的剑，有些诡异，似乎蕴藏着怨魂的力量",
           "sell": 1500, "craft": 0},
-    121: {"atk": [100, 200], "type": "wep", "skill": [523, 59, 532, 533, 534],
-          "description": "传说!!!\n作者的好朋友咬鱼的剑", "sell": 500000},
+    121: {"atk": [125, 225], "type": "wep", "skill": [523, 59, 532, 533, 534, 551],
+          "description": "传说!!!\n看起来像鱼骨，又像嘴巴。。。的神秘武器", "sell": 500000},
     122: {"atk": [90, 150], "type": "wep", "skill": [523, 59, 535, 536, 537],
           "description": "史诗!\n海拉鲁王国的王者骑士所用的单手剑", "sell": 40000, "craft": 4},
     123: {"atk": [150, 250], "type": "wep", "skill": [523, 59, 538, 539, 540, 541],
           "description": "传说!!!\n一把破旧的长矛，但依旧是大犬汪最趁手的武器", "sell": 500000},
     124: {"atk": [10, 15], "type": "wep", "skill": [531], "description": "由绯红木板制成的剑，有些炽热，似乎蕴藏着火焰的力量",
           "sell": 1500, "craft": 0},
+    125: {"atk": [15, 30], "type": "wep", "skill": [543], "description": "炼狱骷髅所持的武器，由骨头制成，十分骇人",
+          "sell": 1500},
+    126: {"atk": [25, 45], "type": "wep", "skill": [543, 544, 545],
+          "description": "由骸骨结晶和骸骨制成的武器，较骸骨相比有更强的炽热之力", "sell": 25000, "craft": 0},
+    127: {"atk": [125, 225], "type": "wep", "skill": [523, 59, 546, 547, 548, 549, 550],
+          "description": "传说!!!\n一把破旧的长矛，但依旧是大犬汪最趁手的武器", "sell": 500000},
     # armor
     21: {"def": 100, "miss": 50, "skill": [0], "type": "arm", "sell": 80,
          "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效", "craft": 0},
@@ -291,9 +312,9 @@ item_property = {
     529: {"type": "cm", "heal": 15},
     530: {"type": "ca", "atk": 5},
     531: {"final": False, "type": "a", "atk": 40, "cost_mana": 25},
-    532: {"final": True, "type": "a;s", "atk": 900, "heal_s": 400, "cost_mana": 1200},
-    533: {"final": True, "type": "s;m", "heal_s": 100, "heal_m": 50, "cost_mana": 0},
-    534: {"final": True, "type": "a;c", "atk": 800, "heal": 300, "cost_mana": 1100},
+    532: {"final": True, "type": "a;s", "atk": 950, "heal_s": 450, "cost_mana": 1200},
+    533: {"final": True, "type": "c;s;m", "heal_s": 200, "heal_m": 50, "heal": 20, "cost_mana": 0},
+    534: {"final": True, "type": "a;c", "atk": 500, "heal": 1000, "cost_mana": 1100},
     535: {"final": True, "type": "a;c", "atk": 500, "heal": 100, "cost_mana": 600},
     536: {"final": True, "type": "a;c", "atk": 300, "heal": 200, "cost_mana": 700},
     537: {"final": True, "type": "a;c;s", "atk": 200, "heal": 150, "heal_s": 200, "cost_mana": 950},
@@ -303,6 +324,14 @@ item_property = {
     541: {"final": False, "type": "m", "heal": 50, "cost_mana": 0},
     542: {"type": "cc", "heal": 20},
     543: {"final": False, "type": "a", "atk": 60, "cost_mana": 35},
+    544: {"final": True, "type": "a;c", "atk": 120, "heal": 35, "cost_mana": 160},
+    545: {"final": True, "type": "c;s", "heal": 70, "heal_s": 150, "cost_mana": 150},
+    546: {"final": True, "type": "m;s", "heal_m": 20, "heal_s": 10, "cost_mana": 0},
+    547: {"final": True, "type": "a;c", "heal": 100, "atk": 1000, "cost_mana": 1200},
+    548: {"final": True, "type": "c;s", "heal": 300, "heal_s": "all", "cost_mana": 700},
+    549: {"final": False, "type": "c;s", "atk": 2222, "cost_mana": 1900},
+    550: {"final": True, "type": "a;c;s", "atk": 1000, "heal": 300, "heal_s": 10, "cost_mana": 1400},
+    551: {"final": False, "type": "a", "atk": 2333, "cost_mana": 2000},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
@@ -361,6 +390,9 @@ item_property = {
     653: {"type": "m", "description": "三重压缩的初级全合金", "sell": 35000},
     654: {"type": "m", "description": "用于从DLC的维度返回主世界的传送器", "sell": 500},
     655: {"type": "m", "description": "由一种存于下界的大型绯红色真菌的茎制成的类似于木板的物品", "sell": 500},
+    656: {"type": "m", "description": "一块骨头，上面有一些血迹", "sell": 50},
+    657: {"type": "m", "description": "大密度的骨粉", "sell": 500},
+    658: {"type": "m", "description": "炼狱骷髅西诺克斯的结晶，价值连城", "sell": 20000},
 
     # events
     70: {"type": "e", "*description": "summon a random mob"},
@@ -395,12 +427,17 @@ item_property = {
     910: {"type": "a", "atk": 50},
     911: {"type": "a", "atk": 90},
     912: {"type": "a", "atk": 70},
+    913: {"type": "a", "atk": 80},
 
     # dlc mob
     101: {"type": "dlcnm", "hp": 45, "atk": [10, 15], "miss": 5, "define": 65, "gold": [145, 235], "exp": 90,
           "gear": [647, 647, 647, 647, 648], "skill": [54], "description": "下界中最常见的怪物，可以从它身上获取金"},
     102: {"type": "dlcnm", "hp": 100, "atk": [5, 10], "miss": 65, "define": 0, "gold": [55, 120], "exp": 180,
           "gear": [649], "skill": [58], "description": "神奇的瘦长怪物，可以通过操作末影珍珠瞬移，家乡是末路之地"},
+    103: {"type": "dlcnm", "hp": 60, "atk": [10, 15], "gear": [656, 657], "gold": [20, 50], "exp": 120,
+          "skill": [55, 59], "miss": 0, "define": 10, "description": "来自下界的骷髅，浑身炙热"},
+    104: {"type": "dlcnb", "hp": 360, "atk": [10, 20], "gear": [658], "gold": [340, 560], "exp": 340,
+          "skill": [913], "miss": 0, "define": 50, "description": "炼狱中的的骷髅西诺克斯，骸骨之歌是其武器"},
 
     0: {"def": 0, "miss": 0, "skill": [], "type": ""},
 }
@@ -408,7 +445,7 @@ player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "defi
                    "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3,
                    "sm1": False, "sm2": False, "sm3": False, "sm4": False, "miner_tier": 1,
                    "miner": False, "miner_max": 1000, "last_login": None, "base_atk": 0, "cheating": False,
-                   "nether_dlc": False, "nether": False}
+                   "nether_dlc": False, "nether": False, "inscription": {"hg": 0, "atk": 0, "def": 0}}
 
 craft_expr = {
     "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
@@ -425,6 +462,7 @@ craft_expr = {
     "铁矿 + 生铁加工工具 + 木棍 * 2 -> 生铁": "1 * 68; 1 * 610; 2 * 11 -> 69", "木之灵 * 4 -> 木之心": "4 * 34 -> 35",
     "桃木剑 * 2 + 木之心 -> 灵木剑": "2 * 14; 1 * 35 -> 19", "木板 * 2 + 木棍 * 2 -> 空魔法杖": "2 * 65; 1 * 11 -> 614",
     "空魔法杖I + 木之灵 -> 自然法杖I": "1 * 614; 1 * 34 -> 110", "空魔法杖 + 木之心 -> 自然法杖II": "1 * 614; 1 * 35 -> 111",
+    "[下界DLC]骸骨 + [下界DLC]骸骨结晶 -> [下界DLC]骸骨之歌": "1 * 125; 1 * 658 -> 126",
     "====================一级科学机器====================": None,  # craft: 1
     "铁矿 * 2 -> 生铁": "2 * 68 -> 69",
     "生铁 * 2 -> 铁板": "2 * 69 -> 611", "铜矿 * 2 -> 生铜": "2 * 617 -> 618", "生铜 * 2 -> 铜板": "2 * 618 -> 619",
@@ -467,7 +505,7 @@ places = {1: "海拉鲁台地", 2: "海拉鲁山脉", 3: "哈特尔平原", 4: "
           9: "雷之台地", 10: "漂流物岬角", 11: "南海拉鲁平原", 12: "东努克尔沙漠",
           13: "中努克尔沙漠", 14: "北努克尔沙漠", 15: "南哈尔里丛林", 16: "哈尔里丛林深部", 17: "咕隆地区", 18: "死亡火山脚",
           19: "死亡火山腰", 20: "死亡火山口", 80: "下界传送门"}
-nether_places = {0: "下界传送门", 1: "下界荒漠", 2: "诡异森林", 3: "绯红森林"}
+nether_places = {1: "下界荒漠", 2: "诡异森林", 3: "绯红森林", 4: "灵魂沙峡谷"}
 
 explore_list = []
 nether_explore_list = []
@@ -1134,6 +1172,11 @@ add_nether_explore(651, 25, 3)
 add_nether_explore(655, 5, 3)
 add_nether_explore(70, 70, 3)
 
+# place 4
+add_nether_explore(656, 5, 4)
+add_nether_explore(657, 20, 4)
+add_nether_explore(70, 75, 4)
+
 run_environment = _get_path()
 _makedir("save")
 _option_go("save")
@@ -1169,6 +1212,10 @@ if mod_objects[-1].GUI:
     mod_gui_count += 1
 if mod_objects[-1].LOAD_GUI:
     mod_objects[-1].load(item_property=item_property, item_namespaces=item_namespaces)
+if mod_objects[-1].PRELOAD_ITEM:
+    for i in mod_objects[-1].ITEMS.keys():
+        item_namespaces[mod_objects[-1].ITEM_PREFIX + i] = mod_objects[-1].ITEMS[i]
+        item_property[mod_objects[-1].ITEM_PREFIX + i] = mod_objects[-1].ITEMS_PROPERTY[i]
     """)
     mod_display.append(mod_name.replace("_mod", "", 1))
 print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]mod preload finished")
@@ -2038,8 +2085,8 @@ MISS: {boss.miss}%
                                          player_property["base_atk"]
                                 boss.hp -= damage
                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
-                        elif item_property[sk]["type"] == "cc":
-                            cure_display(sk, True)
+                        elif item_property[skill]["type"] == "cc":
+                            cure_display(skill, True)
 
     elif choose == 7:
         _update_save()
