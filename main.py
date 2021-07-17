@@ -11,6 +11,20 @@ import pygame.mixer
 import easygui as g
 import settings
 
+inscriptions = {
+    "空符文槽": {"ht": 0, "atk": 0, "atk_p": 0, "def": 0, "def_p": 0, "crit": 0, "miss": 0},
+    "突刺者": {"ht": 0, "atk": 0, "atk_p": -5, "def": 0, "def_p": -5, "crit": 10, "miss": 10},
+    "锐利之锋": {"ht": 0, "atk": 5, "atk_p": 8, "def": 0, "def_p": -10, "crit": 5, "miss": -5},
+    "铜墙铁壁": {"ht": 0, "atk": 0, "atk_p": -8, "def": 0, "def_p": 8, "crit": -15, "miss": -30},
+    "饮血之刃": {"ht": 15, "atk": 0, "atk_p": -10, "def": -5, "def_p": -20, "crit": 10, "miss": -10},
+    "茹毛饮血": {"ht": 20, "atk": 0, "atk_p": -5, "def": 0, "def_p": -5, "crit": 5, "miss": -15},
+    "无尽仲裁": {"ht": 0, "atk": 10, "atk_p": 1, "def": 0, "def_p": -5, "crit": 4, "miss": -5},
+    "夜行者": {"ht": 0, "atk": 0, "atk_p": -5, "def": 0, "def_p": -30, "crit": 2, "miss": 35},
+    "无极之刃": {"ht": 5, "atk": 5, "atk_p": 5, "def": 0, "def_p": -10, "crit": 5, "miss": -20},
+    "舍命虹吸": {"ht": 65, "atk": -5, "atk_p": -20, "def": -15, "def_p": -30, "crit": -50, "miss": -40},
+    "天降正义": {"ht": 0, "atk": 30, "atk_p": 3, "def": -25, "def_p": -10, "crit": 10, "miss": -35},
+    "奥术彗星": {"ht": 0, "atk": 10, "atk_p": 1, "def": -10, "def_p": -5, "crit": 5, "miss": -25},
+}
 item_namespaces = {
     0: "无",
 
@@ -270,7 +284,7 @@ item_property = {
          "miss": 2, "define": 10, "gear": [13, 21], "gold": [18, 30], "exp": 12, "skill": [56]},
     43: {"hp": 5, "atk": [0, 1], "type": "mob",
          "description": "一个极弱的怪物，甚至有可能打出0点伤害...",
-         "miss": 0, "define": 0, "gear": [11], "gold": [3, 7], "exp": 3},
+         "miss": 0, "define": 0, "gear": [11], "gold": [3, 7], "exp": 3, "skill": []},
     44: {"hp": 70, "atk": [5, 10], "type": "mob",
          "description": "波克布林的亲戚，更加强壮了，因此攻击力增强",
          "miss": 0, "define": 15, "gear": [15], "gold": [40, 85], "exp": 40, "skill": [51, 58]},
@@ -409,7 +423,7 @@ item_property = {
          "description": "古代希卡族为对抗灾厄盖侬而打造出的机械自动兵器，但现在被灾厄盖侬的怨念夺走"},
     83: {"type": "boss", "hp": 1, "atk": [1, 5], "skill": [], "gear": [83], "gold": [210, 500], "exp": 999,
          "define": 0, "miss": 99.99, "description": "最弱的Boss，他不可能一直躲下去"},
-    84: {"type": "boss", "hp": 200, "atk": [1, 3], "skill": [95, 96, 97, 98, 99], "gear": [646], "gold": [100, 120],
+    84: {"type": "boss", "hp": 200, "atk": [1, 3], "skill": [95, 96, 97, 98], "gear": [646], "gold": [100, 120],
          "exp": 150, "define": 35, "miss": 42.01, "description": "盘踞于末路之地的龙的孩子，也守护着她宝贵的龙蛋"},
     85: {"type": "boss", "hp": 60, "atk": [5, 10], "skill": [99, 910, 911, 912], "gear": [25], "gold": [40, 70],
          "exp": 240, "define": 50, "miss": 15, "description": "法师的头子，比较强大"},
@@ -445,7 +459,9 @@ player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "defi
                    "need exp": 10, "mana": 30, "max_mana": 30, "mana_reg": 1, "str": 50, "max_str": 50, "str_reg": 3,
                    "sm1": False, "sm2": False, "sm3": False, "sm4": False, "miner_tier": 1,
                    "miner": False, "miner_max": 1000, "last_login": None, "base_atk": 0, "cheating": False,
-                   "nether_dlc": False, "nether": False, "inscription": {"hg": 0, "atk": 0, "def": 0}}
+                   "nether_dlc": False, "nether": False, "inscription_buff":
+                       {"ht": 0, "atk": 0, "atk_p": 0, "def": 0, "def_p": 0, "crit": 0, "miss": 0},
+                   "inscriptions": ["空符文槽", "空符文槽"], "inscription_num": 2}
 
 craft_expr = {
     "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
@@ -489,6 +505,7 @@ craft_expr = {
     "====================四级科学机器====================": None,  # craft: 4
     "生铁 * 3 + 生铜 * 2 + 生锡 -> 初级全合金": "3 * 69; 2 * 618; 1 * 625 -> 642",
     "初级全合金 * 2 -> 初级全合金板": "2 * 642 -> 643", "初级全合金板 * 2 -> 致密初级全合金板": "2 * 643 -> 644",
+    "初级全合金板 * 7 + 生铁 * 5 -> [流彩]荣耀骑士之甲": "7 * 643; 5 * 69 -> 26",
     "初级全合金板 + 铁柄 -> [光]近卫骑士之剑": "1 * 643; 1 * 613 -> 118",
     "致密初级全合金板 + 铁柄 -> [流彩]荣耀骑士之剑": "1 * 644; 1 * 613 -> 119",
     "严密初级全合金板 + 铁柄 -> [史诗]王者骑士之剑": "1 * 653; 1 * 613 -> 122",
@@ -582,6 +599,13 @@ def add_explore(item, p, place):
 def add_nether_explore(item, p, place):
     for t in range(p):
         nether_explore_list[place - 1].append(item)
+
+
+def inscription_buff_set():
+    player_property["inscription_buff"] = {"ht": 0, "atk": 0, "atk_p": 0, "def": 0, "def_p": 0, "crit": 0, "miss": 0}
+    for inscription in player_property["inscriptions"]:
+        for buff in inscriptions[inscription].keys():
+            player_property["inscription_buff"][buff] += inscriptions[inscription][buff]
 
 
 def get_key(value, dict_obj=None):
@@ -766,10 +790,26 @@ def fight_ui(dlc=None):
             g.msgbox(f"{item_namespaces[mob.namespace]}似乎躲开了这次攻击")
         else:
             damage_current_value = item_property[skill_num]["atk"]
-            damage = int(damage_current_value * (1 - mob.define * 0.01)) + player_property["base_atk"]
+            crit_damage = 1
+            if random.randint(1, 100) <= player_property["inscription_buff"]["crit"]:
+                crit_damage = 1.75
+                g.msgbox("暴击！")
+            damage = int((damage_current_value +
+                          player_property["inscription_buff"]["atk"]) *
+                         (1 + 0.01 * player_property["inscription_buff"]["atk_p"]) * (1 - mob.define * 0.01) *
+                         crit_damage) + player_property["base_atk"]
             mob.hp -= damage
             g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
-
+            hp_take = int(damage * player_property["inscription_buff"]["ht"] * 0.01)
+            player_property["hp"] += hp_take
+            if hp_take != 0:
+                if hp_take > 0:
+                    g.msgbox(f"你吸取了{hp_take}点HP")
+                else:
+                    g.msgbox(f"你被反噬了{hp_take}点HP")
+            if player_property["hp"] > player_property["max_hp"]:
+                player_property["hp"] = player_property["max_hp"]
+                g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
     if dlc is None:
         mob_object = item_property[random.choice(mobs)]
     else:
@@ -819,9 +859,26 @@ def fight_ui(dlc=None):
                             item_property[pocket["equip"]["weapon"]]["atk"][1])
                     else:
                         damage_current_value = item_property[pocket["equip"]["weapon"]]["atk"][0]
-                    damage = int(damage_current_value * (1 - mob.define * 0.01)) + player_property["base_atk"]
+                    crit_damage = 1
+                    if random.randint(1, 100) <= player_property["inscription_buff"]["crit"]:
+                        crit_damage = 1.75
+                        g.msgbox("暴击！")
+                    damage = int((damage_current_value +
+                                  player_property["inscription_buff"]["atk"]) *
+                                 (1 + 0.01 * player_property["inscription_buff"]["atk_p"]) * (1 - mob.define * 0.01) *
+                                 crit_damage) + player_property["base_atk"]
                     mob.hp -= damage
                     g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
+                    hp_take = int(damage * player_property["inscription_buff"]["ht"] * 0.01)
+                    player_property["hp"] += hp_take
+                    if hp_take != 0:
+                        if hp_take > 0:
+                            g.msgbox(f"你吸取了{hp_take}点HP")
+                        else:
+                            g.msgbox(f"你被反噬了{hp_take}点HP")
+                    if player_property["hp"] > player_property["max_hp"]:
+                        player_property["hp"] = player_property["max_hp"]
+                        g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
             else:
                 if player_property["mana"] >= item_property[skill_num]["cost_mana"]:
                     player_property["mana"] -= item_property[skill_num]["cost_mana"]
@@ -888,13 +945,14 @@ def fight_ui(dlc=None):
             else:
                 continue
         if random.randint(1, 100) < player_property["miss"] * 0.01 + \
-                item_property[pocket["equip"]["armor"]]["miss"] * 0.01:
+                item_property[pocket["equip"]["armor"]]["miss"] * 0.01 + \
+                player_property["inscription_buff"]["miss"] * 0.01:
             g.msgbox(f"你似乎躲开了这次攻击")
         else:
-            damage = int(random.randint(mob.atk[0], mob.atk[1]) * (1 - (player_property["define"] +
-                                                                        item_property[
-                                                                            pocket["equip"]["armor"]][
-                                                                            "def"]) * 0.0001))
+            damage = int(random.randint(mob.atk[0], mob.atk[1]) *
+                         (1 - ((player_property["define"] + item_property[pocket["equip"]["armor"]]["def"] +
+                                player_property["inscription_buff"]["def"]) * 0.0001 +
+                               player_property["inscription_buff"]["def_p"] * 0.01)))
             player_property["hp"] -= damage
             g.msgbox(f"{item_namespaces[mob.namespace]}对你造成了{damage}点伤害")
         player_property["str"] += player_property["str_reg"]
@@ -917,10 +975,23 @@ def fight_ui(dlc=None):
                         g.msgbox(f"{item_namespaces[mob.namespace]}似乎躲开了这次攻击")
                     else:
                         damage_current_value = item_property[sk]["atk"]
-                        damage = int(damage_current_value * (1 - mob.define * 0.01)) + \
-                                 player_property["base_atk"]
+                        damage = int((damage_current_value +
+                                      player_property["inscription_buff"]["atk"]) *
+                                     (1 + 0.01 * player_property["inscription_buff"]["atk_p"]) * (
+                                             1 - mob.define * 0.01)) \
+                                 + player_property["base_atk"]
                         mob.hp -= damage
                         g.msgbox(f"你对{item_namespaces[mob.namespace]}造成了{damage}点伤害")
+                        hp_take = int(damage * player_property["inscription_buff"]["ht"] * 0.01)
+                        player_property["hp"] += hp_take
+                        if hp_take != 0:
+                            if hp_take > 0:
+                                g.msgbox(f"你吸取了{hp_take}点HP")
+                            else:
+                                g.msgbox(f"你被反噬了{hp_take}点HP")
+                        if player_property["hp"] > player_property["max_hp"]:
+                            player_property["hp"] = player_property["max_hp"]
+                            g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
                 elif item_property[sk]["type"] == "cc":
                     cure_display(sk, True)
     check_level()
@@ -948,10 +1019,15 @@ def check_level():
             player_property["max_str"] = player_property["str"]
             player_property["str_reg"] = int(player_property["lv"] * 0.1) + 1
             player_property["base_atk"] = int(player_property["lv"] * 0.1)
+            player_property["inscription_num"] = int(player_property["lv"] * 0.1) + 2
+            if player_property["inscription_num"] > 11:
+                player_property["inscription_num"] = 11
+            while len(player_property["inscriptions"]) < player_property["inscription_num"]:
+                player_property["inscriptions"].append("空符文槽")
         g.msgbox(f"你升级了！\n你目前的LV为{player_property['lv']}\n"
                  f"你的HP上限变为了{player_property['max_hp']}\n你的HP回满了\n你的法力上限变为了{player_property['max_mana']}"
                  f"\n你的法力回满了\n你的体力上限变为了{player_property['max_str']}\n你的体力回满了\n"
-                 f"你的基础ATK现在为{player_property['base_atk']}")
+                 f"你的基础ATK现在为{player_property['base_atk']}\n你的符文槽个数现在为{player_property['inscription_num']}")
 
 
 def set_skill(ic):
@@ -1305,8 +1381,11 @@ if player_property["miner"]:
     g.msgbox(f"在你离开的这段时间里，采矿机器人为你收集了{get_gold}$")
 player_property["last_login"] = time.time()
 while True:
+    inscription_buff_set()
     check_level()
-    main_choices = ["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗", "与Boss级怪物战斗", "存档", "更换存档", "DLC兑换"]
+    pocket["inventory"].sort()
+    main_choices = ["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗", "与Boss级怪物战斗", "符文配置",
+                    "存档", "更换存档", "DLC兑换"]
     mod_keys = {}
     if mod_gui:
         for mod in mod_objects:
@@ -1451,6 +1530,8 @@ miss: +{item_property[item_checking]["miss"]}
                                 craft_expr.pop("二级科学机器碎片 * 10 + 电路板（需要一级科学机器）-> 二级科学机器", None)
                             if player_property["sm3"]:
                                 craft_expr.pop("三级科学机器碎片 * 15 + 中级电路板 -> 三级科学机器", None)
+                            if player_property["sm4"]:
+                                craft_expr.pop("四级科学机器碎片 * 5 + 高级电路板 -> 四级科学机器", None)
                             if player_property["miner"]:
                                 craft_expr.pop("基础机械外壳 * 2 + 中级电路板 + 电路板 + 锡线 * 4 -> 采矿机器人", None)
                             craft_display = []
@@ -1691,6 +1772,7 @@ miss: +{item_property[item_checking]["miss"]}
                                     player_property["place"] = 1
                                     pocket["inventory"].remove(item_checking)
                                     g.msgbox("你回到了海拉鲁台地")
+                                    break
                                 else:
                                     g.msgbox("你无法使用一个材料")
                             elif use == 1:
@@ -1800,15 +1882,14 @@ miss: +{item_property[item_checking]["miss"]}
     elif choose == 3:
         while True:
             item_buying = g.choicebox("请选择你要购买的物品",
-                                      choices=["收购", item_namespaces[121], item_namespaces[123],
+                                      choices=["收购", item_namespaces[121], item_namespaces[123], item_namespaces[127],
                                                item_namespaces[30], item_namespaces[14], item_namespaces[11],
                                                item_namespaces[31], item_namespaces[37], item_namespaces[38],
                                                item_namespaces[32], item_namespaces[33], item_namespaces[39],
                                                item_namespaces[310], item_namespaces[68], item_namespaces[617],
                                                item_namespaces[624], item_namespaces[610],
                                                item_namespaces[615], item_namespaces[616], item_namespaces[631],
-                                               item_namespaces[639], item_namespaces[623], item_namespaces[653],
-                                               item_namespaces[653]])
+                                               item_namespaces[639], item_namespaces[623], item_namespaces[653]])
             if item_buying is None:
                 break
             elif item_buying == "收购":
@@ -1932,19 +2013,20 @@ miss: +{item_property[item_checking]["miss"]}
                 boss_skill_using = boss.random_skill()
                 g.msgbox(f"{item_namespaces[boss.namespace]}使出了{item_namespaces[boss_skill_using]}")
                 if random.randint(1, 100) < player_property["miss"] * 0.01 + \
-                        item_property[pocket["equip"]["armor"]]["miss"] * 0.01:
+                        item_property[pocket["equip"]["armor"]]["miss"] * 0.01 + \
+                        player_property["inscription_buff"]["miss"] * 0.01:
                     g.msgbox(f"你似乎躲开了这次攻击")
                 else:
                     if boss_skill_using == 50:
-                        damage = int(boss.random_atk() * (1 - (player_property["define"] +
-                                                               item_property[
-                                                                   pocket["equip"]["armor"]][
-                                                                   "def"]) * 0.0001))
+                        damage = int(boss.random_atk() *
+                                     (1 - (player_property["define"] + item_property[pocket["equip"]["armor"]]["def"] +
+                                           player_property["inscription_buff"]["def"]) * 0.0001 +
+                                      player_property["inscription_buff"]["def_p"] * 0.01))
                     else:
-                        damage = int(item_property[boss_skill_using]["atk"] * (1 - (player_property["define"] +
-                                                                                    item_property[
-                                                                                        pocket["equip"]["armor"]][
-                                                                                        "def"]) * 0.0001))
+                        damage = int(item_property[boss_skill_using]["atk"] *
+                                     (1 - ((player_property["define"] + item_property[pocket["equip"]["armor"]]["def"] +
+                                            player_property["inscription_buff"]["def"]) * 0.0001 +
+                                           player_property["inscription_buff"]["def_p"] * 0.01)))
                     g.msgbox(f"{item_namespaces[boss.namespace]}对你造成了{damage}点伤害")
                     player_property["hp"] -= damage
                 while True:
@@ -1979,10 +2061,27 @@ miss: +{item_property[item_checking]["miss"]}
                                         item_property[pocket["equip"]["weapon"]]["atk"][1])
                                 else:
                                     damage_current_value = item_property[pocket["equip"]["weapon"]]["atk"][0]
-                                damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
-                                         player_property["base_atk"]
+                                crit_damage = 1
+                                if random.randint(1, 100) <= player_property["inscription_buff"]["crit"]:
+                                    crit_damage = 1.75
+                                    g.msgbox("暴击！")
+                                damage = int((damage_current_value +
+                                              player_property["inscription_buff"]["atk"]) *
+                                             (1 + 0.01 * player_property["inscription_buff"]["atk_p"]) * (
+                                                     1 - boss.define * 0.01) *
+                                             crit_damage) + player_property["base_atk"]
                                 boss.hp -= damage
                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
+                                hp_take = int(damage * player_property["inscription_buff"]["ht"] * 0.01)
+                                player_property["hp"] += hp_take
+                                if hp_take != 0:
+                                    if hp_take > 0:
+                                        g.msgbox(f"你吸取了{hp_take}点HP")
+                                    else:
+                                        g.msgbox(f"你被反噬了{hp_take}点HP")
+                                if player_property["hp"] > player_property["max_hp"]:
+                                    player_property["hp"] = player_property["max_hp"]
+                                    g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
                         else:
                             if player_property["mana"] >= item_property[skill_num]["cost_mana"]:
                                 player_property["mana"] -= item_property[skill_num]["cost_mana"]
@@ -1995,10 +2094,28 @@ miss: +{item_property[item_checking]["miss"]}
                                                 g.msgbox(f"{item_namespaces[boss.namespace]}似乎躲开了这次攻击")
                                             else:
                                                 damage_current_value = item_property[skill_num]["atk"]
-                                                damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
-                                                         player_property["base_atk"]
+                                                crit_damage = 1
+                                                if random.randint(1, 100) <= player_property["inscription_buff"][
+                                                    "crit"]:
+                                                    crit_damage = 1.75
+                                                    g.msgbox("暴击！")
+                                                damage = int((damage_current_value +
+                                                              player_property["inscription_buff"]["atk"]) *
+                                                             (1 + 0.01 * player_property["inscription_buff"][
+                                                                 "atk_p"]) * (1 - boss.define * 0.01) *
+                                                             crit_damage) + player_property["base_atk"]
                                                 boss.hp -= damage
                                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
+                                                hp_take = int(damage * player_property["inscription_buff"]["ht"] * 0.01)
+                                                player_property["hp"] += hp_take
+                                                if hp_take != 0:
+                                                    if hp_take > 0:
+                                                        g.msgbox(f"你吸取了{hp_take}点HP")
+                                                    else:
+                                                        g.msgbox(f"你被反噬了{hp_take}点HP")
+                                                if player_property["hp"] > player_property["max_hp"]:
+                                                    player_property["hp"] = player_property["max_hp"]
+                                                    g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
                                         elif skill_type == "c":
                                             cure_display(skill_num, True)
                                         elif skill_type == "m":
@@ -2012,10 +2129,28 @@ miss: +{item_property[item_checking]["miss"]}
                                             g.msgbox(f"{item_namespaces[boss.namespace]}似乎躲开了这次攻击")
                                         else:
                                             damage_current_value = item_property[skill_num]["atk"]
-                                            damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
-                                                     player_property["base_atk"]
+                                            crit_damage = 1
+                                            if random.randint(1, 100) <= player_property["inscription_buff"]["crit"]:
+                                                crit_damage = 1.75
+                                                g.msgbox("暴击！")
+                                            damage = int((damage_current_value +
+                                                          player_property["inscription_buff"]["atk"]) *
+                                                         (1 + 0.01 * player_property["inscription_buff"]["atk_p"]) * (
+                                                                 1 - boss.define * 0.01) *
+                                                         crit_damage) + player_property["base_atk"]
                                             boss.hp -= damage
                                             g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
+                                            hp_take = int(damage * player_property["inscription_buff"]["ht"] * 0.01)
+                                            player_property["hp"] += hp_take
+                                            if hp_take != 0:
+                                                if hp_take > 0:
+                                                    g.msgbox(f"你吸取了{hp_take}点HP")
+                                                else:
+                                                    g.msgbox(f"你被反噬了{hp_take}点HP")
+                                            if player_property["hp"] > player_property["max_hp"]:
+                                                player_property["hp"] = player_property["max_hp"]
+                                                g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
+
                                     elif item_property[skill_num]["type"] == "c":
                                         cure_display(skill_num, True)
                                     elif item_property[skill_num]["type"] == "m":
@@ -2081,17 +2216,99 @@ MISS: {boss.miss}%
                                 g.msgbox(f"{item_namespaces[boss.namespace]}似乎躲开了这次攻击")
                             else:
                                 damage_current_value = item_property[skill]["atk"]
-                                damage = int(damage_current_value * (1 - boss.define * 0.01)) + \
-                                         player_property["base_atk"]
+                                crit_damage = 1
+                                if random.randint(1, 100) <= player_property["inscription_buff"]["crit"]:
+                                    crit_damage = 1.75
+                                    g.msgbox("暴击！")
+                                damage = int((damage_current_value +
+                                              player_property["inscription_buff"]["atk"]) *
+                                             (1 + 0.01 * player_property["inscription_buff"]["atk_p"]) * (
+                                                     1 - boss.define * 0.01) *
+                                             crit_damage) + player_property["base_atk"]
                                 boss.hp -= damage
                                 g.msgbox(f"你对{item_namespaces[boss.namespace]}造成了{damage}点伤害")
+                                hp_take = int(damage * player_property["inscription_buff"]["ht"] * 0.01)
+                                player_property["hp"] += hp_take
+                                if hp_take != 0:
+                                    if hp_take > 0:
+                                        g.msgbox(f"你吸取了{hp_take}点HP")
+                                    else:
+                                        g.msgbox(f"你被反噬了{hp_take}点HP")
+                                if player_property["hp"] > player_property["max_hp"]:
+                                    player_property["hp"] = player_property["max_hp"]
+                                    g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
                         elif item_property[skill]["type"] == "cc":
                             cure_display(skill, True)
-
     elif choose == 7:
+        ins_display = ["查看当前符文"]
+        for i in inscriptions.keys():
+            ins_display.append(i)
+        ins_display.remove("空符文槽")
+        while True:
+            ins_choice = g.choicebox(f"符文系统 | 配置你的符文\n当前符文槽: {player_property['inscription_num']}/11\n",
+                                     choices=ins_display)
+            if ins_choice is None:
+                break
+            if ins_choice == "查看当前符文":
+                while True:
+                    ins_check = g.choicebox(f"""你当前的符文
+| 加成 |
+生命偷取: {player_property["inscription_buff"]["ht"]}%
+ATK: {player_property["inscription_buff"]["atk"]} + {player_property["inscription_buff"]["atk_p"]}%ATK
+DEF: {player_property["inscription_buff"]["def"]} + {player_property["inscription_buff"]["def_p"]}%DEF
+暴击几率: {player_property["inscription_buff"]["crit"]}%
+miss: {player_property["inscription_buff"]["miss"]}%
+                    """, choices=player_property["inscriptions"])
+                    if ins_check is None:
+                        break
+                    ins_property = inscriptions[ins_check]
+                    while True:
+                        if g.ccbox(f"""
+{ins_check}
+| 加成 |
+生命偷取: {ins_property["ht"]}%
+ATK: {ins_property["atk"]} + {ins_property["atk_p"]}%ATK
+DEF: {ins_property["def"]} + {ins_property["def_p"]}%DEF
+暴击几率: {ins_property["crit"]}%
+miss: {ins_property["miss"]}%
+                        """, choices=["卸下", "取消"]):
+                            if ins_check == "空符文槽":
+                                g.msgbox("你无法卸下符文槽")
+                                continue
+                            player_property["inscriptions"].remove(ins_check)
+                            player_property["inscriptions"].append("空符文槽")
+                            g.msgbox("已卸下")
+                            break
+                        else:
+                            break
+            else:
+                ins_property = inscriptions[ins_choice]
+                while True:
+                    if g.ccbox(f"""
+                {ins_choice}
+                | 加成 |
+                生命偷取: {ins_property["ht"]}%
+                ATK: {ins_property["atk"]} + {ins_property["atk_p"]}%ATK
+                DEF: {ins_property["def"]} + {ins_property["def_p"]}%DEF
+                暴击几率: {ins_property["crit"]}%
+                miss: {ins_property["miss"]}%
+                                """, choices=["装备", "取消"]):
+                        if ins_choice in player_property["inscriptions"]:
+                            g.msgbox("你已经携带了该符文！")
+                            continue
+                        replace_ins = g.choicebox("请选择要替换的符文或符文槽", choices=player_property["inscriptions"])
+                        if replace_ins is None:
+                            continue
+                        player_property["inscriptions"][player_property["inscriptions"].index(replace_ins)] = ins_choice
+                        inscription_buff_set()
+                        break
+                    else:
+                        break
+        # TODO: finish this function before 6/30
+    elif choose == 8:
         _update_save()
         g.msgbox("已存档")
-    elif choose == 8:
+    elif choose == 9:
         while True:
             if "创建新存档" in saves:
                 saves.remove("创建新存档")
@@ -2110,7 +2327,7 @@ MISS: {boss.miss}%
                 _update_save_version()
             g.msgbox(f"存档已读取\n欢迎回来，{player}！")
             break
-    elif choose == 9:
+    elif choose == 10:
         while True:
             active_code = g.enterbox("请输入DLC兑换码")
             if active_code is None:

@@ -1,7 +1,8 @@
 REBIRTH = False
 
 PROPERTY_KEY = ["max_mana", "mana", "mana_reg", "str", "max_str", "str_reg", "place", "km", "sm1", "sm2", "sm3", "sm4",
-                "miner", "miner_max", "last_login", "miner_tier", "base_atk", "cheating", "nether", "nether_dlc"]
+                "miner", "miner_max", "last_login", "miner_tier", "base_atk", "cheating", "nether", "nether_dlc",
+                "inscriptions", "inscription_num", "inscription_buff"]
 PROPERTY_EXPR = {
     "max_mana": "player_property['max_mana'] = player_property['lv'] * 10 + 20",
     "mana": "player_property['mana'] = player_property['max_mana']",
@@ -23,4 +24,14 @@ PROPERTY_EXPR = {
     "cheating": "player_property['cheating'] = False",
     "nether": "player_property['nether'] = False",
     "nether_dlc": "player_property['nether_dlc'] = False",
+    "inscriptions": "player_property['inscriptions'] = ['空符文槽', '空符文槽']",
+    "inscription_num": """
+player_property['inscription_num'] = 2 + int(player_property['lv'] / 10)
+if player_property["inscription_num"] > 11:
+    player_property["inscription_num"] = 11
+while len(player_property["inscriptions"]) < player_property["inscription_num"]:
+    player_property["inscriptions"].append("空符文槽")
+    """,
+    "inscription_buff": "player_property['inscription_buff'] = {\"ht\": 0, \"atk\": 0, \"atk_p\": 0, \"def\": 0,"
+                        "\"def_p\": 0, \"crit\": 0, \"miss\": 0}",
 }
