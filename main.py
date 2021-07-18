@@ -1,5 +1,5 @@
-# version <dv-009-pv-001>
-# lines: 2129 + 4 (project description: 2; start blank: 1; end blank: 1) = 2133
+# version <dv-009-pv-002>
+# lines: 2366 + 4 (project description: 2; start blank: 1; end blank: 1) = 2370
 import base64
 import collections
 import os
@@ -169,7 +169,7 @@ item_namespaces = {
 
     # boss
     80: "岩石巨人", 81: "棕色波布克林", 82: "大型守护者（陆地型）", 83: "[UT限定]Sans", 84: "[MC限定]小末影龙",
-    85: "[MC限定]唤魔者",
+    85: "[MC限定]唤魔者", 86: "大型守护者（陆地型）+",
 
     # boss skill
     91: "岩石重击",
@@ -185,6 +185,11 @@ item_namespaces = {
     911: "[MC限定][光]尖牙锁定X",
     912: "[MC限定][光]恼鬼大军",
     913: "[下界DLC]骸骨斩",
+    914: "交叉弹射",
+    915: "镭射扫荡",
+    916: "[光]光刃",
+    917: "[流彩]粒子对撞",
+    918: "[史诗]以守护之名",
 
     # dlc mobs
     101: "[下界DLC]僵尸猪灵",
@@ -431,6 +436,11 @@ item_property = {
          "exp": 150, "define": 35, "miss": 42.01, "description": "盘踞于末路之地的龙的孩子，也守护着她宝贵的龙蛋"},
     85: {"type": "boss", "hp": 60, "atk": [5, 10], "skill": [99, 910, 911, 912], "gear": [25], "gold": [40, 70],
          "exp": 240, "define": 50, "miss": 15, "description": "法师的头子，比较强大"},
+    86: {"type": "boss", "hp": 2500, "atk": [10, 18], "skill": [914, 915, 916, 917, 918],
+         "gear": [639, 639, 641, 641, 642, 643, 643, 643, 643, 643],
+         "gold": [8000, 15000], "exp": 5000, "define": 50, "miss": 30,
+         "description": " 古代希卡族为了对抗灾厄盖侬而打造出的机械自动兵器，这种守护者拥有更强的武器及设备，可以在对抗中起到关键作用，"
+                        "但现在被灾厄盖侬的怨念夺走"},
 
     # boss skill
     91: {"type": "a", "atk": 28},
@@ -446,6 +456,11 @@ item_property = {
     911: {"type": "a", "atk": 90},
     912: {"type": "a", "atk": 70},
     913: {"type": "a", "atk": 80},
+    914: {"type": "a", "atk": 75},
+    915: {"type": "a", "atk": 90},
+    916: {"type": "a", "atk": 120},
+    917: {"type": "a", "atk": 145},
+    918: {"type": "a", "atk": 165},
 
     # dlc mob
     101: {"type": "dlcnm", "hp": 45, "atk": [10, 15], "miss": 5, "define": 65, "gold": [145, 235], "exp": 90,
@@ -1263,7 +1278,7 @@ _makedir("save")
 _option_go("save")
 saves = os.listdir()
 g.msgbox("""
-                                  fight dv-008
+                                  fight dv-009
                                       欢迎
 """)
 _back()
