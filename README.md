@@ -1,5 +1,5 @@
 # Fight
-[简体中文](https://github.com/Infinity-Energy/fight/blob/dev/README-zh.md)
+[简体中文](https://github.com/Infinity-Energy/fight/blob/dev/README-zh.md)  
 **This README file uses google translate**  
 A very silly name, isn't it?  
 A ~~junk~~ game that you can do when you have nothing to do, for you to play when you are bored(There shouldn’t be such a time)
