@@ -1071,6 +1071,7 @@ def craft_expr_interpreter(expr):
     return materials_namespace, int(expr[1])
 
 
+# technical functions
 def _makedir(path):
     try:
         os.mkdir(path)
@@ -1109,6 +1110,13 @@ def _update_save_version():
         if i not in player_property.keys():
             exec(settings.PROPERTY_EXPR[i])
     _update_save()
+
+
+def inventory_sort(inventory: list):
+    for i in range(1, len(inventory)):
+        if str(inventory[i]) < str(inventory[i - 1]):
+            inventory[i], inventory[i - 1] = inventory[i - 1], inventory[i]
+    return inventory
 
 
 pygame.mixer.init()
@@ -1403,7 +1411,7 @@ player_property["last_login"] = time.time()
 while True:
     inscription_buff_set()
     check_level()
-    pocket["inventory"].sort()
+    pocket["inventory"] = inventory_sort(pocket["inventory"])
     main_choices = ["状态", "背包", "探索", "商店", "贤者", "与普通怪物战斗", "与Boss级怪物战斗", "符文配置",
                     "存档", "更换存档", "DLC兑换"]
     mod_keys = {}
