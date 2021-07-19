@@ -1381,6 +1381,50 @@ while True:
             save_txt_list = save_txt.split("\n")
             exec("player_property = " + save_txt_list[0])
             exec("pocket = " + save_txt_list[1])
+            # Check the items in the unloaded mods in the save
+            delete_item = False
+            mod_item_not_loaded = False
+            for item in pocket["inventory"]:
+                if type(item) == str:
+                    if item not in item_namespaces.keys():
+                        mod_item_not_loaded = True
+                        if delete_item:
+                            pocket["inventory"].remove(item)
+                        else:
+                            if g.ccbox("这里有一些未被识别的物品在你的存档里（可能是未加载的模组里的物品），你想要删除他们吗？",
+                                       choices=["是", "否"]):
+                                delete_item = True
+                                pocket["inventory"].remove(item)
+                            else:
+                                break
+            if not delete_item and mod_item_not_loaded:
+                continue
+            if type(pocket["equip"]["weapon"]) == str:
+                if item not in item_namespaces.keys():
+                    if delete_item:
+                        pocket["inventory"].remove(item)
+                    else:
+                        if g.ccbox("这里有一些未被识别的物品在你的存档里（可能是未加载的模组里的物品），你想要删除他们吗？",
+                                   choices=["是", "否"]):
+                            delete_item = True
+                            pocket["inventory"].remove(item)
+                        else:
+                            break
+            if not delete_item and mod_item_not_loaded:
+                continue
+            if type(pocket["equip"]["armor"]) == str:
+                if item not in item_namespaces.keys():
+                    if delete_item:
+                        pocket["inventory"].remove(item)
+                    else:
+                        if g.ccbox("这里有一些未被识别的物品在你的存档里（可能是未加载的模组里的物品），你想要删除他们吗？",
+                                   choices=["是", "否"]):
+                            delete_item = True
+                            pocket["inventory"].remove(item)
+                        else:
+                            break
+            if not delete_item and mod_item_not_loaded:
+                continue
             _update_save_version()
         g.msgbox(f"存档已读取\n欢迎回来，{player}！")
         break
