@@ -1466,7 +1466,7 @@ while True:
                 mod_keys[len(main_choices) - 1] = mod_objects.index(mod)
     choose = g.indexbox(f"你好，{player}！\n", choices=main_choices)
     if choose is None:
-        if g.ccbox("你确定要退出存档吗（若要更换存档，可在主界面的更换存档处操作）", choices=["是的", "不了"]):
+        if g.ccbox("你确定要退出游戏吗（若要更换存档，可在主界面的更换存档处操作）", choices=["是的", "不了"]):
             g.msgbox("再见")
             exit()
 
