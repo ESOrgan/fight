@@ -1116,9 +1116,10 @@ def _update_save_version():
 
 
 def inventory_sort(inventory: list):
-    for i in range(1, len(inventory)):
-        if str(inventory[i]) < str(inventory[i - 1]):
-            inventory[i], inventory[i - 1] = inventory[i - 1], inventory[i]
+    for i in range(len(inventory) - 1):
+        for j in range(len(inventory) - i - 1):
+            if str(inventory[j]) > str(inventory[j + 1]):
+                inventory[j], inventory[j + 1] = inventory[j + 1], inventory[j]
     return inventory
 
 
