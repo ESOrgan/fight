@@ -1326,6 +1326,18 @@ if mod_objects[-1].PRELOAD_ITEM:
         item_property[mod_objects[-1].ITEM_PREFIX + i] = mod_objects[-1].ITEMS_PROPERTY[i]
     """)
     mod_display.append(mod_name.replace("_mod", "", 1))
+for mod in mod_objects:
+    if mod.NEED_BASE_MOD:
+        for base_mod in mod.BASE_MOD_LIST:
+            loaded = False
+            for mod_n in mod_list:
+                exec(f"""
+if {mod_n}.class_name == "{base_mod}":
+    loaded = True
+                """)
+            if not loaded:
+                print("缺少前置mod，游戏自动退出")
+
 print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]mod preload finished")
 _option_go("save")
 if len(mod_list) != 0:
