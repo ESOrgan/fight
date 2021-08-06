@@ -1,5 +1,5 @@
-# version <dv-009-pv-002>
-# lines: 2366 + 4 (project description: 2; start blank: 1; end blank: 1) = 2370
+# version <dv-009>
+# lines: 2434 + 4 (project description: 2; start blank: 1; end blank: 1) = 2438
 import base64
 import collections
 import os
@@ -2333,6 +2333,7 @@ MISS: {boss.miss}%
             ins_display.append(i)
         ins_display.remove("空符文槽")
         while True:
+            inscription_buff_set()
             ins_choice = g.choicebox(f"符文系统 | 配置你的符文\n当前符文槽: {player_property['inscription_num']}/11\n",
                                      choices=ins_display)
             if ins_choice is None:
