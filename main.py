@@ -1337,6 +1337,7 @@ if {mod_n}.class_name == "{base_mod}":
                 """)
             if not loaded:
                 print("缺少前置mod，游戏自动退出")
+                exit()
 
 print(f"[{time.strftime('%H:%M:%S', time.localtime())}][INFO]mod preload finished")
 _option_go("save")
