@@ -2,7 +2,7 @@ REBIRTH = False
 
 PROPERTY_KEY = ["max_mana", "mana", "mana_reg", "str", "max_str", "str_reg", "place", "km", "sm1", "sm2", "sm3", "sm4",
                 "miner", "miner_max", "last_login", "miner_tier", "base_atk", "cheating", "nether", "nether_dlc",
-                "inscriptions", "inscription_num", "inscription_buff"]
+                "inscriptions", "inscription_num", "inscription_buff", "kills"]
 PROPERTY_EXPR = {
     "max_mana": "player_property['max_mana'] = player_property['lv'] * 10 + 20",
     "mana": "player_property['mana'] = player_property['max_mana']",
@@ -34,4 +34,5 @@ while len(player_property["inscriptions"]) < player_property["inscription_num"]:
     """,
     "inscription_buff": "player_property['inscription_buff'] = {\"ht\": 0, \"atk\": 0, \"atk_p\": 0, \"def\": 0,"
                         "\"def_p\": 0, \"crit\": 0, \"miss\": 0}",
+    "kills": 'player_property["kills"] = {41: 0, 42: 0, 43: 0, 44: 0, 45: 0, 46: 0, 47: 0}',
 }

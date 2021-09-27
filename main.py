@@ -483,7 +483,9 @@ player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "defi
                    "miner": False, "miner_max": 1000, "last_login": None, "base_atk": 0, "cheating": False,
                    "nether_dlc": False, "nether": False, "inscription_buff":
                        {"ht": 0, "atk": 0, "atk_p": 0, "def": 0, "def_p": 0, "crit": 0, "miss": 0},
-                   "inscriptions": ["空符文槽", "空符文槽"], "inscription_num": 2}
+                   "inscriptions": ["空符文槽", "空符文槽"], "inscription_num": 2,
+                   "kills": {41: 0, 42: 0, 43: 0, 44: 0, 45: 0, 46: 0, 47: 0}
+                   }
 
 craft_expr = {
     "一级科学机器碎片 * 4 + 生铁 * 2 -> 一级科学机器": "4 * 615; 2 * 69 -> 621",
@@ -833,6 +835,7 @@ def fight_ui(dlc=None):
             if player_property["hp"] > player_property["max_hp"]:
                 player_property["hp"] = player_property["max_hp"]
                 g.msgbox("你的HP溢出了，可惜你无法保存溢出的HP")
+
     if dlc is None:
         mob_object = item_property[random.choice(mobs)]
     else:
@@ -846,6 +849,8 @@ def fight_ui(dlc=None):
         if mob.hp <= 0:
             gear = random.choice(mob.gear)
             gold = random.randint(mob.gold[0], mob.gold[1])
+            if dlc is None:
+                player_property["kills"][mob.namespace] += 1
             g.msgbox("你胜利了")
             g.msgbox(f"你获得了{item_namespaces[gear]} * 1和{gold}$以及{mob.exp}点经验")
             pocket["inventory"].append(gear)
@@ -1489,21 +1494,22 @@ while True:
 
     # status UI
     elif choose == 0:
-        if g.ccbox(f"""
-{player}
-作弊: {player_property["cheating"]}
-LV: {player_property["lv"]}
-EXP: {player_property["exp"]}/{player_property["need exp"]}
-HP: {player_property["hp"]}/{player_property["max_hp"]}
-基础ATK: {player_property["base_atk"]}
-体力: {player_property["str"]}/{player_property["max_str"]}
-体力回复: {player_property["str_reg"]}
-法力: {player_property["mana"]}/{player_property["max_mana"]}
-法力回复: {player_property["mana_reg"]}
-现金: {player_property["gold"]}$
-武器：{item_namespaces[pocket["equip"]["weapon"]]}  ATK {item_property[pocket["equip"]["weapon"]]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]} 
-盔甲：{item_namespaces[pocket["equip"]["armor"]]}  DEF {item_property[pocket["equip"]["armor"]]["def"]}
-        """, choices=["更换角色名字", "OK"]):
+        player_stats = g.indexbox(f"""
+        {player}
+        作弊: {player_property["cheating"]}
+        LV: {player_property["lv"]}
+        EXP: {player_property["exp"]}/{player_property["need exp"]}
+        HP: {player_property["hp"]}/{player_property["max_hp"]}
+        基础ATK: {player_property["base_atk"]}
+        体力: {player_property["str"]}/{player_property["max_str"]}
+        体力回复: {player_property["str_reg"]}
+        法力: {player_property["mana"]}/{player_property["max_mana"]}
+        法力回复: {player_property["mana_reg"]}
+        现金: {player_property["gold"]}$
+        武器：{item_namespaces[pocket["equip"]["weapon"]]}  ATK {item_property[pocket["equip"]["weapon"]]["atk"][0]} ~ {item_property[pocket["equip"]["weapon"]]["atk"][1]} 
+        盔甲：{item_namespaces[pocket["equip"]["armor"]]}  DEF {item_property[pocket["equip"]["armor"]]["def"]}
+                """, choices=["更换角色名字", "统计", "OK"])
+        if player_stats == 0:
             while True:
                 new_player = g.enterbox("请输入玩家的名字")
                 if new_player == "":
@@ -1518,6 +1524,11 @@ HP: {player_property["hp"]}/{player_property["max_hp"]}
                     os.rename(player, new_player)
                     player = new_player
                     break
+        elif player_stats == 1:
+            kill_display = []
+            for i in player_property["kills"].keys():
+                kill_display.append(f"{item_namespaces[i]}           {player_property['kills'][i]} 击杀")
+            g.choicebox("击杀统计", choices=kill_display)
     # pocket UI
     elif choose == 1:
         while True:
