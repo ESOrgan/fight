@@ -651,6 +651,7 @@ def set_inventory_display(item_filter: list = None, pocket_yn: bool = False, sel
     global inventory_display, pocket
     inventory_display = []
     if pocket_yn:
+        inventory_display.append("搜索")
         inventory_display.append("合成界面")
     if item_filter is None:
         for i in pocket["inventory"]:
@@ -1610,11 +1611,11 @@ miss: +{item_property[item_checking]["miss"]}
                 while True:
                     set_inventory_display(pocket_yn=True)
                     if player_property["miner"]:
-                        miner_display = "✔"
+                        miner_display = "[✔]"
                         max_store_display = player_property["miner_max"]
                         tier = player_property["miner_tier"]
                     else:
-                        miner_display = "❌"
+                        miner_display = "[ ]"
                         max_store_display = "/"
                         tier = "/"
                     item_checking = g.choicebox(f"请选择你要操作的物品 采矿机器人: {miner_display} LV {tier} "
