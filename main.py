@@ -1618,11 +1618,28 @@ miss: +{item_property[item_checking]["miss"]}
                         miner_display = "[ ]"
                         max_store_display = "/"
                         tier = "/"
+                    search_flag = False
                     item_checking = g.choicebox(f"请选择你要操作的物品 采矿机器人: {miner_display} LV {tier} "
                                                 f"采矿机器人最大储存量: {max_store_display}",
                                                 choices=inventory_display)
                     if item_checking is None:
                         break
+                    if item_checking == "搜索":
+                        while True:
+                            search = g.enterbox("搜索\n搜索一个物品")
+                            if search is None:
+                                break
+                            if search not in item_namespaces.values():
+                                g.msgbox("物品索引里没有这个物品，请检查你的拼写、模组装载情况")
+                                continue
+                            if get_key(search) not in pocket["inventory"]:
+                                g.msgbox("你没有你所搜索的东西")
+                                continue
+                            item_checking = search
+                            search_flag = True
+                            break
+                        if not search_flag:
+                            continue
                     elif item_checking == "合成界面":
                         while True:
                             if player_property["sm1"]:
