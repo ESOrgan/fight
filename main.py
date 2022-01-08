@@ -1640,9 +1640,9 @@ miss: +{item_property[item_checking]["miss"]}
                             sm_display = []
                             for i in range(4):
                                 if player_property[f"sm{i + 1}"]:
-                                    sm_display.append("✔")
+                                    sm_display.append("[✔]")
                                 else:
-                                    sm_display.append("❌")
+                                    sm_display.append("[ ]")
                             crafting_item = g.choicebox(f"请选择你要合成的物品 一级科学机器: {sm_display[0]}"
                                                         f"二级科学机器: {sm_display[1]} 三级科学机器: {sm_display[2]}"
                                                         f"四级科学机器: {sm_display[3]}",
