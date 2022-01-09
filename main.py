@@ -252,7 +252,7 @@ item_property = {
     116: {"atk": [35, 50], "type": "wep", "skill": [523, 59, 522], "description": "海拉鲁王国的钻石骑士所用的单手剑",
           "craft": 3, "sell": 22000},
     117: {"atk": [10, 20], "type": "wep", "skill": [],
-          "description": "[UT限定][光]那些去挑战Sans的人们从未返乡，拿到了它的你拥有无上荣耀！"},
+          "description": "[UT限定][光]那些去挑战Sans的人们从未返乡，拿到了它的你拥有无上荣耀！", "sell": 100000},
     118: {"atk": [40, 70], "type": "wep", "skill": [523, 525, 526], "description": "[光]海拉鲁王国的近卫骑士所用的单手剑",
           "sell": 15000, "craft": 4},
     119: {"atk": [50, 80], "type": "wep", "skill": [523, 525, 526, 527],
