@@ -38,9 +38,11 @@ item_namespaces = {
     115: "铂金骑士之剑", 116: "钻石骑士之剑", 117: "[UT限定][光]龙骨炮", 118: "[光]近卫骑士之剑", 119: "[流彩]荣耀骑士之剑",
     120: "[下界DLC]诡异之剑", 121: "[跨次元联动][三次元限定][传说]一口魚の兵器", 122: "[史诗]王者骑士之剑",
     123: "[跨次元联动][三次元限定][传说]青槍", 124: "[下界DLC]绯红之剑", 125: "[下界DLC]骸骨", 126: "[下界DLC][流彩]骸骨之歌",
-    127: "[跨次元联动][三次元限定][传说]得力の文具", 128: "夺魂镰刀",
+    127: "[跨次元联动][三次元限定][传说]得力の文具", 128: "夺魂镰刀", 129: "ASTRO-L-BLADE", 130: "ASTRO-ZERO-BLADE",
+    131: "ASTRO-K-BLADE", 132: "ASTRO-SHADOW-BLADE",
     # armor
     21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍", 25: "[MC限定]唤魔者长袍", 26: "[流彩]荣耀骑士之甲",
+    27: "ASTRO-SHADOW-ARMOR",
 
     # medicine
     30: "绷带", 31: "医用绷带", 32: "小型法力回复剂", 33: "小型体力回复剂", 34: "木之灵", 35: "木之心", 36: "仙人掌果",
@@ -48,6 +50,7 @@ item_namespaces = {
 
     # mobs
     41: "波布克林", 42: "蓝色波布克林", 43: "丘丘", 44: "莫力布林", 45: "蓝色莫力布林", 46: "木系法师", 47: "依盖队队员",
+    48: "ASTRO-原", 49: "ASTRO-改", 410: "ASTRO-零", 411: "ASTRO-刹", 412: "ASTRO-影",
 
     # skill
     50: "普通攻击",
@@ -102,6 +105,13 @@ item_namespaces = {
     549: "[跨次元联动][三次元限定][传说]得力症候群（得力综合征）（终极技能）（攻击++）（高耗蓝）",
     550: "[跨次元联动][三次元限定][传说]私の仏は思いやりがあります（我佛慈悲）（终极技能）（攻击+/回体力-/治疗-）",
     551: "[跨次元联动][三次元限定][传说]デーモンスラッシュ（魔之斩）（攻击++）（高耗蓝）",
+    552: "E-BLADE（攻击）",
+    553: "E-BLADE-BELIEF（攻击）",
+    554: "CHARGED（攻击）",
+    555: "2X CHARGED-BELIEF（攻击）",
+    556: "APT-K（攻击）",
+    557: "PRIORITY（攻击）",
+    558: "ASTRO FOREVER（攻击）",
 
     # materials
     61: "小石子",
@@ -162,6 +172,16 @@ item_namespaces = {
     656: "[下界DLC]骨头",
     657: "[下界DLC]骨块",
     658: "[下界DLC]骸骨结晶",
+    659: "L.L.P.C",
+    660: "L.L.J.C",
+    661: "ASTRO-ZERO-CORE",
+    662: "ASTRO-ZERO-ARM",
+    663: "ASTRO-ZERO-LEG",
+    664: "ASTRO-ZERO-BATTERY",
+    665: "ASTRO-K-CORE",
+    666: "ASTRO-K-ARM",
+    667: "ASTRO-K-LEG",
+    668: "ASTRO-K-BATTERY",
 
     # events
     70: "随机怪物",
@@ -254,6 +274,14 @@ item_property = {
     127: {"atk": [125, 225], "type": "wep", "skill": [523, 59, 546, 547, 548, 549, 550],
           "description": "传说!!!\n一把破旧的长矛，但依旧是大犬汪最趁手的武器", "sell": 500000},
     128: {"atk": [30, 40], "type": "wep", "skill": [56], "description": "依盖队队员所用的武器", "sell": 600},
+    129: {"atk": [20, 45], "type": "wep", "skill": [552, 553],
+          "description": "ASTRO-Low-BLADE", "sell": 7000},
+    130: {"atk": [60, 80], "type": "wep", "skill": [554, 555],
+          "description": "[数据缺失]", "sell": 17000},
+    131: {"atk": [120, 150], "type": "wep", "skill": [556, 557],
+          "description": "ASTRO-刹 的剑，更重了，伤害更高了", "sell": 20000},
+    132: {"atk": [90, 110], "type": "wep", "skill": [558],
+          "description": "ASTRO FOREVER", "sell": 25000},
     # armor
     21: {"def": 100, "miss": 50, "skill": [0], "type": "arm", "sell": 80,
          "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效", "craft": 0},
@@ -268,6 +296,8 @@ item_property = {
          "description": "那些在海拉鲁大地上的唤魔者用的防具，非常轻便，但没什么防御力，似乎还有其他的用处", "sell": 1500},
     26: {"def": 600, "miss": 50, "skill": [542], "type": "arm", "description": "海拉鲁王国的荣耀骑士所用的防具",
          "sell": 70000, "craft": 4},
+    27: {"def": 2530, "miss": 0, "skill": [], "type": "arm", "description": "ASTRO FOREVER",
+         "sell": 19000},
     # medicine
     30: {"heal": 2, "type": "med", "buff": [0],
          "description": "普通的布质绷带，能包裹你的伤口", "sell": 10},
@@ -305,6 +335,17 @@ item_property = {
          "gear": [110, 24], "description": "普通的法师，拥有着木系的能力", "skill": [515, 516]},
     47: {"hp": 125, "atk": [25, 45], "type": "mob", "miss": 45, "define": 10, "gold": [100, 150], "exp": 235,
          "gear": [128], "description": "依盖队，皈依盖侬的队伍，这是其中的一个队员", "skill": [58]},
+    48: {"hp": 150, "atk": [30, 45], "type": "mob", "miss": 5, "define": 17, "gold": [200, 250], "exp": 300,
+         "gear": [659, 660, 129, 630], "description": "ASTRO 战争机器\n原型机\n[数据缺失]", "skill": [552, 553]},
+    49: {"hp": 225, "atk": [35, 45], "type": "mob", "miss": 10, "define": 18, "gold": [300, 350], "exp": 325,
+         "gear": [659, 660, 129, 630], "description": "ASTRO 战争机器\n原型改装机\n[数据缺失]", "skill": [552, 553]},
+    410: {"hp": 275, "atk": [50, 75], "type": "mob", "miss": 25, "define": 25, "gold": [500, 700], "exp": 500,
+          "gear": [661, 662, 663, 664, 641, 130], "description": "ASTRO 战争机器\n零号机\n[数据缺失]", "skill": [554, 555]},
+    411: {"hp": 100, "atk": [90, 160], "type": "mob", "miss": 0, "define": 0, "gold": [500, 650], "exp": 600,
+          "gear": [641, 665, 666, 667, 668, 131],
+          "description": "ASTRO 战争机器\n刹\nASTRO广泛生产的型号，舍弃了大量属性换取更高的伤害", "skill": [556, 557]},
+    412: {"hp": 350, "atk": [60, 95], "type": "mob", "miss": 45, "define": 45, "gold": [1600, 3000], "exp": 1500,
+          "gear": [641], "description": "ASTRO 战争机器\n影\nASTRO最强的型号，不要轻易迎战", "skill": []},
 
     # skill
     51: {"final": False, "type": "a", "atk": 10, "cost_mana": 20},
@@ -358,6 +399,13 @@ item_property = {
     549: {"final": False, "type": "c;s", "atk": 2222, "cost_mana": 1900},
     550: {"final": True, "type": "a;c;s", "atk": 1000, "heal": 300, "heal_s": 10, "cost_mana": 1400},
     551: {"final": False, "type": "a", "atk": 2333, "cost_mana": 2000},
+    552: {"final": False, "type": "a", "atk": 60, "cost_mana": 80},
+    553: {"final": False, "type": "a", "atk": 80, "cost_mana": 90},
+    554: {"final": False, "type": "a", "atk": 140, "cost_mana": 170},
+    555: {"final": False, "type": "a", "atk": 200, "cost_mana": 280},
+    556: {"final": False, "type": "a", "atk": 260, "cost_mana": 300},
+    557: {"final": False, "type": "a", "atk": 350, "cost_mana": 400},
+    558: {"final": False, "type": "a", "atk": 300, "cost_mana": 300},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
@@ -419,6 +467,16 @@ item_property = {
     656: {"type": "m", "description": "一块骨头，上面有一些血迹", "sell": 50},
     657: {"type": "m", "description": "大密度的骨粉", "sell": 500},
     658: {"type": "m", "description": "炼狱骷髅西诺克斯的结晶，价值连城", "sell": 20000},
+    659: {"type": "m", "description": "Low Level Part Connector", "sell": 5600},
+    660: {"type": "m", "description": "Low Level Joint Controller", "sell": 8000},
+    661: {"type": "m", "description": "[数据缺失]", "sell": 60000},
+    662: {"type": "m", "description": "[数据缺失]", "sell": 12000},
+    663: {"type": "m", "description": "[数据缺失]", "sell": 12000},
+    664: {"type": "m", "description": "[数据缺失]", "sell": 6000},
+    665: {"type": "m", "description": "ASTRO-刹 的核心，搭载了最强的手臂和腿部驱动", "sell": 140000},
+    666: {"type": "m", "description": "ASTRO-刹 的手臂，能够提起更重的 ASTRO-K-BLADE，且挥动速度是最快的", "sell": 23000},
+    667: {"type": "m", "description": "ASTRO-刹 的机械腿，跑动及跳跃能力增强了", "sell": 27000},
+    668: {"type": "m", "description": "ASTRO-刹 的电池，能负载消耗更大的 ASTRO-刹 机体", "sell": 9000},
 
     # events
     70: {"type": "e", "*description": "summon a random mob"},
@@ -484,7 +542,7 @@ player_property = {"lv": 1, "hp": 20, "max_hp": 20, "gold": 20, "miss": 5, "defi
                    "nether_dlc": False, "nether": False, "inscription_buff":
                        {"ht": 0, "atk": 0, "atk_p": 0, "def": 0, "def_p": 0, "crit": 0, "miss": 0},
                    "inscriptions": ["空符文槽", "空符文槽"], "inscription_num": 2,
-                   "kills": {41: 0, 42: 0, 43: 0, 44: 0, 45: 0, 46: 0, 47: 0}
+                   "kills": {41: 0, 42: 0, 43: 0, 44: 0, 45: 0, 46: 0, 47: 0, 48: 0, 49: 0, 410: 0, 411: 0, 412: 0}
                    }
 
 craft_expr = {
@@ -1118,6 +1176,9 @@ def _update_save_version():
     for i in settings.PROPERTY_KEY:
         if i not in player_property.keys():
             exec(settings.PROPERTY_EXPR[i])
+    for i in mobs:
+        if not i in player_property["kills"].keys():
+            player_property["kills"][i] = 0
     _update_save()
 
 
@@ -1291,6 +1352,11 @@ add_nether_explore(656, 5, 4)
 add_nether_explore(657, 20, 4)
 add_nether_explore(70, 75, 4)
 
+# get mob list
+for i in item_property.keys():
+    if str(i)[0] == "4":
+        mobs.append(i)
+
 run_environment = _get_path()
 _makedir("save")
 _option_go("save")
@@ -1451,11 +1517,6 @@ while True:
             _update_save_version()
         g.msgbox(f"存档已读取\n欢迎回来，{player}！")
         break
-
-# get mob list
-for i in item_property.keys():
-    if str(i)[0] == "4":
-        mobs.append(i)
 
 # get boss list
 for i in item_property.keys():
