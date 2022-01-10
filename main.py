@@ -491,7 +491,7 @@ item_property = {
                                                                                   635, 635],
          "gold": [3000, 6000], "exp": 2000, "define": 30, "miss": 20,
          "description": "古代希卡族为对抗灾厄盖侬而打造出的机械自动兵器，但现在被灾厄盖侬的怨念夺走"},
-    83: {"type": "boss", "hp": 1, "atk": [1, 5], "skill": [], "gear": [83], "gold": [210, 500], "exp": 999,
+    83: {"type": "boss", "hp": 1, "atk": [1, 5], "skill": [], "gear": [117], "gold": [210, 500], "exp": 999,
          "define": 0, "miss": 99.99, "description": "最弱的Boss，他不可能一直躲下去"},
     84: {"type": "boss", "hp": 200, "atk": [1, 3], "skill": [95, 96, 97, 98], "gear": [646], "gold": [100, 120],
          "exp": 150, "define": 35, "miss": 42.01, "description": "盘踞于末路之地的龙的孩子，也守护着她宝贵的龙蛋"},
