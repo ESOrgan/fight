@@ -39,7 +39,7 @@ item_namespaces = {
     120: "[下界DLC]诡异之剑", 121: "[跨次元联动][三次元限定][传说]一口魚の兵器", 122: "[史诗]王者骑士之剑",
     123: "[跨次元联动][三次元限定][传说]青槍", 124: "[下界DLC]绯红之剑", 125: "[下界DLC]骸骨", 126: "[下界DLC][流彩]骸骨之歌",
     127: "[跨次元联动][三次元限定][传说]得力の文具", 128: "夺魂镰刀", 129: "ASTRO-L-BLADE", 130: "ASTRO-ZERO-BLADE",
-    131: "ASTRO-K-BLADE", 132: "ASTRO-SHADOW-BLADE",
+    131: "ASTRO-K-BLADE", 132: "ASTRO-SHADOW-BLADE",133:"Dev-L-Blade",
     # armor
     21: "石板甲", 22: "士兵之甲", 23: "骑士之甲", 24: "法师长袍", 25: "[MC限定]唤魔者长袍", 26: "[流彩]荣耀骑士之甲",
     27: "ASTRO-SHADOW-ARMOR",
@@ -50,7 +50,7 @@ item_namespaces = {
 
     # mobs
     41: "波布克林", 42: "蓝色波布克林", 43: "丘丘", 44: "莫力布林", 45: "蓝色莫力布林", 46: "木系法师", 47: "依盖队队员",
-    48: "ASTRO-原", 49: "ASTRO-改", 410: "ASTRO-零", 411: "ASTRO-刹", 412: "ASTRO-影",
+    48: "ASTRO-原", 49: "ASTRO-改", 410: "ASTRO-零", 411: "ASTRO-刹", 412: "ASTRO-影",420:"Dev-Large-lion"
 
     # skill
     50: "普通攻击",
@@ -282,6 +282,8 @@ item_property = {
           "description": "ASTRO-刹 的剑，更重了，伤害更高了", "sell": 20000},
     132: {"atk": [90, 110], "type": "wep", "skill": [558],
           "description": "ASTRO FOREVER", "sell": 25000},
+    133: {"atk": [100, 200], "type": "wep", "skill": [559],
+          "description": "[数据缺失]", "sell": 30000},
     # armor
     21: {"def": 100, "miss": 50, "skill": [0], "type": "arm", "sell": 80,
          "description": "蓝色波克布林所使用的防具，十分简陋，但防御有效", "craft": 0},
@@ -346,6 +348,8 @@ item_property = {
           "description": "ASTRO 战争机器\n刹\nASTRO广泛生产的型号，舍弃了大量属性换取更高的伤害", "skill": [556, 557]},
     412: {"hp": 350, "atk": [60, 95], "type": "mob", "miss": 45, "define": 45, "gold": [1600, 3000], "exp": 1500,
           "gear": [641], "description": "ASTRO 战争机器\n影\nASTRO最强的型号，不要轻易迎战", "skill": []},
+    420: {"hp": 400, "atk": [100, 190], "type": "mob", "miss": 10, "define": 60, "gold": [2000, 3500], "exp": 1900,
+          "gear": [641,643,133], "description": "Dev 战争机器\n原型机\nDev第一个型号", "skill": []},
 
     # skill
     51: {"final": False, "type": "a", "atk": 10, "cost_mana": 20},
@@ -406,6 +410,7 @@ item_property = {
     556: {"final": False, "type": "a", "atk": 260, "cost_mana": 300},
     557: {"final": False, "type": "a", "atk": 350, "cost_mana": 400},
     558: {"final": False, "type": "a", "atk": 300, "cost_mana": 300},
+    559: {"final": False, "type": "a", "atk": 540, "cost_mana": 422},
 
     # materials
     61: {"type": "m", "description": "普通的石子", "sell": 1},
